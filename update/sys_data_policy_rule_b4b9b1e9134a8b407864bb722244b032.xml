@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_data_policy_rule">
+    <sys_data_policy_rule action="INSERT_OR_UPDATE">
+        <disabled>ignore</disabled>
+        <field>carry_over_vacation_allowed_till_month</field>
+        <mandatory>true</mandatory>
+        <sys_class_name>sys_data_policy_rule</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-26 13:02:15</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_data_policy display_value="Carry Over Vacation Allowed Till Month Mandatory for Employees Except Contracters">1c59bde9134a8b407864bb722244b0d2</sys_data_policy>
+        <sys_id>b4b9b1e9134a8b407864bb722244b032</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>carry_over_vacation_allowed_till_month</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_data_policy_rule_b4b9b1e9134a8b407864bb722244b032</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-26 13:02:15</sys_updated_on>
+        <table>x_nykl3_tenroxnbsa_user_profile</table>
+    </sys_data_policy_rule>
+</record_update>

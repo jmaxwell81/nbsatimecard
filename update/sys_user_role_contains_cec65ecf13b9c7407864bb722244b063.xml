@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_user_role_contains">
+    <sys_user_role_contains action="INSERT_OR_UPDATE">
+        <contains display_value="x_nykl3_tenroxnbsa.tenrox_application_access" name="x_nykl3_tenroxnbsa.tenrox_application_access">bc6e45cc0f4332001416d23be1050e9d</contains>
+        <role display_value="x_nykl3_tenroxnbsa.project_create" name="x_nykl3_tenroxnbsa.project_create">6926d2cf13b9c7407864bb722244b092</role>
+        <sys_class_name>sys_user_role_contains</sys_class_name>
+        <sys_created_by>satom</sys_created_by>
+        <sys_created_on>2017-10-18 20:44:16</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>cec65ecf13b9c7407864bb722244b063</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_nykl3_tenroxnbsa_tenrox_user.x_nykl3_tenroxnbsa.project</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_user_role_contains_cec65ecf13b9c7407864bb722244b063</sys_update_name>
+        <sys_updated_by>satom</sys_updated_by>
+        <sys_updated_on>2017-10-18 20:44:16</sys_updated_on>
+    </sys_user_role_contains>
+</record_update>

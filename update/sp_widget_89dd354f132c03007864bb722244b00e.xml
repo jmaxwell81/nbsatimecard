@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <client_script><![CDATA[function($scope, spUtil, tenroxPortalService, $rootScope) {
+	
+	var c = this;
+	$scope.submitTimesheet = function(){
+		tenroxPortalService.submitTimesheet($scope.data.timesheetId).then(function(response){
+			$scope.data.canSubmitTimesheet = response.data.canSubmitTimesheet;
+			var oldState = $scope.data.state.value;
+			var newState = response.data.data.value;
+			$scope.data.state = response.data.data;
+			var mssg = response.data.message;
+			if(response.data.status == 'error'){
+				spUtil.update($scope); 
+				if(mssg)
+					spUtil.addErrorMessage(mssg);
+			}
+			else if(oldState == newState){
+				spUtil.update($scope);
+				if(mssg)
+					spUtil.addInfoMessage(mssg);
+			}
+			else if(mssg && response.data.status == 'success')
+				spUtil.addInfoMessage(mssg);
+		});
+	};
+	
+	/*$scope.generateTimecards = function(){
+		TimeCardPortalService.generateTimecards({
+			timesheet_id: $scope.data.timesheetId
+		}).then(function(response){
+			spUtil.addInfoMessage(response.data.message);
+		});
+	};*/
+	
+	var filterQuery = 'sys_id='+ $scope.data.timesheetId;
+	spUtil.recordWatch($scope, 'x_nykl3_tenroxnbsa_timesheet', filterQuery, function(){
+		spUtil.update($scope);
+	});
+	
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.header{
+  padding:15px 13px 15px 1px;
+  font-size: 20px;
+  
+  .btn-icon{
+    line-height:1;
+    background-color:red;
+    font-size:18px;
+    padding: 9px 12px;
+  }
+  .date-selector{
+    display: inline-block;
+    .fa{
+     font-size: 26px;
+      background-color: transparent;
+    }
+    .date-range{
+      display: inline-block;
+      line-height:0.7;
+      vertical-align: middle;
+      padding:2px 0;
+    }
+  }
+  
+  .ts-data{
+    display: inline-block;
+    margin-right:50px;
+    line-height: 1.32;
+    vertical-align: middle;
+    .ts-col{
+      font-size: 13px;
+    }
+    .ts-val{
+      font-size:18px;
+    }
+  }
+  .btn-primary{
+    font-size: 18px; 
+  }
+  .loader{
+    position: fixed;
+  }
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>tsp-header</id>
+        <internal>false</internal>
+        <link><![CDATA[function(scope, elem, attrs){
+	var $uibModal = $injector.get('$uibModal'),
+	tenroxPortalService = $injector.get('tenroxPortalService'),
+	$window = $injector.get('$window'),
+	$timeout = $injector.get('$timeout'),
+	spUtil = $injector.get('spUtil');
+	scope.getNextTimeSheet = function(){
+		if(scope.data.nextTimesheetId)
+			_loadTimesheet(scope.data.nextTimesheetId);
+		else {
+			scope.data.loading = true;
+			tenroxPortalService.getNextTimesheet(scope.data.timesheetId).then(function(response){
+				scope.data.loading = false;
+				var nextTimesheet = response.data.data.timesheet_id;
+				if(nextTimesheet)
+					$timeout(function(){
+					_loadTimesheet(nextTimesheet);
+				});
+			});
+		}
+	};
+	
+	scope.getPreviousTimesheet = function(){
+		if(scope.data.previousTimesheetId)
+			_loadTimesheet(scope.data.previousTimesheetId);
+		else {
+			scope.data.loading = true;
+			tenroxPortalService.getPreviousTimesheet(scope.data.timesheetId).then(function(response){
+				scope.data.loading = false;
+				var previousTimesheet = response.data.data.timesheet_id;
+				if(previousTimesheet)
+					$timeout(function(){
+					_loadTimesheet(previousTimesheet);
+				});
+			});
+		}
+	};
+	
+	scope.getCurrentWeekTimesheet = function(){
+		_loadTimesheet(scope.data.currentWeekTimesheetId);
+		if(scope.data.currentWeekTimesheetId)
+			_loadTimesheet(scope.data.currentWeekTimesheetId);
+		else {
+			scope.data.loading = true;
+			tenroxPortalService.getCurrentWeekTimesheet(scope.data.timesheetId).then(function(response){
+				scope.data.loading = false;
+				var currentWeekTimesheet = response.data.data.timesheet_id;
+				if(currentWeekTimesheet)
+					$timeout(function(){
+					_loadTimesheet(currentWeekTimesheet);
+				});
+			});
+		}
+	};
+	
+	function _loadTimesheet(id){
+		if(id && id != scope.data.timesheetId){
+			var timesheetId = scope.data.timesheetId;
+			var href = $window.location.href;
+			var newURL = '';
+			var regexp = new RegExp(timesheetId, 'g');
+			if(timesheetId && regexp.test(href)){
+				newURL = href.replace(timesheetId, id || timesheetId);
+			}else
+			newURL = '/tcp?sysparm_domain_restore=false&sysparm_stack=no&sysparm_timesheet_id='+ id;
+			var newTitle = document.title;
+			scope.data.timesheetId = id;
+			history.pushState({id: scope.data.timesheetId}, newTitle, newURL);
+			scope.data.loading = true;
+		}
+	}
+	
+	scope.copyFromPreviousTimesheet = function(){
+		var modalScope = scope.$new();
+		var modalInstance = $uibModal.open({
+			templateUrl : 'copy-timesheet-modal',
+			scope: modalScope,
+			windowClass: 'copy-timesheet',
+			controller:function($scope, $uibModalInstance){
+				$scope.data = {};
+				$scope.data.copyTimeLogged = false;
+				$scope.timesheetFilter = 'sys_id!='+ scope.data.timesheetId + '^user='+scope.data.userId + '^week_starts_on<'+scope.data.weekStartsOn;
+				$scope.data.previousTimesheet = {
+					displayValue: scope.data.previousTimesheetDisplay,
+					value: scope.data.previousTimesheetId,
+					name: 'timesheet-selector'
+				};
+				$scope.ok = function(){
+					var previousTimesheetId = $scope.data.previousTimesheet.value;
+					if(!previousTimesheetId){
+						$scope.data.isPreviousTimesheetIdEmpty = true;
+						
+					}else{
+						$scope.data.isPreviousTimesheetIdEmpty = false;
+						$scope.data.loader = true;
+						timecardPortalService.copyTimesheet({
+							current_timesheet_id: scope.data.timesheetId,
+							previous_timesheet_id: previousTimesheetId,
+							copy_time_logged: $scope.data.copyTimeLogged
+						}).then(function(response){
+							$uibModalInstance.dismiss('close');
+							spUtil.addInfoMessage(response.data.message);
+						});
+					}
+					$scope.$$phase || $scope.$root && $scope.$root.$$phase || $scope.$digest();
+				};
+				$scope.cancel = function () {
+					$uibModalInstance.dismiss('cancel');
+				};
+			}
+		});
+	};
+	
+	scope.$on('tcp.copy.timesheet', scope.copyFromPreviousTimesheet);
+	
+	scope.safeDigest = function(){
+		scope.$$phase || scope.$root && scope.$root.$$phase || scope.$digest();
+	};
+	
+}]]></link>
+        <name>Time Sheet Portal Header</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function($sp) {
+	var TABLE_TIMESHEET = 'x_nykl3_tenroxnbsa_timesheet';
+	data.userId = gs.getUserID();
+	var timesheetId = '0e6b6eb81323fe007864bb722244b025';// = input.timesheetId || '';
+	//if(!input)
+	//	timesheetId = $sp.getParameter('sysparm_timesheet_id');
+	//if(!timesheetId)
+		//timesheetId = new tenroxFactory().getTimeSheet(data.userId, input.startDate);
+	data.isVaildTimesheet = true;
+	var timesheet = new GlideRecord(TABLE_TIMESHEET);
+	if(!timesheet.get(timesheetId) || !timesheet.canRead()){
+		data.isVaildTimesheet = false;
+		return;
+	}
+	
+	data.weekStartsOn = timesheet.getValue('week_start');
+
+	var tcps = new tenroxPortalService();
+	var response = tcps.getHeaderData(timesheetId);
+	data.timesheetId = timesheetId;
+	data.currentWeekTimesheetId = response.currentWeekTimesheetId;
+	data.previousTimesheetId = response.previousTimesheetId;
+	data.nextTimesheetId = response.nextTimesheetId;
+	data.weekRange = response.week_range;
+	data.state = response.state;
+	data.total_hours = response.total_hours;
+	if(data.previousTimesheetId){
+		var previousTimesheet = new GlideRecord(TABLE_TIMESHEET);
+		previousTimesheet.get(data.previousTimesheetId);
+		data.previousTimesheetDisplay = previousTimesheet.getDisplayValue('week_start');
+	}
+	data.canSubmitTimesheet = (new timeSheetUIActionHelper(timesheet)).canSubmit();
+	data.canGenerateTimeCards = (new timeSheetUIActionHelper(timesheet)).canGenerateAssignments();
+	
+})($sp);]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-08-17 15:39:26</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>89dd354f132c03007864bb722244b00e</sys_id>
+        <sys_mod_count>49</sys_mod_count>
+        <sys_name>Time Sheet Portal Header</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sp_widget_89dd354f132c03007864bb722244b00e</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-08-22 04:57:14</sys_updated_on>
+        <template><![CDATA[<div class="header">
+  <div ng-if="data.isVaildTimesheet">
+    <div class="date-selector"> 
+      <button type="button" class="btn btn-icon icon-chevron-left" ng-click="getPreviousTimesheet() aria-label="${Go to previous time sheet}""></button>
+      <div class="date-range">
+        <div role="heading" aria-level="2">{{data.weekRange}}</div>
+        <a href="javascript:void(0)" ng-click="getCurrentWeekTimesheet()" style="font-size:10px;" ng-if="data.currentWeekTimesheetId != data.timesheetId">${Go to Current Week}</a>
+      </div>
+      <button type="button" class="btn btn-icon icon-chevron-right" ng-click="getNextTimeSheet()" aria-label="${Go to next time sheet}"></button>
+    </div>
+    <div class="pull-right">
+      <div class="ts-data">
+        <div class="ts-col">${State}</div>
+        <div class="ts-val">{{data.state.display_value}}</div>
+      </div>
+      <div class="ts-data">
+        <div class="ts-col">${Total}</div>
+        <div class="ts-val">{{data.total_hours}}</div>
+      </div>
+      <div class="btn-group" ng-if="data.canSubmitTimesheet" role="group" aria-label="..." role="group">
+        <button type="button" ng-click="" class="btn btn-primary" ng-click="submitTimesheet()">${Submit}</button>
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="${More actions}">
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right" aria-label="${More actions}">
+          <li><a href="javascript:void(0)" ng-if="data.canGenerateTimeCards" ng-click="generateTimecards()">${Generate Time Cards}</a></li>
+           <li><a href="javascript:void(0)" ng-click="copyFromPreviousTimesheet()" aria-haspopup="true">${Copy from previous Time Sheet}</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="loader" ng-if="data.loading">
+      <div class="loader-content">
+        <fa name="spinner" spin="true"></fa>
+        <p>{{::data.messages.loadingText}}</p>
+      </div>
+    </div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_nykl3_tenroxnbsa.timeSheetUIActionHelper</api_name>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>timeSheetUIActionHelper</name>
+        <script><![CDATA[var timeSheetUIActionHelper = Class.create();
+timeSheetUIActionHelper.prototype = {
+    initialize: function(gr) {
+		this.gr = gr;
+    },
+	
+	canApprove: function() {
+		return this._canDoAction();
+	},
+	
+	canReject: function() {
+		return this._canDoAction();
+	},
+	
+	canSubmit: function(){
+		var allowedStates = ["Draft"];
+		return this.gr.canWrite() && (this.gr.getValue('user') == gs.getUserID() || gs.hasRole('x_nykl3_tenroxnbsa_tenrox_admin')) && (allowedStates.indexOf(this.gr.getValue("state")) != -1);
+	},
+	
+	canCopyFromPreviousTimesheet: function(){
+		var nonAllowedStates = ['Approved', 'Processed'];
+		return (this.gr.getValue('user') == gs.getUserID() || gs.hasRole('timecard_admin')) && (nonAllowedStates.indexOf(this.gr.getValue("state")) == -1);
+	},
+	
+	canGenerateAssignments: function(){
+		var gr = new GlideRecord('planned_task');
+		if (!gr.isValid())
+			return false;
+
+		var nonAllowedStates = ['Approved', 'Pending Approval'];
+		return (this.gr.getValue('user') == gs.getUserID() || gs.hasRole('x_nykl3_tenroxnbsa_tenrox_admin')) && (nonAllowedStates.indexOf(this.gr.getValue("state")) == -1);
+	},
+	
+	_canDoAction: function() {
+		var userId = gs.getUserID();
+		var hasRights = gs.hasRole('timecard_approver') && this.gr.getValue('state') == 'Submitted';
+		if (gs.hasRole('timecard_admin'))
+			return hasRights;
+		
+		var ga = new GlideAggregate('time_card');
+		ga.addQuery('time_sheet', this.gr.getValue('sys_id'));
+		ga.addQuery('state', 'Submitted');
+		ga.addQuery('approver_list', 'CONTAINS', userId);
+		ga.addQuery('approved_by', 'DOES NOT CONTAIN', userId).addOrCondition('approved_by', null);
+		ga.addAggregate('COUNT');
+		ga.query();
+		
+		var pendingApprovalCount = 0;
+		if (ga.next()) {
+			var count = ga.getAggregate('COUNT');
+			if (JSUtil.notNil(count))
+				pendingApprovalCount = parseInt(count);
+		}
+
+		hasRights = hasRights && pendingApprovalCount > 0;
+
+		return hasRights;
+	},
+
+    type: 'timeSheetUIActionHelper'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-08-17 19:49:01</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>71b6b68f136c03007864bb722244b035</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>timeSheetUIActionHelper</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_include_71b6b68f136c03007864bb722244b035</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-08-17 19:49:01</sys_updated_on>
+    </sys_script_include>
+</record_update>

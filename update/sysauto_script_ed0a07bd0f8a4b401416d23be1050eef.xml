@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <condition/>
+        <conditional>false</conditional>
+        <name>Tenrox - Auto Create Timesheets Weekly</name>
+        <run_as/>
+        <run_as_tz>US/Eastern</run_as_tz>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>7</run_dayofweek>
+        <run_period/>
+        <run_start>2017-10-27 13:31:27</run_start>
+        <run_time>1970-01-01 06:00:00</run_time>
+        <run_type>weekly</run_type>
+        <script><![CDATA[timesheetAutoCreation();
+
+function timesheetAutoCreation() {
+	var TABLE_USER_PROFILE = 'x_nykl3_tenroxnbsa_user_profile';
+	var TABLE_TIMESHEET    = 'x_nykl3_tenroxnbsa_timesheet';
+	
+	var mondayDate = new GlideDateTime(gs.endOfThisWeek()).getDate();
+	
+	var su = new global.NBSA_SNUtils();
+	var au = new global.ArrayUtil();
+	var activeUserProfile = su.getA(TABLE_USER_PROFILE, ['tenrox_status=Active'], ['sys_id']);
+	var activeUserProfileCount = activeUserProfile.length;
+	
+	var timeSheet = new GlideRecord(TABLE_TIMESHEET);
+	var queryStr = "week_startBETWEENjavascript:gs.daysAgo(0)@javascript:gs.daysAgo(-7)";
+	timeSheet.addEncodedQuery(queryStr);
+	timeSheet.query();
+	
+	var preExistingTimesheet = [];
+	var preExistingTimesheetCount = timeSheet.getRowCount();
+	var i = 0;
+	while (timeSheet.next()) {
+		preExistingTimesheet[i++] = timeSheet.getValue('employee');
+	}
+	
+	var autoCreatedTimesheet = [];
+	var j=0;
+	activeUserProfile.forEach(function(up) {
+		if (!au.contains(preExistingTimesheet, up)) {
+			autoCreatedTimesheet[j++] = generateTimeSheet(up.toString(), mondayDate, 'Open');
+		}
+	});
+
+	gs.info('Timesheet Auto Creation - Total Active User Profiles: '+activeUserProfileCount+' ['+activeUserProfile.toString()+']\nTotal Pre-existing Timesheets for week '+mondayDate.getDisplayValue()+': '+preExistingTimesheetCount+', sys_id of user profiles with pre-existing timesheets: ['+preExistingTimesheet.toString()+']\nTotal Auto Created Timesheets: '+autoCreatedTimesheet.length+', sys_id array: ['+autoCreatedTimesheet.toString()+']');
+}
+
+function generateTimeSheet(employee, weekStart, state) {
+	gs.debug('Timesheet Auto Creation: employee: '+employee+', weekStart: '+weekStart+', state: '+state);
+	var TABLE_TIMESHEET = 'x_nykl3_tenroxnbsa_timesheet';
+	var timeSheet = new GlideRecord(TABLE_TIMESHEET);
+	timeSheet.initialize();
+	timeSheet.employee = employee;
+	timeSheet.week_start = weekStart;
+	timeSheet.state = state == undefined? 'Open' : state;
+	var sysID = timeSheet.insert();
+	gs.debug('Timesheet Auto Creation: employee: '+employee+', sysID: '+sysID);
+	return sysID;
+}]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-27 13:34:59</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>ed0a07bd0f8a4b401416d23be1050eef</sys_id>
+        <sys_mod_count>55</sys_mod_count>
+        <sys_name>Tenrox - Auto Create Timesheets Weekly</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sysauto_script_ed0a07bd0f8a4b401416d23be1050eef</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-03-21 14:54:35</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>

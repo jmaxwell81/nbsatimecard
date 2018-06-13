@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element extends="x_nykl3_tenroxnbsa_week" label="Non-Work Time" max_length="40" name="x_nykl3_tenroxnbsa_non_work_time" type="collection">
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="NWT" mandatory="true" max_length="32" name="nwt" reference="x_nykl3_tenroxnbsa_leave_type" reference_qual="javascript:leaveTypeReturnFunction(current.timesheet.employee_category);" type="reference" use_reference_qualifier="advanced"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Timesheet" mandatory="true" max_length="32" name="timesheet" reference="x_nykl3_tenroxnbsa_timesheet" type="reference"/>
+        <index name="index">
+            <element name="timesheet"/>
+        </index>
+        <index name="index2">
+            <element name="nwt"/>
+        </index>
+    </element>
+</database>

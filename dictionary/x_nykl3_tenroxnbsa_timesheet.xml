@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element audit="true" extends="x_nykl3_tenroxnbsa_week" label="Timesheet" max_length="40" name="x_nykl3_tenroxnbsa_timesheet" type="collection">
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Alternate Manager" max_length="32" name="alternate_manager" read_only="true" reference="sys_user" type="reference"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" choice="1" label="Bypass 8 Hr PWD Rule for Days" max_length="40" name="bypass_8_hr_pwd_rule_for_days" type="glide_list">
+            <choice>
+                <element label="mon" sequence="1" value="mon"/>
+                <element label="tue" sequence="2" value="tue"/>
+                <element label="wed" sequence="3" value="wed"/>
+                <element label="thu" sequence="4" value="thu"/>
+                <element label="fri" sequence="5" value="fri"/>
+            </choice>
+        </element>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Employee" mandatory="true" max_length="32" name="employee" read_only="true" reference="x_nykl3_tenroxnbsa_user_profile" type="reference"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" choice="1" choice_field="employee_category" choice_table="x_nykl3_tenroxnbsa_user_profile" label="Employee Category" max_length="40" name="employee_category" read_only="true" type="choice">
+            <choice>
+                <element label="Consultant" sequence="0" value="Consultant"/>
+                <element label="Contracted" sequence="1" value="Contracted"/>
+                <element label="Exempt" sequence="2" value="Exempt"/>
+                <element label="Exempt Non-Manager" sequence="3" value="Exempt Non-Manager"/>
+                <element label="Non-Exempt" sequence="4" value="Non-Exempt"/>
+            </choice>
+        </element>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Employee Justification for Manager Approved Leave" max_length="400" name="employee_justification_for_manager_approved_leave" type="string"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" choice="1" choice_field="employee_type" choice_table="x_nykl3_tenroxnbsa_user_profile" label="Employee Type" max_length="40" name="employee_type" read_only="true" type="choice">
+            <choice>
+                <element label="Employee" sequence="0" value="Employee"/>
+                <element label="Consultant" sequence="1" value="Consultant"/>
+            </choice>
+        </element>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="0" label="Fri NWT" max_length="40" name="fri_nwt" read_only="true" type="float"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="0" label="Fri Reg" max_length="40" name="fri_reg" read_only="true" type="float"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" choice="1" label="Holidays" max_length="40" name="holidays" type="glide_list">
+            <choice>
+                <element label="fri" value="fri"/>
+                <element label="mon" value="mon"/>
+                <element label="thu" value="thu"/>
+                <element label="tue" value="tue"/>
+                <element label="wed" value="wed"/>
+            </choice>
+        </element>
+        <element attributes="edge_encryption_enabled=true" label="Invoice#" max_length="40" name="invoice" type="string"/>
+        <element label="Invoice# end" max_length="40" name="invoice_end" type="glide_date"/>
+        <element label="Invoice# start" max_length="40" name="invoice_start" type="glide_date"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Lock Timesheet for Days" max_length="4000" name="lock_timesheet_for_days" type="glide_list"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Manager" max_length="32" name="manager" read_only="true" reference="sys_user" type="reference"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Manager Approved Leave Exists" max_length="40" name="manager_approved_leave_exists" read_only="true" type="boolean"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Manager Justification for Manager Approved Leaves" max_length="400" name="manager_justification_for_manager_approved_leaves" type="string"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Month Entry Completed" max_length="40" name="month_entry_completed" type="boolean"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="0" label="Mon NWT" max_length="40" name="mon_nwt" read_only="true" type="float"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="0" label="Mon Reg" max_length="40" name="mon_reg" read_only="true" type="float"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#9;return current.mon_nwt+current.tue_nwt+current.wed_nwt+current.thu_nwt+current.fri_nwt;&#13;&#10;})(current);" label="Non-Work Time (Hrs)" max_length="40" name="nwt" read_only="true" type="float" virtual="true"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="0" label="Over Time (Hrs)" max_length="40" name="ot" read_only="true" type="float"/>
+        <element attributes="edge_encryption_enabled=true" label="Overtime Comments" max_length="100" name="overtime_comments" type="string"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#9;return current.mon_reg+current.tue_reg+current.wed_reg+current.thu_reg+current.fri_reg+current.sat_reg+current.sun_reg;&#13;&#10;})(current);" default="0" label="Regular (Hrs)" max_length="40" name="reg" read_only="true" type="float" virtual="true"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Remarks" max_length="4000" name="remarks" type="journal"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="0" label="Sat Reg" max_length="40" name="sat_reg" read_only="true" type="float"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="0" label="Straight Hours" max_length="40" name="sh" read_only="true" type="float"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" choice="1" default="Open" label="State" mandatory="true" max_length="40" name="state" read_only="true" type="choice">
+            <choice>
+                <element label="Accounting Approved" value="Accounting Approved"/>
+                <element label="Manager Approved" value="Manager Approved"/>
+                <element label="Open" value="Open"/>
+                <element label="Payroll Approved" value="Payroll Approved"/>
+                <element label="Processed" value="Processed"/>
+                <element label="Submitted" value="Submitted"/>
+            </choice>
+        </element>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="0" label="Sun Reg" max_length="40" name="sun_reg" read_only="true" type="float"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="0" label="Thu NWT" max_length="40" name="thu_nwt" read_only="true" type="float"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="0" label="Thu Reg" max_length="40" name="thu_reg" read_only="true" type="float"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;    return current.employee.user.name + ' : ' + current.week_start&#13;&#10;})(current);" display="true" label="Timesheet" max_length="100" name="timesheet" read_only="true" type="string"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="0" label="Tue NWT" max_length="40" name="tue_nwt" read_only="true" type="float"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="0" label="Tue Reg" max_length="40" name="tue_reg" read_only="true" type="float"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" choice="1" choice_field="u_vendor" choice_table="sys_user" label="Vendor" max_length="40" name="vendor" type="choice">
+            <choice/>
+        </element>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="0" label="Wed NWT" max_length="40" name="wed_nwt" read_only="true" type="float"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="0" label="Wed Reg" max_length="40" name="wed_reg" read_only="true" type="float"/>
+        <index name="index">
+            <element name="alternate_manager"/>
+        </index>
+        <index name="index2">
+            <element name="manager"/>
+        </index>
+        <index name="index3">
+            <element name="employee"/>
+        </index>
+    </element>
+</database>

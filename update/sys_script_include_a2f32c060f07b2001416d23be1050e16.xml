@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_nykl3_tenroxnbsa.workTypeReturnFunction</api_name>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>workTypeReturnFunction</name>
+        <script><![CDATA[function workTypeReturnFunction(project) {
+	if (!project) {
+		return 'sys_idISEMPTY';
+	} else {
+		var ret = 'sys_idIN';
+		var workType = new GlideRecord('x_nykl3_tenroxnbsa_m2m_project_and_type');
+		workType.addQuery('project', project);
+		workType.query();
+		while (workType.next()) {
+			ret += workType.project_work_type + ",";
+		}
+		return ret;
+	}
+}]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-05-31 17:01:08</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>a2f32c060f07b2001416d23be1050e16</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>workTypeReturnFunction</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_include_a2f32c060f07b2001416d23be1050e16</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-05-31 17:06:48</sys_updated_on>
+    </sys_script_include>
+</record_update>

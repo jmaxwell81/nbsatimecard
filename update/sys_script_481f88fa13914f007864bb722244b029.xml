@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_label/>
+        <action_name/>
+        <action_query>false</action_query>
+        <action_run_at>server</action_run_at>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <application/>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_nykl3_tenroxnbsa_bill_rate</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Bill Rate Duplicate Record Validation</name>
+        <onclick/>
+        <order>100</order>
+        <priority>100</priority>
+        <read_access_action>false</read_access_action>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+	
+	var curStart = new GlideDateTime(current.getValue('effective_from_date'));
+	var curEnd =  new GlideDateTime(current.getValue('effective_till_date'));
+	if (current.getValue('effective_till_date') && curStart.compareTo(curEnd) >= 0) {
+		gs.addErrorMessage("End ("+curEnd.getDate()+") must be greater than Start ("+curStart.getDate()+")");
+		current.setAbortAction(true);
+	}
+	
+	var gr = new GlideRecord('x_nykl3_tenroxnbsa_bill_rate');
+	gr.addQuery('user', current.user);
+	gr.addQuery('sys_id!='+current.sys_id);
+	gr.query();
+	
+	var start, end, error;
+	while (gr.next()) {
+		start = new GlideDateTime(gr.getValue('effective_from_date'));
+		end = new GlideDateTime(gr.getValue('effective_till_date'));
+		
+		// If current record doesn't have a effective till date then it is only allowed if both below conditions meet
+		// 1) No other bill rate for this user exists without effective till date (only one open bill rate can exists)
+		// 2) And current records's start date is greater than start and end of any existing bill rate for the user
+		if (!current.getValue('effective_till_date')) {
+			if (!gr.getValue('effective_till_date'))
+				error = "A Bill Rate already exists for "+current.user.user.name+" without Effective Till Date. Please put Effective Till Date in that if you'd like to create another open bill rate";
+			else if (start.compareTo(curStart)>=0 || end.compareTo(curStart) >=0)
+				error = "A Bill rate already exists with Effective From Date: "+start.getDate()+", and Effecive Till Date: "+end.getDate()+". Current Start Date ("+curStart.getDate()+") needs to be greater than these dates.";
+		} else if (!gr.getValue('effective_till_date')) {
+			// If current record has the effective till date, then 
+			// If any existing record doesn't have the effective till date, then current records start and end must be less than existing records's start
+				if (curStart.compareTo(start)>=0 || curEnd.compareTo(start)>=0)
+					error = "A Bill rate already exists with Effective From Date: "+start.getDate();
+		} else if (!((curStart.compareTo(start)<0 && curEnd.compareTo(start)<0) || (curStart.compareTo(end)>0 && curEnd.compareTo(end)>0))) {
+			//Current Start and End dates shouldn't be with-in any existing start and end dates
+				error = "A Bill rate already exists with Effective From Date: "+start.getDate()+", and Effecive Till Date: "+end.getDate();
+		}
+		if (error) {
+			gs.addErrorMessage(error);
+			current.setAbortAction(true);
+			break;
+		}
+	}
+	
+
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>LIUR</sys_created_by>
+        <sys_created_on>2017-09-22 19:47:16</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>481f88fa13914f007864bb722244b029</sys_id>
+        <sys_mod_count>20</sys_mod_count>
+        <sys_name>Bill Rate Duplicate Record Validation</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_481f88fa13914f007864bb722244b029</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-05-11 13:30:07</sys_updated_on>
+        <template/>
+        <when>before</when>
+    </sys_script>
+</record_update>

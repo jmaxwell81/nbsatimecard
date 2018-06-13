@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_nykl3_tenroxnbsa.tenroxPortalService</api_name>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>tenroxPortalService</name>
+        <script><![CDATA[var tenroxPortalService = Class.create();
+tenroxPortalService.prototype = {
+    initialize: function(gRequest) {
+		this.gRequest = gRequest;
+		this.TABLE_TIMESHEET     = 'x_nykl3_tenroxnbsa_timesheet';
+		this.TABLE_ASSIGNMENT    = 'x_nykl3_tenroxnbsa_assignment';
+		this.TABLE_NON_WORK_TIME = 'x_nykl3_tenroxnbsa_non_work_time';
+
+		this.tu = new tenroxUtil();
+    },
+	
+	json: function() {
+        return new JSON();
+    },
+	
+	getHeaderData: function(timesheetId) {
+		var userId = gs.getUserID();
+		var gr = new GlideRecord(this.TABLE_TIMESHEET);
+		gr.get(timesheetId);
+		
+		var response = {};
+		//response.week_range = this.getWeekRange(gr.week_start.getGlideObject());
+		response.week_range = this.getWeekRange(new GlideDateTime(gr.week_start).getDate());
+		response.state = {value:gr.getValue('state'), display_value: gr.getDisplayValue('state')};
+		var totalHours = gr.getDisplayValue('total');
+		if(totalHours == 0 || global.JSUtil.nil(totalHours)){
+			totalHours = gs.getMessage('No time logged');
+		}else if(totalHours == 1){
+			totalHours = gs.getMessage('{0} hour', totalHours);
+		}else{
+			totalHours = gs.getMessage('{0} hours', totalHours);
+		}
+		response.total_hours = totalHours;
+		var currentWeekStart = this.tu.getStartOfCurrentWeek().toString();
+		response.currentWeekTimesheetId = this._getTimesheet(userId, currentWeekStart);
+		//var weekStartsOn = gr.week_start.getGlideObject();
+		var weekStartsOn = new GlideDateTime(gr.week_start).getDate();
+		weekStartsOn.addDaysUTC(7);
+		var nextWeekStart = weekStartsOn.toString();
+		response.nextTimesheetId = this._getTimesheet(userId, nextWeekStart);
+		weekStartsOn.addDaysUTC(-14);
+		var previousWeekStart = weekStartsOn.toString();
+		response.previousTimesheetId = this._getTimesheet(userId, previousWeekStart);
+		return response;
+	},
+	
+	_getTimesheet: function(userId, weekStartsOn){
+		if (global.JSUtil.nil(userId))
+			userId = gs.getUserID();
+		
+		if (global.JSUtil.nil(weekStartsOn))
+			weekStartsOn = this.tu.getStartOfCurrentWeek(userId);
+		
+		var sysId;
+		var gr = new GlideRecord(this.TABLE_TIMESHEET);
+		gr.addQuery("week_start", weekStartsOn);
+		gr.addQuery("user", userId);
+		gr.query();
+		
+		if (gr.next())
+			sysId = gr.getUniqueValue();
+		return sysId;
+	},
+	
+	getWeekRange: function(startDate){
+		var months = [
+			gs.getMessage('January'), 
+			gs.getMessage('February'), 
+			gs.getMessage('March'), 
+			gs.getMessage('April'), 
+			gs.getMessage('May'), 
+			gs.getMessage('June'), 
+			gs.getMessage('July'), 
+			gs.getMessage('August'), 
+			gs.getMessage('September'), 
+			gs.getMessage('October'), 
+			gs.getMessage('November'), 
+			gs.getMessage('December')];
+		var endDate = new GlideDateTime(startDate).getDate();
+		/*endDate.addDays(6);
+		var startingMonth = startDate.getMonthNoTZ();
+		var endingMonth = endDate.getMonthNoTZ();
+		var startingYear = startDate.getYearNoTZ();
+		var endingYear = endDate.getYearNoTZ();
+		var week = startDate.getDayOfMonthNoTZ();*/
+		endDate.addDaysUTC(6);
+		var startingMonth = startDate.getMonthUTC();
+		var endingMonth = endDate.getMonthUTC();
+		var startingYear = startDate.getYearUTC();
+		var endingYear = endDate.getYearUTC();
+		var week = startDate.getDayOfMonthUTC();
+		if(startingMonth != endingMonth)
+			week += ' ' + months[startingMonth - 1];
+		if(startingYear != endingYear)
+			week += ' ' + startingYear;
+		//week += ' - ' + endDate.getDayOfMonthNoTZ() + ' ' + months[endingMonth - 1] + ' ' + endingYear;
+		week += ' - ' + endDate.getDayOfMonthUTC() + ' ' + months[endingMonth - 1] + ' ' + endingYear;
+		return week;
+	},
+	
+	/*addToTimesheet: function(){
+		var data = this.json().decode(this.gRequest.getParameter('values'));
+		var timecards = data.timecards;
+		var timesheetId = data.timesheetId;
+		var action = data.action;
+		var ua = new TimecardUsageAnalytics();
+		ua.reportActionUsage(action, 'portal');
+		var timecardIds = [];
+		var timesheet = new TimeSheet(timesheetId);
+		var status = 'success';
+		for(var i=0; i< timecards.length;i++){
+			var values = timecards[i];
+			var category = values.category;
+			if(category == 'task_work'){
+				var taskId = values.task;
+				var task = new GlideRecord('task');
+				if(task.get(taskId) && (task.instanceOf('pm_project') || task.instanceOf('pm_project_task'))){
+					values.category = 'project_work';
+					category = 'project_work';
+					var gr = new GlideRecord(task.sys_class_name);
+					gr.get(taskId);
+					var timecardReportingPref = gr.top_task.time_card_preference;
+					if(timecardReportingPref == 'project'){
+						values.task =  gr.getValue('top_task');
+					}
+				}
+			}
+			var query = 'state=Pending^ORstate=Rejected';
+			if(category == 'task_work' || category == 'project_work')
+				query += '^task='+ values.task;
+			else
+				query += '^category='+ values.category;
+			var projectTimeCateogry = values.project_time_category;
+			if(projectTimeCateogry)
+				query += '^project_time_category='+ projectTimeCateogry;
+			var existingTimecard = timesheet.getTimeCards(query);
+			if(existingTimecard.getRowCount() > 0){
+				existingTimecard.next();
+				timecardIds.push(existingTimecard.getUniqueValue());
+				this._setValues(existingTimecard, values, false);
+				existingTimecard.update();
+			}else{
+				var timecard = new GlideRecord('time_card');
+				timecard.initialize();
+				timecard.setValue('user', gs.getUserID());
+				timecard.week_starts_on =  timesheet.getGlideRecord().week_starts_on;
+				this._setValues(timecard, values, true);
+				var id = timecard.insert();
+				if(global.JSUtil.notNil(id))
+					timecardIds.push(id);
+				else
+					status = 'error';
+			}
+		}
+		return this.json().encode({status: status, ids: timecardIds.join(',')});	
+	},*/
+	
+	addAssignmentToTimesheet: function(){
+		var data = this.json().decode(this.gRequest.getParameter('values'));
+		//var timecards = data.timecards;
+		var assignments = data.assignments;
+		var timesheetId = data.timesheetId;
+		var action = data.action;
+		//var timecardIds = [];
+		var assignmentIds = [];
+		var timesheet = new TimeSheet(timesheetId);
+		var status = 'success';
+		for(var i=0; i< assignments.length;i++){
+			var values = assignments[i];
+			var project = values.project;
+			var projectWorkType = values.project_work_type;
+			var query = 'project='+project+'^ORproject_work_type'+projectWorkType;
+			var existingAssignment = timesheet.getAssignments(query);
+			if(existingAssignment.getRowCount() > 0){
+				existingAssignment.next();
+				assignmentIds.push(existingAssignment.getUniqueValue());
+				this._setValues(existingAssignment, values, false);
+				existingAssignment.update();
+			} else {
+				var assignment = new GlideRecord(this.TABLE_ASSIGNMENT);
+				assignment.initialize();
+				assignment.setValue('employee', gs.getUserID());
+				assignment.setValue('timesheet', timesheetId);
+				this._setValues(assignment, values, true);
+				var id = assignment.insert();
+				if(global.JSUtil.notNil(id))
+					assignmentIds.push(id);
+				else
+					status = 'error';
+			}
+		}
+		return this.json().encode({status: status, ids: assignmentIds.join(',')});	
+	},
+	
+	/*copyTimesheet: function(){
+		//var ua = new TimecardUsageAnalytics();
+		//ua.reportActionUsage('copy_timesheet', 'portal');
+		var currentTimesheetId  = this.gRequest.getParameter('current_timesheet_id');
+		var previousTimesheetId = this.gRequest.getParameter('previous_timesheet_id');
+		var copyTimeLogged = this.gRequest.getParameter('copy_time_logged');
+		copyTimeLogged = (copyTimeLogged && (copyTimeLogged == 'true' || copyTimeLogged == true)) ? true : false;
+		var timesheet = new TimeSheet(currentTimesheetId);
+		var timecardsCreated = timesheet.copyFromPreviousTimeSheet(previousTimesheetId, copyTimeLogged);
+		var message = '';
+		if(timecardsCreated != 0)
+			message = gs.getMessage('{0} time card(s) created', timecardsCreated.toString());
+		else
+			message = gs.getMessage('No time cards created');
+		return this.json().encode({status: 'success', message: message});
+	},*/
+	
+	generateTimecards: function(){
+		//var ua = new TimecardUsageAnalytics();
+		//ua.reportActionUsage('generate_timecards', 'portal');
+		var timesheetId = this.gRequest.getParameter('timesheet_id');
+		var timesheet = new GlideRecord(this.TABLE_TIMESHEET);
+		timesheet.get(timesheetId);
+		var generator = new assignmentGenerator();
+		var timecardsCreated = generator.generate(timesheet.getValue('week_start'), timesheet.getValue('employee'));
+		var message = '';
+		if(timecardsCreated != 0)
+			message = gs.getMessage('{0} time card(s) created', timecardsCreated.toString());
+		else
+			message = gs.getMessage('No time cards created');
+		return this.json().encode({status: 'success', message: message});
+	},
+	
+	submitTimesheet: function(){
+		var timesheetId = this.gRequest.getParameter('timesheet_id');
+		var timesheet = new GlideRecord(this.TABLE_TIMESHEET);
+		timesheet.get(timesheetId);
+		timesheet.setValue('state', 'Submitted to Manager');
+		timesheet.update();
+
+		/*var timesheet = new timeSheet(timesheetId);
+		var exceedingMaxHours = timesheet.validateMaxHours();
+		var msg = '';
+		var status = 'success';
+		if (!exceedingMaxHours) {
+			var count = timesheet.submitTimeCards();
+			msg = gs.getMessage("{0} time card(s) submitted", count.toString());
+		}else{
+			status = 'error';
+		}
+		var timesheetGr = timesheet.getGlideRecord();
+		var state = timesheetGr.getValue('state');*/
+		var canSubmitTimesheet = (new TimeSheetUIActionHelper(timesheetGr)).canSubmit();
+		return this.json().encode({
+			status: 'success', 
+			data: {value: state, display_value: 'Submitted to Manager'},
+			//message: msg,
+			canSubmitTimesheet : canSubmitTimesheet
+		});
+	},
+	
+	getNextTimesheet: function(){
+		var timesheetId = this.gRequest.getParameter('timesheet_id');
+		var userId = gs.getUserId();
+		var gr = new GlideRecord(this.TABLE_TIMESHEET);
+		gr.get(timesheetId);
+		//var weekStartsOn = gr.week_starts_on.getGlideObject();
+		var weekStartsOn = new GlideDateTime(gr.week_start).getDate();
+		weekStartsOn.addDaysUTC(7);
+		var nextWeekStart = weekStartsOn.toString();
+		var nextTimesheetId = new TimeSheetFactory().getTimeSheet(userId, nextWeekStart);
+		return this.json().encode({
+			status: 'success', 
+			data: {timesheet_id: nextTimesheetId},
+		});
+	},
+	
+	getPreviousTimesheet: function(){
+		var timesheetId = this.gRequest.getParameter('timesheet_id');
+		var userId = gs.getUserId();
+		var gr = new GlideRecord(this.TABLE_TIMESHEET);
+		gr.get(timesheetId);
+		//var weekStartsOn = gr.week_starts_on.getGlideObject();
+		var weekStartsOn = new GlideDateTime(gr.week_start).getDate();
+		weekStartsOn.addDaysUTC(-7);
+		var previousWeekStart = weekStartsOn.toString();
+		var previousTimesheetId = new TimeSheetFactory().getTimeSheet(userId, previousWeekStart);
+		return this.json().encode({
+			status: 'success', 
+			data: {timesheet_id: previousTimesheetId},
+		});
+	},
+	
+	getCurrentWeekTimesheet: function(){
+		var timesheetId = this.gRequest.getParameter('timesheet_id');
+		var userId = gs.getUserId();
+		var gr = new GlideRecord(this.TABLE_TIMESHEET);
+		gr.get(timesheetId);
+		var currentWeekStart = TimeCardUtil.getStartOfCurrentWeek().toString();
+		var currentWeekTimesheetId = new TimeSheetFactory().getTimeSheet(userId, currentWeekStart);
+		return this.json().encode({
+			status: 'success', 
+			data: {timesheet_id: currentWeekTimesheetId},
+		});
+	},
+	
+	updateTimecard: function(){
+		var timecardId = this.gRequest.getParameter('sysparm_sys_id');
+		var fields = this.gRequest.getParameter('sysparm_fields').split(',');
+		var data = this.json().decode(this.gRequest.getParameter('data'));
+		var timecard = new GlideRecord(this.TABLE_ASSIGNMENT);
+		timecard.get(timecardId);
+		for(var key in data){
+			timecard.setDisplayValue(key, data[key]);
+		}
+		var status = 'success';
+		if(!timecard.update())
+			status = 'error';
+		var responseData = {};
+		for(var i in fields){
+			var field = fields[i];
+			var fieldData = {};
+			fieldData.value = timecard.getValue(field);
+			fieldData.display_value = timecard.getDisplayValue(field);
+			responseData[field] = fieldData;
+		}
+		return this.json().encode({
+			status: status, 
+			result: responseData
+		});
+	},
+	
+	getDayBreakdowns: function(timesheetId){
+		var breakdowns = [];
+		var days = [{label: gs.getMessage('Mon'), value: 'monday'},
+					{label: gs.getMessage('Tue'), value: 'tuesday'},
+					{label: gs.getMessage('Wed'), value:'wednesday'},
+					{label: gs.getMessage('Thu'), value:'thursday'},
+					{label: gs.getMessage('Fri'), value: 'friday'},
+					{label: gs.getMessage('Sat'), value: 'saturday'},
+					{label: gs.getMessage('Sun'), value: 'sunday'}];
+		var gr = new GlideRecord(this.TABLE_TIMESHEET);
+		gr.get(timesheetId);
+		var fields = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+		//var dayObj = gr.week_starts_on.getGlideObject();
+		var dayObj = new GlideDateTime(gr.week_start).getDate();
+		var day = dayObj.getDayOfWeekUTC();
+		for(var i = 1; i<=7;i++){
+			var breakdown = {};
+			var dayField = fields[day-1]; 
+			breakdown.dayOfWeek  = days[day - 1].label;
+			breakdown.field = days[day - 1].value;
+			//breakdown.date = dayObj.getDayOfMonthNoTZ();
+			breakdown.date = dayObj.getDayOfMonthUTC();
+			breakdown.hours = gr.getDisplayValue(dayField);
+			var agg = new GlideAggregate(this.TABLE_ASSIGNMENT);
+			agg.addNotNullQuery(dayField);
+			agg.addQuery(dayField , '!=', 0);
+			agg.addQuery('timesheet', timesheetId);
+			agg.addNotNullQuery('task');
+			agg.groupBy('task');
+			agg.query();
+			breakdown.tasks = agg.getRowCount() || 0;
+			breakdowns.push(breakdown);
+			day = (day + 1 <= 7) ? day + 1  : 1;
+			dayObj.addDaysUTC(1);
+		}
+		return breakdowns;
+	},
+	
+	_setValues: function(gr, values, isNew){
+		var dayFields = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+		if(!isNew){
+			for(var i in dayFields){
+				var field = dayFields[i];
+				var val = values[field];
+				if(val){
+					var grValue = gr.getValue(field);
+					if(global.JSUtil.notNil(grValue))
+						values[field] = parseFloat(val) + parseFloat(grValue);
+				}
+			}
+		}
+		for(var key in values){
+			var type = gr.getElement(key).getED().getInternalType();
+			if(type == 'journal')
+				gr[key] = values[key];
+			else{
+				gr.setValue(key, values[key]);
+			}
+		}
+	},
+	
+    type: 'tenroxPortalService'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-08-17 17:47:25</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>e76a1ecf132c03007864bb722244b067</sys_id>
+        <sys_mod_count>19</sys_mod_count>
+        <sys_name>tenroxPortalService</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_include_e76a1ecf132c03007864bb722244b067</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-08-21 05:04:41</sys_updated_on>
+    </sys_script_include>
+</record_update>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_label/>
+        <action_name/>
+        <action_query>false</action_query>
+        <action_run_at>server</action_run_at>
+        <action_update>false</action_update>
+        <active>false</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <application/>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_nykl3_tenroxnbsa_timesheet</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Set Default Activity</name>
+        <onclick/>
+        <order>100</order>
+        <priority>100</priority>
+        <read_access_action>false</read_access_action>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[/* Author: Manami Sato - 10/16/17
+ * 
+ * 
+ */
+(function executeRule(current, previous /*null when async*/) {
+	//Put a Condition to check if user is Employee or not
+	if (current.employee.employee_type != 'Employee')
+		return;
+	//Check if a Lunch Break already exists for the current time sheet, if yes, log a warning and exit.
+	var gr = new GlideRecord('x_nykl3_tenroxnbsa_assignment');
+	gr.addQuery('timesheet', current);
+	gr.addQuery('set_default_acitvity','true');
+	gr.query();
+    /*var c = gr.getRowCount();
+	var a;
+	while(gr.next()){
+		a += ',' + gr.getValue('project');
+	}
+	for(var i=1; i < c ; i++){
+		//Create the Lunch Break
+		gr.initialize();
+		gr.timesheet = current.sys_id;
+		gr.set_default_acitvity = 'true';
+		gr.project = '16e28e0513b8c3007864bb722244b0b1';
+		gr.mon = 1;
+		gr.tue = 1;
+		gr.wed = 1;
+		gr.thu = 1;
+		gr.fri = 1;
+		var sysId = gr.insert();
+	}*/
+	var sysId;
+	while(gr.next()){
+		gr.initialize();
+		gr.timesheet = current.sys_id;
+		gr.set_default_acitvity = 'true';
+		gr.project = gr.getValue('project');
+		sysId = gr.insert();
+	}
+
+/*var gr2 = new GlideRecord('x_nykl3_tenroxnbsa_assignment');
+		
+	while(gr.next()){
+		gr2.initialize();
+		gr2.timesheet = current.sys_id;
+		//gr2.set_default_activity = gr.getValue('set_default_activity');
+		gr2.project = gr.getValue('project');
+		var sysId = gr2.insert();
+	}	
+	*/
+	
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>satom</sys_created_by>
+        <sys_created_on>2017-10-16 17:20:30</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>29f41bda137d87407864bb722244b0a1</sys_id>
+        <sys_mod_count>71</sys_mod_count>
+        <sys_name>Set Default Activity</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_29f41bda137d87407864bb722244b0a1</sys_update_name>
+        <sys_updated_by>satom</sys_updated_by>
+        <sys_updated_on>2017-10-17 15:51:39</sys_updated_on>
+        <template/>
+        <when>after</when>
+    </sys_script>
+</record_update>

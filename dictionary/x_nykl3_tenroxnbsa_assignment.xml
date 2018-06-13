@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element extends="x_nykl3_tenroxnbsa_week" label="Assignment" max_length="40" name="x_nykl3_tenroxnbsa_assignment" type="collection">
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Project" mandatory="true" max_length="32" name="project" reference="x_nykl3_tenroxnbsa_project" reference_qual="javascript:projectReturnFunction(current.timesheet.week_start, current.timesheet.week_end, current.project_work_type);" type="reference" use_dependent_field="true" use_reference_qualifier="advanced"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Project Work Type" max_length="32" name="project_work_type" reference="x_nykl3_tenroxnbsa_project_work_type" reference_qual="javascript:workTypeReturnFunction(current.project);" type="reference" use_reference_qualifier="advanced"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Set default acitvity" max_length="40" name="set_default_acitvity" read_roles="x_nykl3_tenroxnbsa_tenrox_user" type="boolean"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Timesheet" mandatory="true" max_length="32" name="timesheet" reference="x_nykl3_tenroxnbsa_timesheet" type="reference"/>
+        <index name="index">
+            <element name="timesheet"/>
+        </index>
+        <index name="index2">
+            <element name="project_work_type"/>
+        </index>
+        <index name="index3">
+            <element name="project"/>
+        </index>
+    </element>
+</database>

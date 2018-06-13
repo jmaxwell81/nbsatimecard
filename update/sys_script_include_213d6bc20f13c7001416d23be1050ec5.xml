@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_nykl3_tenroxnbsa.projectReturnFunction</api_name>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>projectReturnFunction</name>
+        <script><![CDATA[function projectReturnFunction(weekStart, weekEnd, workType) {
+	//gs.debug('grpReturnFunction: weekStart: {0}, weekEnd: {1}', [weekStart, weekEnd]);
+	if (!weekStart || !weekEnd) {
+		return;
+	}
+	var ret = 'sys_idIN';
+	var sn = new global.NBSA_SNUtils();
+	var query = 'startISEMPTY^ORstart<='+weekEnd+'^endISEMPTY^ORend>='+weekStart;
+	
+	if (workType)
+		query += this.projects(workType);
+	
+	//gs.debug('grpReturnFunction: query: '+query);
+	sn.getO('x_nykl3_tenroxnbsa_project', [query], ['sys_id']).forEach(function(x) {
+		ret += x.sys_id+',';
+	});
+	//gs.debug('grpReturnFunction: ret: '+ret);
+	return ret;
+}
+
+function projects(workType) {
+	if (!workType)
+		return;
+	
+	var ret = '^sys_idIN';
+	var sn = new global.NBSA_SNUtils();
+	sn.getO('x_nykl3_tenroxnbsa_m2m_project_and_type', ['project_work_type='+workType], ['project']).forEach(function(x) {
+		ret += x.project + ",";
+	});
+	return ret;
+}]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-12-29 14:54:31</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>213d6bc20f13c7001416d23be1050ec5</sys_id>
+        <sys_mod_count>9</sys_mod_count>
+        <sys_name>projectReturnFunction</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_include_213d6bc20f13c7001416d23be1050ec5</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-01-02 13:11:02</sys_updated_on>
+    </sys_script_include>
+</record_update>

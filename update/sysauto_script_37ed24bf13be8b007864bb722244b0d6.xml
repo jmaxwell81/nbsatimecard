@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <condition/>
+        <conditional>false</conditional>
+        <name>Tenrox - Creation of Leave Times for Next Period for Contracted Employees</name>
+        <run_as/>
+        <run_as_tz/>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period/>
+        <run_start>2017-12-08 22:12:20</run_start>
+        <run_time>1970-01-01 05:11:00</run_time>
+        <run_type>daily</run_type>
+        <script><![CDATA[/*
+ * Author: Lavlesh Garg 12/9/2017
+ * Application: Tenrox
+ * This job is scheduled to run Daily to Create Leave times (Initial Balance, Used and Remaining) for Active / Suspended contracted employees
+ * This job will created leave times for those contracted employees for which start date is one month from today
+ * This is because leaves (paid time off) are not calculated from 1st January
+ * It's calculated from the start date of the employee and expries next year
+ */
+
+var tu = new tenroxUtil();
+
+var gt, year, oneMonthFromNow, employeeStartDate, diff;
+var paidTimeOff, validFrom, leaveBalanceArray;
+var zeroLeaveBalanceArray = [['paid_time_off', 0]];
+var leaveType = ['Remaining', 'Used', 'Initial Balance'];
+
+gt = new GlideDateTime();
+gt.addMonthsLocalTime(1);
+oneMonthFromNow = gt.getDate();
+year = gt.getYearLocalTime();
+gs.debug('One Month from now: {0}, year: {1}', [oneMonthFromNow.toString(), year]);
+
+// Get All the user profile records for Active / Suspended Contracted Employees
+var grup = new GlideRecord(tu.TABLE_USER_PROFILE);
+var query = 'tenrox_statusINActive,Suspended^employee_type=Employee^employee_category=Contracted';
+gs.debug('query: '+query);
+grup.addEncodedQuery(query);
+grup.query();
+
+gs.debug('Total User Profiles (Active and Suspended, Contracted Employees): '+grup.getRowCount());
+
+while (grup.next()) {
+	
+	// If start date for the user is empty, can't create leave times, so continue to next user profile
+	if (!grup.start_date) {
+		gs.error("Start Date for Contracted Employee: "+grup.user.name+", is empty, so can't create leave time for next year.");
+		continue;
+	}
+	
+	// First Check if the Start Date of this employee is one month from now or not (and day and month, not year)
+	gt.setDisplayValue(grup.start_date.toString());
+	employeeStartDate = gt.getDate();
+	
+	//diff would be difference between employeeStartDate and employeeStartDate and it would be in days like '345 days', '780 days'
+	diff = GlideDate.subtract(employeeStartDate, oneMonthFromNow).getDisplayValue();
+	gs.debug('One Month from now: {0}, Employee Start Date: {1}, Diff: {2}, Employee: {3}', [oneMonthFromNow.toString(), employeeStartDate.toString(), diff, grup.user.name]);
+	
+	//Extract the number of days. Diff would be like '10 days', split on space, and get the first element of array
+	if (diff) {
+		diff = diff.split(' ')[0];
+	}
+	
+	gs.debug('Diff after splitting: {0} for Employee: {1}', [diff, grup.user.name]);
+	
+	/*
+ 	* If the difference is exactly 1, 2, 3 ... years, diff%365 would be zero
+ 	* And it would be mean that 1 month from now, employee would need leave times for next 1 year, so we are going to create them now
+ 	* If it's leap year, we would be creating leave time a month and a day before instead of a month. That would be okay.
+ 	*/
+	if (diff && diff%365 == 0) {
+		gs.debug('Creating Leave Times for '+grup.user.name);
+		paidTimeOff = grup.paid_time_off? grup.paid_time_off : 0;
+		
+		// Valid from would be same as start date, only the year would be current
+		// So first set the date to start date
+		// Then change the year to current year
+		gt.setDisplayValue(grup.start_date.toString());
+		gt.setYearLocalTime(year);
+		validFrom = gt.getDate();
+		
+		for (var l in leaveType) {
+			if (leaveType[l] == 'Used')
+				leaveBalanceArray = zeroLeaveBalanceArray;
+			else
+				leaveBalanceArray = [['paid_time_off', paidTimeOff]];
+			gs.debug('calling createLeaveTime for, type: '+leaveType[l]+', User: '+grup.user.name+', validFrom: '+validFrom+', leaveBalanceArray: '+leaveBalanceArray);
+			var error = tu.createLeaveTime(leaveType[l], grup.sys_id, validFrom, leaveBalanceArray);
+			if (error)
+				gs.warn(error);
+		}
+		
+	}
+}]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-12-09 14:04:25</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>37ed24bf13be8b007864bb722244b0d6</sys_id>
+        <sys_mod_count>5</sys_mod_count>
+        <sys_name>Tenrox - Creation of Leave Times for Next Period for Contracted Employees</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sysauto_script_37ed24bf13be8b007864bb722244b0d6</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-12-10 13:19:09</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>

@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_nykl3_tenroxnbsa.timeSheet</api_name>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>timeSheet</name>
+        <script><![CDATA[var timeSheet = Class.create();
+timeSheet.prototype = {
+	initialize: function(obj) {
+		this.TABLE_TIMESHEET          = 'x_nykl3_tenroxnbsa_timeSheet';
+		this.TABLE_ASSIGNMENT         = 'x_nykl3_tenroxnbsa_assignment';
+		this.TABLE_NON_WORK_TIME      = 'x_nykl3_tenroxnbsa_non_work_time';
+		if (obj instanceof GlideRecord) {
+			this.gr = obj;
+			this.sysId = this.gr.getValue('sys_id');
+		} else {
+			this.sysId = obj;
+			this.gr = this.getGlideRecord();
+		}
+		//roll up fields map from time_card to time_sheet
+		this.rollupFieldsMap = {
+			monday: "mon",
+			tuesday: "tue",
+			wednesday: "wed",
+			thursday: "thu",
+			friday: "fri",
+			saturday: "sat",
+			sunday: "sun",
+			total: "total"
+		};
+	},
+	
+	/*rollupStateFromTimeCards: function() {
+		var countByState = {};
+		var timeSheetState;
+		var timeCards = new GlideAggregate("time_card");
+		timeCards.addQuery("time_sheet", this.sysId);
+		timeCards.addAggregate("COUNT", "state");
+		timeCards.groupBy("state");
+		timeCards.query();
+		while (timeCards.next()) {
+			countByState[timeCards.getValue("state")] = parseInt(timeCards.getAggregate("COUNT", "state"));
+		}
+		
+		timeSheetState = "Pending";
+		
+		if(countByState["Pending"] > 0)
+			timeSheetState = "Pending";
+		else if(countByState["Rejected"] > 0)
+			timeSheetState = "Rejected";
+		else if (countByState["Submitted"] > 0)
+			timeSheetState = "Submitted";
+		else if (countByState["Approved"] > 0)
+			timeSheetState = "Approved";
+		else if (countByState["Processed"] > 0)
+			timeSheetState = "Processed";
+		
+		var timeSheetGR = this.getGlideRecord();
+		timeSheetGR.setValue("state", timeSheetState);
+		return timeSheetGR.update();
+	},*/
+	
+	/*recalculateHoursFields: function(fields) {
+		var index;
+		var timeCards = new GlideAggregate("time_card");
+		timeCards.addQuery("time_sheet", this.sysId);
+		for (index in fields) {
+			timeCards.addAggregate("SUM", fields[index]);
+		}
+		timeCards.setGroup(false);
+		timeCards.query();
+		if (timeCards.next()) {
+			for (index in fields) {
+				this.gr.setValue(this.rollupFieldsMap[fields[index]], timeCards.getAggregate("SUM", fields[index]));
+			}
+			this.gr.update();
+		}
+	},*/
+	
+	recalculateAllHoursFields: function() {
+		var allFields = Object.keys(this.rollupFieldsMap);
+		this.recalculateHoursFields(allFields);
+	},
+	
+	submitTimeCards: function() {
+		var timeCards = this.timeCardsPendingSubmission();
+		return this.updateTimeCardState(timeCards, 'Submitted');
+	},
+	
+	approveTimeCards: function() {
+		var userId;
+		if (!gs.hasRole('timecard_admin'))
+			userId = gs.getUserID();
+		var timeCards = this.timeCardsPendingApproval(userId);
+		return this.updateTimeCardState(timeCards, 'Approved');
+	},
+	
+	rejectTimeCards: function() {
+		var userId;
+		if (!gs.hasRole('timecard_admin'))
+			userId = gs.getUserID();
+		var timeCards = this.timeCardsPendingApproval(userId);
+		return this.updateTimeCardState(timeCards, 'Rejected');
+	},
+	
+	updateTimeCardState: function(timeCards, newState) {
+		var field, successCount = 0;
+		while (timeCards.next()) {
+			timeCards.setValue('state', newState);
+			if (timeCards.update())
+				successCount++;
+		}
+		return successCount;
+	},
+	
+	hasApprovedOrProcessedTimeCards: function() {
+		var timeCards = new GlideAggregate('time_card');
+		timeCards.addQuery('time_sheet', this.sysId);
+		timeCards.addQuery('state', 'IN', 'Approved,Processed');
+		timeCards.setGroup(false);
+		timeCards.addAggregate('COUNT');
+		timeCards.query();
+		
+		var count = 0;
+		if (timeCards.next())
+			count = parseFloat(timeCards.getAggregate('COUNT'));
+		
+		return count > 0;
+	},
+	
+	timeCardsPendingSubmission: function() {
+		var timeCards = new GlideRecord('time_card');
+		timeCards.addQuery('state', 'IN', 'Pending,Rejected');
+		var filter = timeCards.getEncodedQuery();
+		return this.getTimeCards(filter);
+	},
+	
+	timeCardsPendingApproval: function(userId) {
+		var timeCards = new GlideRecord("time_card");
+		timeCards.addQuery('state', 'Submitted');
+		if (JSUtil.notNil(userId)) {
+			timeCards.addQuery('approver_list', 'CONTAINS', userId);
+			timeCards.addQuery('approved_by', 'DOES NOT CONTAIN', userId).addOrCondition('approved_by', null);
+		}
+		var filter = timeCards.getEncodedQuery();
+		return this.getTimeCards(filter);
+	},
+	
+	/*getTimeCards: function(filter) {
+		var timeCards = new GlideRecord("time_card");
+		timeCards.addQuery("time_sheet", this.sysId);
+		if (JSUtil.notNil(filter))
+			timeCards.addEncodedQuery(filter);
+		timeCards.query();
+		return timeCards;
+	},*/
+	
+	getAssignments: function(filter) {
+		var assignments = new GlideRecord(this.TABLE_ASSIGNMENT);
+		assignments.addQuery("timeSheet", this.sysId);
+		if (JSUtil.notNil(filter))
+			assignments.addEncodedQuery(filter);
+		assignments.query();
+		return assignments;
+	},
+	
+	getTaskIds: function() {
+		var gr = this.getTimeCards();
+		var taskIds = [];
+		while (gr.next())
+			taskIds.push(gr.getValue('task'));
+		
+		return taskIds;
+	},
+	
+	getTimeCardsToCopy: function(taskClosedAfter) {
+		var currenttimeSheetTaskIds = this.getTaskIds();
+		// Get all tasks of the time sheet that have been closed after the given GlideDate or still active
+		var tasks = new GlideRecord('task');
+		tasks.addQuery('sys_id', 'IN', currenttimeSheetTaskIds);
+		tasks.addActiveQuery().addOrCondition('closed_at', '>=', TimeCardUtil.getWeekStartsOnDateTimeForUser(taskClosedAfter, this.gr.getValue('user')));
+		tasks.query();
+		
+		var tasksToCopy = [];
+		while (tasks.next()) {
+			tasksToCopy.push(tasks.getValue('sys_id'));
+		}
+		
+		var timeCards = new GlideRecord('time_card');
+		timeCards.addQuery('time_sheet', this.sysId);
+		sq = timeCards.addNullQuery('task'); // all non-task related time cards
+		sq.addOrCondition('task', 'IN', tasksToCopy); // or all active task time cards
+		timeCards.query();
+		return timeCards;
+	},
+	
+	copyFromPrevioustimeSheet: function(previoustimeSheetId, copyTime){
+		if(JSUtil.nil(previoustimeSheetId))
+			return;
+		var count = 0;
+		var previoustimeSheet = new timeSheet(previoustimeSheetId);
+		var timeCardsToCopy = previoustimeSheet.getTimeCardsToCopy(this.gr.getValue('week_starts_on'));
+		
+		var currenttimeSheetTasks = [];
+		var gr = this.getTimeCards('taskISNOTEMPTY');
+		while (gr.next()) {
+			var key = gr.getValue('task');
+			if (gr.isValidField('project_time_category') && !gr.project_time_category.nil())
+				key += gr.getValue('project_time_category');
+			currenttimeSheetTasks.push(key);
+		}
+		var arrayUtil = new ArrayUtil();
+		while(timeCardsToCopy.next()){
+			// Skip if time card already exists for task
+			if (!timeCardsToCopy.task.nil()) {
+				var taskAndCategory = timeCardsToCopy.getValue('task');
+				if (timeCardsToCopy.isValidField('project_time_category') && !timeCardsToCopy.project_time_category.nil())
+					taskAndCategory += timeCardsToCopy.getValue('project_time_category');
+				if (arrayUtil.contains(currenttimeSheetTasks, taskAndCategory))
+					continue;
+			}
+			if(this.copyTimeCard(timeCardsToCopy, copyTime))
+				count++;
+		}
+		return count;
+	},
+	
+	copyTimeCard: function(timeCard, copyTime){
+		var newTimeCard = new GlideRecord('time_card');
+		newTimeCard.initialize();
+		var fieldsToCopy = ['category', 'comments','task', 'resource_plan', 'project_time_category'];
+		if (copyTime)
+			fieldsToCopy.push('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
+		newTimeCard.setValue('time_sheet', this.sysId);
+		newTimeCard.setValue('week_starts_on', this.gr.getValue('week_starts_on'));
+		for(var i=0; i< fieldsToCopy.length; i++){
+			if (timeCard.isValidField(fieldsToCopy[i]))
+				newTimeCard[fieldsToCopy[i]] = timeCard.getValue(fieldsToCopy[i]);
+		}
+		return newTimeCard.insert();
+	},
+	
+	getGlideRecord: function() {
+		var gr = new GlideRecord("time_sheet");
+		gr.get(this.sysId);
+		return gr;
+	},
+	
+	validateMaxHours: function(policy) {
+		if (JSUtil.nil(policy)) {
+			var user = this.gr.user.getRefRecord();
+			policy = timeSheetPolicy.getFromUser(user);
+		}
+		var daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+		var exceedingMaxHours = false;
+		var maxHoursPerDay = policy.maxHoursPerDay();
+		var maxHoursPerWeek = policy.maxHoursPerWeek();
+		
+		var exceedingDays = [];
+		for (i = 0; i < daysOfWeek.length; ++i) {
+			if (parseFloat(this.gr.getValue(daysOfWeek[i])) > maxHoursPerDay) {
+				exceedingDays.push(this.gr.getElement([daysOfWeek[i]]).getLabel());
+				exceedingMaxHours = true;
+			}
+		}
+		
+		if (exceedingMaxHours)
+			gs.addErrorMessage(gs.getMessage('Maximum hours per day cannot exceed {0} hours. The following days have exceeded maximum hours - {1}', [maxHoursPerDay, exceedingDays.join(',')]));
+		
+		if (maxHoursPerWeek > 0 && parseFloat(this.gr.getValue('total_hours')) > maxHoursPerWeek) {
+			gs.addErrorMessage(gs.getMessage('Maximum hours per week cannot exceed {0} hours', maxHoursPerWeek));
+			exceedingMaxHours = true;
+		}
+		
+		return exceedingMaxHours;
+	},
+	
+	deleteTimeCards: function() {
+		var timeCards = this.getTimeCards();
+		while (timeCards.next())
+			timeCards.deleteRecord();
+	},
+	
+	type: 'timeSheet'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-08-17 18:48:13</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>19b6e2cb136c03007864bb722244b0ea</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>timeSheet</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_include_19b6e2cb136c03007864bb722244b0ea</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-08-17 19:45:43</sys_updated_on>
+    </sys_script_include>
+</record_update>

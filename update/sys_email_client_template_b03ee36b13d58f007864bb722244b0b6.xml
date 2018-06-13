@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_email_client_template">
+    <sys_email_client_template action="INSERT_OR_UPDATE">
+        <blind_copied/>
+        <body>Hi ${user.first_name},&#13;
+&#13;
+Kindly note that you now have access to Tenrox, a employee effort tracking application.&#13;
+You are requested to enter your hours in the application starting your first day.&#13;
+&#13;
+The link to user guide is provided here.&#13;
+&#13;
+Thanks and Regards,&#13;
+Tenrox Admin</body>
+        <condition/>
+        <copied/>
+        <from>NBSA Tenrox Admin&lt;nbsa.tenroxadmin@nykgroup.com&gt;</from>
+        <name>Tenrox New Account</name>
+        <order>100</order>
+        <recipients>user.email</recipients>
+        <reply_to>NBSA Tenrox Admin&lt;nbsa.tenroxadmin@nykgroup.com&gt;</reply_to>
+        <subject>New Tenrox profile created for ${user.first_name}</subject>
+        <sys_class_name>sys_email_client_template</sys_class_name>
+        <sys_created_by>RAWATS</sys_created_by>
+        <sys_created_on>2017-09-25 19:54:59</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>b03ee36b13d58f007864bb722244b0b6</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>Tenrox New Account</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_email_client_template_b03ee36b13d58f007864bb722244b0b6</sys_update_name>
+        <sys_updated_by>RAWATS</sys_updated_by>
+        <sys_updated_on>2017-09-25 22:24:30</sys_updated_on>
+        <table>x_nykl3_tenroxnbsa_user_profile</table>
+    </sys_email_client_template>
+</record_update>

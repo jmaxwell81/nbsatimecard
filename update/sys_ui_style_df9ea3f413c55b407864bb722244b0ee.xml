@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_style">
+    <sys_ui_style action="INSERT_OR_UPDATE">
+        <element>mon</element>
+        <name>x_nykl3_tenroxnbsa_non_work_time</name>
+        <style>background-color:orange;
+font-size:12px;
+color:black;
+text-align: left;</style>
+        <sys_class_name>sys_ui_style</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2018-03-22 16:46:15</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>df9ea3f413c55b407864bb722244b0ee</sys_id>
+        <sys_mod_count>7</sys_mod_count>
+        <sys_name>x_nykl3_tenroxnbsa_non_work_time</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_ui_style_df9ea3f413c55b407864bb722244b0ee</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-03-22 18:35:32</sys_updated_on>
+        <value>javascript:current.timesheet.holidays.toString().contains('mon')</value>
+    </sys_ui_style>
+</record_update>

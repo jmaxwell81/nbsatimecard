@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>true</action_delete>
+        <action_insert>false</action_insert>
+        <action_label/>
+        <action_name/>
+        <action_query>false</action_query>
+        <action_run_at>server</action_run_at>
+        <action_update>false</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <application/>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_nykl3_tenroxnbsa_lock_timesheet</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Unlock Timesheets When Deleting Record</name>
+        <onclick/>
+        <order>100</order>
+        <priority>100</priority>
+        <read_access_action>false</read_access_action>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+	
+	unlockTimesheet();
+
+})(current, previous);
+
+function unlockTimesheet() {
+	var tu = new tenroxUtil();
+	var log = 'Unlocking Timesheets:';
+	
+	gs.debug('startDate: '+current.start_date+', endDate: '+current.end_date+', employeeType: '+current.employee_type);
+	
+	var firstWeekMonday = tu.getStartOfWeekByDate(current.start_date);
+	var lastWeekMonday = tu.getStartOfWeekByDate(current.end_date);
+	
+	//gs.debug('firstWeekMonday: '+firstWeekMonday+', lastWeekMonday: '+lastWeekMonday+', employeeType: '+current.employee_type);
+	
+	var grts = new GlideRecord(tu.TABLE_TIMESHEET);
+	grts.addQuery('employee_type='+current.employee_type);
+	grts.addQuery('week_start>='+firstWeekMonday);
+	grts.addQuery('week_start<='+lastWeekMonday);
+	grts.query();
+	gs.debug('Total Timesheets in Range to be unlocked: '+grts.getRowCount());
+	log += '\nTotal Timesheets in Range to be unlocked: '+grts.getRowCount();
+	
+	var dateRangeArray = getDateRangeArray(current.start_date, current.end_date);
+	gs.debug('dateRangeArray.length: {0}, dateRangeArray: {1}', dateRangeArray.length, dateRangeArray.toString());
+	
+	var weekDaysToLock, alreadyLockedDays;
+	while (grts.next()) {
+		alreadyLockedDays = grts.lock_timesheet_for_days.toString();
+		gs.debug('grts.timesheet: '+grts.timesheet+', already locked days: '+alreadyLockedDays);
+		if (alreadyLockedDays != undefined && alreadyLockedDays != '') {
+			weekDaysToLock = getWeekDaysToLock(grts.week_start, dateRangeArray, grts.lock_timesheet_for_days.toString());
+			gs.debug('grts.timesheet: '+grts.timesheet+', new week days to be locked: '+weekDaysToLock);
+			log += '\ngrts.timesheet: '+grts.timesheet+', new week days to be locked: '+weekDaysToLock;
+			if (weekDaysToLock != undefined) {
+				grts.lock_timesheet_for_days = weekDaysToLock;
+				grts.update();
+			}
+		}
+	}
+	//current.log = log;
+	//current.update();
+	//action.setRedirectURL(current);
+}
+
+function getDateRangeArray(start, end) {
+	var startDateTime = new GlideDateTime(start.toString());
+	var endDateTime = new GlideDateTime(end.toString());
+	
+	var dateRangeArray = [];
+	var i=0;
+	while (GlideDate.subtract(startDateTime.getDate(), endDateTime.getDate()).getDisplayValue()) {
+		dateRangeArray[i] = startDateTime.getDate().getDisplayValue();
+		startDateTime.addDaysUTC(1);
+		i++;
+	}
+	return dateRangeArray;
+}
+
+function getWeekDaysToLock(weekStart, dateRangeArray, alreadyLockedDays) {
+	var week = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+	var weekDaysToUnlock = '';
+	var finalWeekDaysToLock = [];
+	var au = new global.ArrayUtil();
+	alreadyLockedDays = alreadyLockedDays.toString();
+	
+	var tsStartDate = new GlideDateTime(weekStart.toString());
+	tsStartDate.addDaysUTC(-1);
+	for (var i in week) {
+		tsStartDate.addDaysUTC(1);
+		d = tsStartDate.getDate().getDisplayValue();
+		var con = au.contains(dateRangeArray, d);
+		//gs.debug('dateRangeArray contains {0} is {1}', d, con);
+		if (con) {
+			weekDaysToUnlock += week[i] + ',';
+		}
+	}
+	
+	if (weekDaysToUnlock == undefined || weekDaysToUnlock.length == 0)
+		return;
+	
+	if (weekDaysToUnlock.endsWith(',')) {
+		weekDaysToUnlock = weekDaysToUnlock.substr(0, weekDaysToUnlock.length-1);
+	}
+	
+	if (weekDaysToUnlock.split(',').length == 7) {
+		return '';
+	}
+	
+	if (alreadyLockedDays && alreadyLockedDays.endsWith(',')) {
+		alreadyLockedDays = alreadyLockedDays.substr(0, alreadyLockedDays.length-1);
+	}
+	
+	if (alreadyLockedDays == undefined || alreadyLockedDays.length ==0)
+		return '';
+	
+	if (alreadyLockedDays == 'all')
+		alreadyLockedDays = 'mon,tue,wed,thu,fri,sat,sun';
+	
+	alreadyLockedDays = alreadyLockedDays.split(',');
+	weekDaysToUnlock = weekDaysToUnlock.split(',');
+	finalWeekDaysToLock = [];
+	var k=0;
+	for (var j in alreadyLockedDays) {
+		if (!au.contains(weekDaysToUnlock, alreadyLockedDays[j])) {
+			finalWeekDaysToLock[k++] = alreadyLockedDays[j];
+		}
+	}
+	
+	return finalWeekDaysToLock.toString();
+}
+]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-12-04 21:26:27</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>daf16c56137e0b007864bb722244b02e</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Unlock Timesheets When Deleting Record</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_daf16c56137e0b007864bb722244b02e</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-12-04 21:26:27</sys_updated_on>
+        <template/>
+        <when>before</when>
+    </sys_script>
+</record_update>

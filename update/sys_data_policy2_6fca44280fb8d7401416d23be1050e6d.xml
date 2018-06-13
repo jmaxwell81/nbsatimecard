@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_data_policy2">
+    <sys_data_policy2 action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <apply_import_set>true</apply_import_set>
+        <apply_soap>true</apply_soap>
+        <conditions/>
+        <description/>
+        <enforce_ui>true</enforce_ui>
+        <inherit>false</inherit>
+        <model_id/>
+        <model_table>x_nykl3_tenroxnbsa_project_work_type</model_table>
+        <reverse_if_false>true</reverse_if_false>
+        <short_description>Project Work Type Mandatory</short_description>
+        <sys_class_name>sys_data_policy2</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2018-03-08 19:16:34</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>6fca44280fb8d7401416d23be1050e6d</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Project Work Type Mandatory</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_data_policy2_6fca44280fb8d7401416d23be1050e6d</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-03-08 19:16:34</sys_updated_on>
+    </sys_data_policy2>
+</record_update>

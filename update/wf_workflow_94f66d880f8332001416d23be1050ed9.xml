@@ -1,0 +1,1996 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="wf_workflow_version">
+    <wf_workflow_version action="INSERT_OR_UPDATE">
+        <active>false</active>
+        <activity_stages>{"activities":{},"subflows":[],"stages":{},"ends":["ff2c637c0f060b401416d23be1050e4c"]}</activity_stages>
+        <after_business_rules>false</after_business_rules>
+        <checked_out/>
+        <checked_out_by/>
+        <column_renderer display_value="Workflow-driven">a56213111b030100adca1e094f0713ac</column_renderer>
+        <condition table="x_nykl3_tenroxnbsa_timesheet">state=Open^EQ<item endquery="false" field="state" goto="false" newquery="false" operator="=" or="false" value="Open"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </condition>
+        <condition_type>run_match</condition_type>
+        <description>This is an approval workflow to tenrox timesheets</description>
+        <expected_sequences>a72c6b3c0f060b401416d23be1050e87,3b2c637c0f060b401416d23be1050e46,ab2c6b3c0f060b401416d23be1050e82,b32c637c0f060b401416d23be1050e4d,ab2c6b3c0f060b401416d23be1050e81,f32c637c0f060b401416d23be1050e47,ff2c637c0f060b401416d23be1050e4b,ff2c637c0f060b401416d23be1050e4c</expected_sequences>
+        <expected_time>1970-01-01 14:00:00</expected_time>
+        <expected_time_type/>
+        <full_sequences>a72c6b3c0f060b401416d23be1050e87,3b2c637c0f060b401416d23be1050e46,ab2c6b3c0f060b401416d23be1050e82,f72c637c0f060b401416d23be1050e4c|a72c6b3c0f060b401416d23be1050e87,3b2c637c0f060b401416d23be1050e46,ab2c6b3c0f060b401416d23be1050e82,b32c637c0f060b401416d23be1050e4d,ab2c6b3c0f060b401416d23be1050e81,f32c637c0f060b401416d23be1050e47,ff2c637c0f060b401416d23be1050e4b,ff2c637c0f060b401416d23be1050e4c|a72c6b3c0f060b401416d23be1050e87,3b2c637c0f060b401416d23be1050e46,ab2c6b3c0f060b401416d23be1050e82,b32c637c0f060b401416d23be1050e4d,ab2c6b3c0f060b401416d23be1050e81,f32c637c0f060b401416d23be1050e47,f72c637c0f060b401416d23be1050e4c|a72c6b3c0f060b401416d23be1050e87,3b2c637c0f060b401416d23be1050e46,ab2c6b3c0f060b401416d23be1050e82,b32c637c0f060b401416d23be1050e4d,ab2c6b3c0f060b401416d23be1050e81,f32c6b3c0f060b401416d23be1050e88,f72c637c0f060b401416d23be1050e4c|a72c6b3c0f060b401416d23be1050e87,3b2c637c0f060b401416d23be1050e46,ab2c6b3c0f060b401416d23be1050e82,b32c637c0f060b401416d23be1050e4d,ab2c6b3c0f060b401416d23be1050e81,f32c6b3c0f060b401416d23be1050e88,eb2c6b3c0f060b401416d23be1050e87,ff2c637c0f060b401416d23be1050e4c</full_sequences>
+        <journal/>
+        <max_activity_count>100</max_activity_count>
+        <name>Timesheet Approval</name>
+        <not_cacheable>false</not_cacheable>
+        <on_cancel><![CDATA[// This script executes if the workflow is cancelled.// The global variable context_sys_id contains the sys_id of the cancelled workflow context.]]></on_cancel>
+        <order>100</order>
+        <pin_type>set_by_activity</pin_type>
+        <published>true</published>
+        <relative_duration/>
+        <requires_ert>true</requires_ert>
+        <run_multiple>false</run_multiple>
+        <schedule/>
+        <stage_field/>
+        <stage_order>computed</stage_order>
+        <start display_value="Begin">a72c6b3c0f060b401416d23be1050e87</start>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:45</sys_created_on>
+        <sys_id>632c6b3c0f060b401416d23be1050e81</sys_id>
+        <sys_mod_count>4</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:27:19</sys_updated_on>
+        <table>x_nykl3_tenroxnbsa_timesheet</table>
+        <timezone/>
+        <validated>false</validated>
+        <workflow display_value="Timesheet Approval">94f66d880f8332001416d23be1050ed9</workflow>
+    </wf_workflow_version>
+    <wf_workflow action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <description>This is an approval workflow to tenrox timesheets</description>
+        <name>Timesheet Approval</name>
+        <preview/>
+        <sys_class_name>wf_workflow</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-05-25 16:40:49</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>94f66d880f8332001416d23be1050ed9</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Timesheet Approval</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>wf_workflow_94f66d880f8332001416d23be1050ed9</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-05-25 16:40:49</sys_updated_on>
+        <table>x_nykl3_tenroxnbsa_timesheet</table>
+        <template>false</template>
+        <vars/>
+    </wf_workflow>
+    <wf_activity action="INSERT_OR_UPDATE">
+        <activity_definition display_value="Approval - User">35433da80a0a029a0028c639a1e51eb4</activity_definition>
+        <activity_definition_updated>false</activity_definition_updated>
+        <databus_lookup_id>10</databus_lookup_id>
+        <height/>
+        <input>{}</input>
+        <is_parent>false</is_parent>
+        <name>Accounting Approval</name>
+        <new_activity_definition/>
+        <notes/>
+        <out_of_date>false</out_of_date>
+        <parent/>
+        <pinned>false</pinned>
+        <pinned_version/>
+        <stage/>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>f32c637c0f060b401416d23be1050e47</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <timeout>1970-01-01 00:00:00</timeout>
+        <vars/>
+        <width/>
+        <workflow_version display_value="Timesheet Approval">632c6b3c0f060b401416d23be1050e81</workflow_version>
+        <x>748</x>
+        <y>291</y>
+    </wf_activity>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>50</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>fb2c637c0f060b401416d23be1050e49</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">4485eef70a6a803f6bc4bafa9e999640</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>100</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>bb2c637c0f060b401416d23be1050e4a</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>any</value>
+        <variable display_value="">c35e5bdd0a0a0ba96248a709f495c9ae</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>101</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>f32c637c0f060b401416d23be1050e48</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>approval</value>
+        <variable display_value="">e846198f0a0004f91fba434a514ba8b8</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>103</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>b72c637c0f060b401416d23be1050e48</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">e37b77ac0a0004f973283ad13b341c5b</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>104</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>f72c637c0f060b401416d23be1050e4a</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">e37a96e80a0004f978b47d2d6c5e0b22</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>110</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>372c637c0f060b401416d23be1050e47</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a77191a4c0a800662b403f7dff5f1bbd</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>115</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>f32c637c0f060b401416d23be1050e4b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a76680b9c0a8006661b107d0f21fae67</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>120</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>7b2c637c0f060b401416d23be1050e48</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a77903a7c0a8006641af7c9b1d34444e</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>200</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>ff2c637c0f060b401416d23be1050e48</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">c35e4cc40a0a0ba96248a7098ec9cb06</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>310</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>772c637c0f060b401416d23be1050e49</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>reject</value>
+        <variable display_value="">502163410a6a803f0356332b24dc7945</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>330</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>b32c637c0f060b401416d23be1050e49</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>approval_history</value>
+        <variable display_value="">e863e3b80a0004f911d67787e77e0f16</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>900</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>7f2c637c0f060b401416d23be1050e4a</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a774138dc0a80066000be7af20961c7d</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>900</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>372c637c0f060b401416d23be1050e4a</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a7754e91c0a800664938d0ef6d2664d7</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>1110</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>3b2c637c0f060b401416d23be1050e49</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a769a182c0a8006629db7fa3fc2a863d</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>1120</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>bf2c637c0f060b401416d23be1050e49</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>3bf802c20a0a0b52008e2859cd8abcf2</value>
+        <variable display_value="">a76c6257c0a8006645cff43883470e64</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>1150</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>732c637c0f060b401416d23be1050e4a</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a76b8c6ec0a800664bb14d5d8b9cd7c4</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>1200</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>7f2c637c0f060b401416d23be1050e47</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a775f59ac0a8006665d72362ae687035</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>1200</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>b72c637c0f060b401416d23be1050e4b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a7781cb6c0a80066147dc7a5244d5d16</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>1330</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>332c637c0f060b401416d23be1050e48</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>9ae74be8136dcf007864bb722244b0fe</value>
+        <variable display_value="">02c618170a0a0b26436f5c2c9f7a3901</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>1360</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>3f2c637c0f060b401416d23be1050e48</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>// Set 'answer' to the number of seconds this timer should wait&#13;
+answer = 0;</value>
+        <variable display_value="">a782cde9c0a8006608f39abdd85c8395</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>1370</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>bb2c637c0f060b401416d23be1050e47</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>// Set the variable 'answer' to '', 'approved' or 'rejected' to indicate the approval status for this approval.  When called, the following information is available:&#13;
+//&#13;
+//    counts.total = total number of users that are part of this approval&#13;
+//    counts.approved = # of users that approved so far&#13;
+//    counts.rejected = # of users that rejected so far&#13;
+//    counts.requested = # of users that are pending approval&#13;
+//    counts.not_requested = # of users that are not pending approval&#13;
+//    counts.not_required = # of users that approval is not required&#13;
+//&#13;
+</value>
+        <variable display_value="">02c86d780a0a0b261e6a356bc893d348</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>2000</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>f72c637c0f060b401416d23be1050e47</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>0</value>
+        <variable display_value="">02ca01820a0a0b261cf923fb95f5e1d0</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c637c0f060b401416d23be1050e47</document_key>
+        <order>2050</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>332c637c0f060b401416d23be1050e4b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>// Set the variable 'answer' to a comma-separated list of user ids and/or group ids or an array of user/group ids to add as approvers.&#13;
+//&#13;
+// For example:&#13;
+//       answer = [];&#13;
+//       answer.push('id1');&#13;
+//       answer.push('id2');&#13;
+</value>
+        <variable display_value="">c35e582f0a0a0ba96248a70985207e63</variable>
+    </sys_variable_value>
+    <wf_condition action="INSERT_OR_UPDATE">
+        <activity display_value="Accounting Approval">f32c637c0f060b401416d23be1050e47</activity>
+        <condition>activity.result == 'approved' || activity.result == 'skipped'</condition>
+        <condition_default display_value="Approved">586e1fa60a0a0b5c008121ab894f2b06</condition_default>
+        <condition_type>standard</condition_type>
+        <else_flag>false</else_flag>
+        <error>false</error>
+        <event>false</event>
+        <event_name/>
+        <is_positive>true</is_positive>
+        <name>Approved</name>
+        <order>1</order>
+        <short_description>Approval request was approved</short_description>
+        <skip_during_generate>false</skip_during_generate>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>3f2c637c0f060b401416d23be1050e4b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+    </wf_condition>
+    <wf_condition action="INSERT_OR_UPDATE">
+        <activity display_value="Accounting Approval">f32c637c0f060b401416d23be1050e47</activity>
+        <condition>activity.result == 'rejected'</condition>
+        <condition_default display_value="Rejected">586e4ef60a0a0b5c00440b56c014c8a5</condition_default>
+        <condition_type>standard</condition_type>
+        <else_flag>false</else_flag>
+        <error>false</error>
+        <event>false</event>
+        <event_name/>
+        <is_positive>false</is_positive>
+        <name>Rejected</name>
+        <order>2</order>
+        <short_description>Approval request was rejected</short_description>
+        <skip_during_generate>true</skip_during_generate>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>bb2c637c0f060b401416d23be1050e4b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+    </wf_condition>
+    <wf_activity action="INSERT_OR_UPDATE">
+        <activity_definition display_value="Begin">c7a5e32c0a0a0b3a002377c24ed8ea76</activity_definition>
+        <activity_definition_updated>false</activity_definition_updated>
+        <databus_lookup_id>1</databus_lookup_id>
+        <height/>
+        <input/>
+        <is_parent>false</is_parent>
+        <name>Begin</name>
+        <new_activity_definition/>
+        <notes/>
+        <out_of_date>false</out_of_date>
+        <parent/>
+        <pinned>false</pinned>
+        <pinned_version/>
+        <stage/>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>a72c6b3c0f060b401416d23be1050e87</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <timeout>1970-01-01 00:00:00</timeout>
+        <vars/>
+        <width>80</width>
+        <workflow_version display_value="Timesheet Approval">632c6b3c0f060b401416d23be1050e81</workflow_version>
+        <x>20</x>
+        <y>20</y>
+    </wf_activity>
+    <wf_condition action="INSERT_OR_UPDATE">
+        <activity display_value="Begin">a72c6b3c0f060b401416d23be1050e87</activity>
+        <condition>true</condition>
+        <condition_default/>
+        <condition_type>standard</condition_type>
+        <else_flag>false</else_flag>
+        <error>false</error>
+        <event>false</event>
+        <event_name/>
+        <is_positive>true</is_positive>
+        <name>Always</name>
+        <order>0</order>
+        <short_description/>
+        <skip_during_generate>false</skip_during_generate>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>2b2c6b3c0f060b401416d23be1050e87</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+    </wf_condition>
+    <wf_activity action="INSERT_OR_UPDATE">
+        <activity_definition display_value="End">c7a66f7d0a0a0b3a004544a6d2f14076</activity_definition>
+        <activity_definition_updated>false</activity_definition_updated>
+        <databus_lookup_id>1</databus_lookup_id>
+        <height/>
+        <input/>
+        <is_parent>false</is_parent>
+        <name>End</name>
+        <new_activity_definition/>
+        <notes/>
+        <out_of_date>false</out_of_date>
+        <parent/>
+        <pinned>false</pinned>
+        <pinned_version/>
+        <stage/>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>ff2c637c0f060b401416d23be1050e4c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <timeout>1970-01-01 00:00:00</timeout>
+        <vars/>
+        <width>80</width>
+        <workflow_version display_value="Timesheet Approval">632c6b3c0f060b401416d23be1050e81</workflow_version>
+        <x>1187</x>
+        <y>438</y>
+    </wf_activity>
+    <wf_activity action="INSERT_OR_UPDATE">
+        <activity_definition display_value="If">98f621ca0a0a0b5900f7c291f5e45a0e</activity_definition>
+        <activity_definition_updated>false</activity_definition_updated>
+        <databus_lookup_id>9</databus_lookup_id>
+        <height/>
+        <input>{}</input>
+        <is_parent>false</is_parent>
+        <name>Is user Consultant?</name>
+        <new_activity_definition/>
+        <notes/>
+        <out_of_date>false</out_of_date>
+        <parent/>
+        <pinned>false</pinned>
+        <pinned_version/>
+        <stage/>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>ab2c6b3c0f060b401416d23be1050e81</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <timeout>1970-01-01 00:00:00</timeout>
+        <vars/>
+        <width/>
+        <workflow_version display_value="Timesheet Approval">632c6b3c0f060b401416d23be1050e81</workflow_version>
+        <x>518</x>
+        <y>339</y>
+    </wf_activity>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e81</document_key>
+        <order>100</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>eb2c6b3c0f060b401416d23be1050e81</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>employee.employee_type=Consultant^EQ</value>
+        <variable display_value="">493cba6a0a6a803f07df24b118473551</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e81</document_key>
+        <order>200</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>af2c6b3c0f060b401416d23be1050e81</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>0</value>
+        <variable display_value="">493d2c1d0a6a803f3217a75738ea3289</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e81</document_key>
+        <order>300</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>632c6b3c0f060b401416d23be1050e82</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>// This script needs to set answer to 'yes' or 'no' to indicate the state of the activity.&#13;
+//&#13;
+// For example,&#13;
+//&#13;
+//   answer = ifScript();&#13;
+//&#13;
+//   function ifScript() {&#13;
+//      if (condition is true) {&#13;
+//         return 'yes';&#13;
+//      }&#13;
+//      return 'no';&#13;
+//   }&#13;
+</value>
+        <variable display_value="">c35e50810a0a0ba96248a709b450fc32</variable>
+    </sys_variable_value>
+    <wf_condition action="INSERT_OR_UPDATE">
+        <activity display_value="Is user Consultant?">ab2c6b3c0f060b401416d23be1050e81</activity>
+        <condition>activity.result == 'no'</condition>
+        <condition_default display_value="No">c1eff6430a0a0b59000f955abe842c94</condition_default>
+        <condition_type>standard</condition_type>
+        <else_flag>false</else_flag>
+        <error>false</error>
+        <event>false</event>
+        <event_name/>
+        <is_positive>false</is_positive>
+        <name>No</name>
+        <order>200</order>
+        <short_description/>
+        <skip_during_generate>true</skip_during_generate>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>e72c6b3c0f060b401416d23be1050e82</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+    </wf_condition>
+    <wf_condition action="INSERT_OR_UPDATE">
+        <activity display_value="Is user Consultant?">ab2c6b3c0f060b401416d23be1050e81</activity>
+        <condition>activity.result == 'yes'</condition>
+        <condition_default display_value="Yes">c1ef63200a0a0b59005ef89bae78feb7</condition_default>
+        <condition_type>standard</condition_type>
+        <else_flag>false</else_flag>
+        <error>false</error>
+        <event>false</event>
+        <event_name/>
+        <is_positive>true</is_positive>
+        <name>Yes</name>
+        <order>100</order>
+        <short_description/>
+        <skip_during_generate>false</skip_during_generate>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>672c6b3c0f060b401416d23be1050e82</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+    </wf_condition>
+    <wf_activity action="INSERT_OR_UPDATE">
+        <activity_definition display_value="Approval - User">35433da80a0a029a0028c639a1e51eb4</activity_definition>
+        <activity_definition_updated>false</activity_definition_updated>
+        <databus_lookup_id>3</databus_lookup_id>
+        <height/>
+        <input>{}</input>
+        <is_parent>false</is_parent>
+        <name>Manager Approval</name>
+        <new_activity_definition/>
+        <notes/>
+        <out_of_date>false</out_of_date>
+        <parent/>
+        <pinned>false</pinned>
+        <pinned_version/>
+        <stage/>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>ab2c6b3c0f060b401416d23be1050e82</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <timeout>1970-01-01 00:00:00</timeout>
+        <vars/>
+        <width/>
+        <workflow_version display_value="Timesheet Approval">632c6b3c0f060b401416d23be1050e81</workflow_version>
+        <x>272</x>
+        <y>147</y>
+    </wf_activity>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>50</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>a32c6b3c0f060b401416d23be1050e85</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>employee.managerISNOTEMPTY^EQ</value>
+        <variable display_value="">4485eef70a6a803f6bc4bafa9e999640</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>100</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>632c6b3c0f060b401416d23be1050e86</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>any</value>
+        <variable display_value="">c35e5bdd0a0a0ba96248a709f495c9ae</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>101</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>ab2c6b3c0f060b401416d23be1050e83</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>approval</value>
+        <variable display_value="">e846198f0a0004f91fba434a514ba8b8</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>103</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>6f2c6b3c0f060b401416d23be1050e83</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">e37b77ac0a0004f973283ad13b341c5b</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>104</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>af2c6b3c0f060b401416d23be1050e85</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">e37a96e80a0004f978b47d2d6c5e0b22</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>110</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>eb2c6b3c0f060b401416d23be1050e82</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a77191a4c0a800662b403f7dff5f1bbd</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>115</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>ab2c6b3c0f060b401416d23be1050e86</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a76680b9c0a8006661b107d0f21fae67</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>120</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>232c6b3c0f060b401416d23be1050e84</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a77903a7c0a8006641af7c9b1d34444e</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>200</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>a72c6b3c0f060b401416d23be1050e84</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>${employee.manager}</value>
+        <variable display_value="">c35e4cc40a0a0ba96248a7098ec9cb06</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>310</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>2f2c6b3c0f060b401416d23be1050e84</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>reject</value>
+        <variable display_value="">502163410a6a803f0356332b24dc7945</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>330</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>6b2c6b3c0f060b401416d23be1050e84</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>approval_history</value>
+        <variable display_value="">e863e3b80a0004f911d67787e77e0f16</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>900</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>eb2c6b3c0f060b401416d23be1050e85</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>08fcd0830a0a0b2600079f56b1adb9ae</value>
+        <variable display_value="">a7754e91c0a800664938d0ef6d2664d7</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>900</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>272c6b3c0f060b401416d23be1050e86</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a774138dc0a80066000be7af20961c7d</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>1110</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>ef2c6b3c0f060b401416d23be1050e84</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a769a182c0a8006629db7fa3fc2a863d</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>1120</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>672c6b3c0f060b401416d23be1050e85</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>3bf802c20a0a0b52008e2859cd8abcf2</value>
+        <variable display_value="">a76c6257c0a8006645cff43883470e64</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>1150</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>2b2c6b3c0f060b401416d23be1050e85</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a76b8c6ec0a800664bb14d5d8b9cd7c4</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>1200</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>6f2c6b3c0f060b401416d23be1050e86</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a7781cb6c0a80066147dc7a5244d5d16</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>1200</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>272c6b3c0f060b401416d23be1050e83</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a775f59ac0a8006665d72362ae687035</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>1330</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>e72c6b3c0f060b401416d23be1050e83</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">02c618170a0a0b26436f5c2c9f7a3901</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>1360</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>e32c6b3c0f060b401416d23be1050e84</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>// Set 'answer' to the number of seconds this timer should wait&#13;
+answer = 0;</value>
+        <variable display_value="">a782cde9c0a8006608f39abdd85c8395</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>1370</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>632c6b3c0f060b401416d23be1050e83</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>// Set the variable 'answer' to '', 'approved' or 'rejected' to indicate the approval status for this approval.  When called, the following information is available:&#13;
+//&#13;
+//    counts.total = total number of users that are part of this approval&#13;
+//    counts.approved = # of users that approved so far&#13;
+//    counts.rejected = # of users that rejected so far&#13;
+//    counts.requested = # of users that are pending approval&#13;
+//    counts.not_requested = # of users that are not pending approval&#13;
+//    counts.not_required = # of users that approval is not required&#13;
+//&#13;
+</value>
+        <variable display_value="">02c86d780a0a0b261e6a356bc893d348</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>2000</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>af2c6b3c0f060b401416d23be1050e82</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>0</value>
+        <variable display_value="">02ca01820a0a0b261cf923fb95f5e1d0</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ab2c6b3c0f060b401416d23be1050e82</document_key>
+        <order>2050</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>e72c6b3c0f060b401416d23be1050e86</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>// Set the variable 'answer' to a comma-separated list of user ids and/or group ids or an array of user/group ids to add as approvers.&#13;
+//&#13;
+// For example:&#13;
+//       answer = [];&#13;
+//       answer.push('id1');&#13;
+//       answer.push('id2');&#13;
+</value>
+        <variable display_value="">c35e582f0a0a0ba96248a70985207e63</variable>
+    </sys_variable_value>
+    <wf_condition action="INSERT_OR_UPDATE">
+        <activity display_value="Manager Approval">ab2c6b3c0f060b401416d23be1050e82</activity>
+        <condition>activity.result == 'approved' || activity.result == 'skipped'</condition>
+        <condition_default display_value="Approved">586e1fa60a0a0b5c008121ab894f2b06</condition_default>
+        <condition_type>standard</condition_type>
+        <else_flag>false</else_flag>
+        <error>false</error>
+        <event>false</event>
+        <event_name/>
+        <is_positive>true</is_positive>
+        <name>Approved</name>
+        <order>1</order>
+        <short_description>Approval request was approved</short_description>
+        <skip_during_generate>false</skip_during_generate>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>e32c6b3c0f060b401416d23be1050e87</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+    </wf_condition>
+    <wf_condition action="INSERT_OR_UPDATE">
+        <activity display_value="Manager Approval">ab2c6b3c0f060b401416d23be1050e82</activity>
+        <condition>activity.result == 'rejected'</condition>
+        <condition_default display_value="Rejected">586e4ef60a0a0b5c00440b56c014c8a5</condition_default>
+        <condition_type>standard</condition_type>
+        <else_flag>false</else_flag>
+        <error>false</error>
+        <event>false</event>
+        <event_name/>
+        <is_positive>false</is_positive>
+        <name>Rejected</name>
+        <order>2</order>
+        <short_description>Approval request was rejected</short_description>
+        <skip_during_generate>true</skip_during_generate>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>632c6b3c0f060b401416d23be1050e87</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+    </wf_condition>
+    <wf_activity action="INSERT_OR_UPDATE">
+        <activity_definition display_value="Approval - User">35433da80a0a029a0028c639a1e51eb4</activity_definition>
+        <activity_definition_updated>false</activity_definition_updated>
+        <databus_lookup_id>8</databus_lookup_id>
+        <height/>
+        <input>{}</input>
+        <is_parent>false</is_parent>
+        <name>Payroll Manager Approval</name>
+        <new_activity_definition/>
+        <notes/>
+        <out_of_date>false</out_of_date>
+        <parent/>
+        <pinned>false</pinned>
+        <pinned_version/>
+        <stage/>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>f32c6b3c0f060b401416d23be1050e88</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <timeout>1970-01-01 00:00:00</timeout>
+        <vars/>
+        <width/>
+        <workflow_version display_value="Timesheet Approval">632c6b3c0f060b401416d23be1050e81</workflow_version>
+        <x>750</x>
+        <y>439</y>
+    </wf_activity>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>50</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>372c637c0f060b401416d23be1050e44</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">4485eef70a6a803f6bc4bafa9e999640</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>100</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>f32c637c0f060b401416d23be1050e45</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>any</value>
+        <variable display_value="">c35e5bdd0a0a0ba96248a709f495c9ae</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>101</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>f32c6b3c0f060b401416d23be1050e89</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>approval</value>
+        <variable display_value="">e846198f0a0004f91fba434a514ba8b8</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>103</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>b72c6b3c0f060b401416d23be1050e89</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">e37b77ac0a0004f973283ad13b341c5b</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>104</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>332c637c0f060b401416d23be1050e45</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">e37a96e80a0004f978b47d2d6c5e0b22</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>110</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>372c6b3c0f060b401416d23be1050e88</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a77191a4c0a800662b403f7dff5f1bbd</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>115</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>3f2c637c0f060b401416d23be1050e45</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a76680b9c0a8006661b107d0f21fae67</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>120</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>7b2c6b3c0f060b401416d23be1050e89</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a77903a7c0a8006641af7c9b1d34444e</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>200</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>ff2c6b3c0f060b401416d23be1050e89</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">c35e4cc40a0a0ba96248a7098ec9cb06</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>310</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>bf2c637c0f060b401416d23be1050e43</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>reject</value>
+        <variable display_value="">502163410a6a803f0356332b24dc7945</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>330</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>fb2c637c0f060b401416d23be1050e43</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>approval_history</value>
+        <variable display_value="">e863e3b80a0004f911d67787e77e0f16</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>900</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>7f2c637c0f060b401416d23be1050e44</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>08fcd0830a0a0b2600079f56b1adb9ae</value>
+        <variable display_value="">a7754e91c0a800664938d0ef6d2664d7</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>900</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>b72c637c0f060b401416d23be1050e45</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a774138dc0a80066000be7af20961c7d</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>1110</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>732c637c0f060b401416d23be1050e44</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a769a182c0a8006629db7fa3fc2a863d</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>1120</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>f72c637c0f060b401416d23be1050e44</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>3bf802c20a0a0b52008e2859cd8abcf2</value>
+        <variable display_value="">a76c6257c0a8006645cff43883470e64</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>1150</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>bb2c637c0f060b401416d23be1050e44</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a76b8c6ec0a800664bb14d5d8b9cd7c4</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>1200</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>7f2c6b3c0f060b401416d23be1050e88</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a775f59ac0a8006665d72362ae687035</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>1200</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>ff2c637c0f060b401416d23be1050e45</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value/>
+        <variable display_value="">a7781cb6c0a80066147dc7a5244d5d16</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>1330</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>332c6b3c0f060b401416d23be1050e89</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>142c463e13573e007864bb722244b02a</value>
+        <variable display_value="">02c618170a0a0b26436f5c2c9f7a3901</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>1360</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>3f2c6b3c0f060b401416d23be1050e89</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>// Set 'answer' to the number of seconds this timer should wait&#13;
+answer = 0;</value>
+        <variable display_value="">a782cde9c0a8006608f39abdd85c8395</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>1370</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>bb2c6b3c0f060b401416d23be1050e88</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>// Set the variable 'answer' to '', 'approved' or 'rejected' to indicate the approval status for this approval.  When called, the following information is available:&#13;
+//&#13;
+//    counts.total = total number of users that are part of this approval&#13;
+//    counts.approved = # of users that approved so far&#13;
+//    counts.rejected = # of users that rejected so far&#13;
+//    counts.requested = # of users that are pending approval&#13;
+//    counts.not_requested = # of users that are not pending approval&#13;
+//    counts.not_required = # of users that approval is not required&#13;
+//&#13;
+</value>
+        <variable display_value="">02c86d780a0a0b261e6a356bc893d348</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>2000</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>f72c6b3c0f060b401416d23be1050e88</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>0</value>
+        <variable display_value="">02ca01820a0a0b261cf923fb95f5e1d0</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f32c6b3c0f060b401416d23be1050e88</document_key>
+        <order>2050</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>7b2c637c0f060b401416d23be1050e45</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>// Set the variable 'answer' to a comma-separated list of user ids and/or group ids or an array of user/group ids to add as approvers.&#13;
+//&#13;
+// For example:&#13;
+//       answer = [];&#13;
+//       answer.push('id1');&#13;
+//       answer.push('id2');&#13;
+</value>
+        <variable display_value="">c35e582f0a0a0ba96248a70985207e63</variable>
+    </sys_variable_value>
+    <wf_condition action="INSERT_OR_UPDATE">
+        <activity display_value="Payroll Manager Approval">f32c6b3c0f060b401416d23be1050e88</activity>
+        <condition>activity.result == 'approved' || activity.result == 'skipped'</condition>
+        <condition_default display_value="Approved">586e1fa60a0a0b5c008121ab894f2b06</condition_default>
+        <condition_type>standard</condition_type>
+        <else_flag>false</else_flag>
+        <error>false</error>
+        <event>false</event>
+        <event_name/>
+        <is_positive>true</is_positive>
+        <name>Approved</name>
+        <order>1</order>
+        <short_description>Approval request was approved</short_description>
+        <skip_during_generate>false</skip_during_generate>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>f32c637c0f060b401416d23be1050e46</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+    </wf_condition>
+    <wf_condition action="INSERT_OR_UPDATE">
+        <activity display_value="Payroll Manager Approval">f32c6b3c0f060b401416d23be1050e88</activity>
+        <condition>activity.result == 'rejected'</condition>
+        <condition_default display_value="Rejected">586e4ef60a0a0b5c00440b56c014c8a5</condition_default>
+        <condition_type>standard</condition_type>
+        <else_flag>false</else_flag>
+        <error>false</error>
+        <event>false</event>
+        <event_name/>
+        <is_positive>false</is_positive>
+        <name>Rejected</name>
+        <order>2</order>
+        <short_description>Approval request was rejected</short_description>
+        <skip_during_generate>true</skip_during_generate>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>772c637c0f060b401416d23be1050e46</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+    </wf_condition>
+    <wf_activity action="INSERT_OR_UPDATE">
+        <activity_definition display_value="Set Values">1ca8d7cf0a0a0b265e9a000c2c08248c</activity_definition>
+        <activity_definition_updated>false</activity_definition_updated>
+        <databus_lookup_id>11</databus_lookup_id>
+        <height/>
+        <input>{}</input>
+        <is_parent>false</is_parent>
+        <name>Set State = Admin Approved</name>
+        <new_activity_definition/>
+        <notes/>
+        <out_of_date>false</out_of_date>
+        <parent/>
+        <pinned>false</pinned>
+        <pinned_version/>
+        <stage/>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>ff2c637c0f060b401416d23be1050e4b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <timeout>1970-01-01 00:00:00</timeout>
+        <vars/>
+        <width/>
+        <workflow_version display_value="Timesheet Approval">632c6b3c0f060b401416d23be1050e81</workflow_version>
+        <x>983</x>
+        <y>301</y>
+    </wf_activity>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>ff2c637c0f060b401416d23be1050e4b</document_key>
+        <order>100</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>332c637c0f060b401416d23be1050e4c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>state=Admin Approved^EQ</value>
+        <variable display_value="">1cb38c8f0a0a0b266fb48e08de35f507</variable>
+    </sys_variable_value>
+    <wf_condition action="INSERT_OR_UPDATE">
+        <activity display_value="Set State = Admin Approved">ff2c637c0f060b401416d23be1050e4b</activity>
+        <condition>true</condition>
+        <condition_default/>
+        <condition_type>standard</condition_type>
+        <else_flag>false</else_flag>
+        <error>false</error>
+        <event>false</event>
+        <event_name/>
+        <is_positive>true</is_positive>
+        <name>Always</name>
+        <order>0</order>
+        <short_description/>
+        <skip_during_generate>false</skip_during_generate>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>372c637c0f060b401416d23be1050e4c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+    </wf_condition>
+    <wf_activity action="INSERT_OR_UPDATE">
+        <activity_definition display_value="Set Values">1ca8d7cf0a0a0b265e9a000c2c08248c</activity_definition>
+        <activity_definition_updated>false</activity_definition_updated>
+        <databus_lookup_id>7</databus_lookup_id>
+        <height/>
+        <input>{}</input>
+        <is_parent>false</is_parent>
+        <name>Set State = Manager Approved</name>
+        <new_activity_definition/>
+        <notes/>
+        <out_of_date>false</out_of_date>
+        <parent/>
+        <pinned>false</pinned>
+        <pinned_version/>
+        <stage/>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>b32c637c0f060b401416d23be1050e4d</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <timeout>1970-01-01 00:00:00</timeout>
+        <vars/>
+        <width/>
+        <workflow_version display_value="Timesheet Approval">632c6b3c0f060b401416d23be1050e81</workflow_version>
+        <x>401</x>
+        <y>246</y>
+    </wf_activity>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>b32c637c0f060b401416d23be1050e4d</document_key>
+        <order>100</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>f32c637c0f060b401416d23be1050e4d</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>state=Manager Approved^EQ</value>
+        <variable display_value="">1cb38c8f0a0a0b266fb48e08de35f507</variable>
+    </sys_variable_value>
+    <wf_condition action="INSERT_OR_UPDATE">
+        <activity display_value="Set State = Manager Approved">b32c637c0f060b401416d23be1050e4d</activity>
+        <condition>true</condition>
+        <condition_default/>
+        <condition_type>standard</condition_type>
+        <else_flag>false</else_flag>
+        <error>false</error>
+        <event>false</event>
+        <event_name/>
+        <is_positive>true</is_positive>
+        <name>Always</name>
+        <order>0</order>
+        <short_description/>
+        <skip_during_generate>false</skip_during_generate>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>f72c637c0f060b401416d23be1050e4d</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+    </wf_condition>
+    <wf_activity action="INSERT_OR_UPDATE">
+        <activity_definition display_value="Set Values">1ca8d7cf0a0a0b265e9a000c2c08248c</activity_definition>
+        <activity_definition_updated>false</activity_definition_updated>
+        <databus_lookup_id>4</databus_lookup_id>
+        <height/>
+        <input>{}</input>
+        <is_parent>false</is_parent>
+        <name>Set State = Payroll Approved</name>
+        <new_activity_definition/>
+        <notes/>
+        <out_of_date>false</out_of_date>
+        <parent/>
+        <pinned>false</pinned>
+        <pinned_version/>
+        <stage/>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>eb2c6b3c0f060b401416d23be1050e87</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <timeout>1970-01-01 00:00:00</timeout>
+        <vars/>
+        <width/>
+        <workflow_version display_value="Timesheet Approval">632c6b3c0f060b401416d23be1050e81</workflow_version>
+        <x>982</x>
+        <y>520</y>
+    </wf_activity>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>eb2c6b3c0f060b401416d23be1050e87</document_key>
+        <order>100</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>2f2c6b3c0f060b401416d23be1050e87</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>state=Payroll Approved^EQ</value>
+        <variable display_value="">1cb38c8f0a0a0b266fb48e08de35f507</variable>
+    </sys_variable_value>
+    <wf_condition action="INSERT_OR_UPDATE">
+        <activity display_value="Set State = Payroll Approved">eb2c6b3c0f060b401416d23be1050e87</activity>
+        <condition>true</condition>
+        <condition_default/>
+        <condition_type>standard</condition_type>
+        <else_flag>false</else_flag>
+        <error>false</error>
+        <event>false</event>
+        <event_name/>
+        <is_positive>true</is_positive>
+        <name>Always</name>
+        <order>0</order>
+        <short_description/>
+        <skip_during_generate>false</skip_during_generate>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>332c6b3c0f060b401416d23be1050e88</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+    </wf_condition>
+    <wf_activity action="INSERT_OR_UPDATE">
+        <activity_definition display_value="Set Values">1ca8d7cf0a0a0b265e9a000c2c08248c</activity_definition>
+        <activity_definition_updated>false</activity_definition_updated>
+        <databus_lookup_id>5</databus_lookup_id>
+        <height/>
+        <input>{}</input>
+        <is_parent>false</is_parent>
+        <name>Set State to Open</name>
+        <new_activity_definition/>
+        <notes/>
+        <out_of_date>false</out_of_date>
+        <parent/>
+        <pinned>false</pinned>
+        <pinned_version/>
+        <stage/>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>f72c637c0f060b401416d23be1050e4c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <timeout>1970-01-01 00:00:00</timeout>
+        <vars/>
+        <width/>
+        <workflow_version display_value="Timesheet Approval">632c6b3c0f060b401416d23be1050e81</workflow_version>
+        <x>737</x>
+        <y>59</y>
+    </wf_activity>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>f72c637c0f060b401416d23be1050e4c</document_key>
+        <order>100</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>3b2c637c0f060b401416d23be1050e4c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>state=Open^EQ</value>
+        <variable display_value="">1cb38c8f0a0a0b266fb48e08de35f507</variable>
+    </sys_variable_value>
+    <wf_condition action="INSERT_OR_UPDATE">
+        <activity display_value="Set State to Open">f72c637c0f060b401416d23be1050e4c</activity>
+        <condition>true</condition>
+        <condition_default/>
+        <condition_type>standard</condition_type>
+        <else_flag>false</else_flag>
+        <error>false</error>
+        <event>false</event>
+        <event_name/>
+        <is_positive>true</is_positive>
+        <name>Always</name>
+        <order>0</order>
+        <short_description/>
+        <skip_during_generate>false</skip_during_generate>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>3f2c637c0f060b401416d23be1050e4c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+    </wf_condition>
+    <wf_activity action="INSERT_OR_UPDATE">
+        <activity_definition display_value="Wait for condition">d93a02ae0a0a0aa30077abad3fdac035</activity_definition>
+        <activity_definition_updated>false</activity_definition_updated>
+        <databus_lookup_id>6</databus_lookup_id>
+        <height/>
+        <input>{}</input>
+        <is_parent>false</is_parent>
+        <name>Wait for State = Submitted</name>
+        <new_activity_definition/>
+        <notes/>
+        <out_of_date>false</out_of_date>
+        <parent/>
+        <pinned>false</pinned>
+        <pinned_version/>
+        <stage/>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>3b2c637c0f060b401416d23be1050e46</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <timeout>1970-01-01 00:00:00</timeout>
+        <vars/>
+        <width/>
+        <workflow_version display_value="Timesheet Approval">632c6b3c0f060b401416d23be1050e81</workflow_version>
+        <x>160</x>
+        <y>50</y>
+    </wf_activity>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>3b2c637c0f060b401416d23be1050e46</document_key>
+        <order>1</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>3f2c637c0f060b401416d23be1050e46</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>state=Submitted^EQ</value>
+        <variable display_value="">c35dc4cd0a0a0ba96248a70990c1ac54</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>wf_activity</document>
+        <document_key>3b2c637c0f060b401416d23be1050e46</document_key>
+        <order>2</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>7b2c637c0f060b401416d23be1050e46</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <value>// Set the variable 'answer' to true or false to indicate if the condition has been met or not.&#13;
+answer = true;&#13;
+</value>
+        <variable display_value="">c35debce0a0a0ba96248a709440cf31a</variable>
+    </sys_variable_value>
+    <wf_condition action="INSERT_OR_UPDATE">
+        <activity display_value="Wait for State = Submitted">3b2c637c0f060b401416d23be1050e46</activity>
+        <condition>true</condition>
+        <condition_default/>
+        <condition_type>standard</condition_type>
+        <else_flag>false</else_flag>
+        <error>false</error>
+        <event>false</event>
+        <event_name/>
+        <is_positive>true</is_positive>
+        <name>Always</name>
+        <order>0</order>
+        <short_description/>
+        <skip_during_generate>false</skip_during_generate>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>332c637c0f060b401416d23be1050e47</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+    </wf_condition>
+    <wf_transition action="INSERT_OR_UPDATE">
+        <condition display_value="Always">372c637c0f060b401416d23be1050e4c</condition>
+        <from display_value="Set State = Admin Approved">ff2c637c0f060b401416d23be1050e4b</from>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>332c637c0f060b401416d23be1050e4e</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <to display_value="End">ff2c637c0f060b401416d23be1050e4c</to>
+    </wf_transition>
+    <wf_transition action="INSERT_OR_UPDATE">
+        <condition display_value="Approved">3f2c637c0f060b401416d23be1050e4b</condition>
+        <from display_value="Accounting Approval">f32c637c0f060b401416d23be1050e47</from>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>332c637c0f060b401416d23be1050e4f</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <to display_value="Set State = Admin Approved">ff2c637c0f060b401416d23be1050e4b</to>
+    </wf_transition>
+    <wf_transition action="INSERT_OR_UPDATE">
+        <condition display_value="Yes">672c6b3c0f060b401416d23be1050e82</condition>
+        <from display_value="Is user Consultant?">ab2c6b3c0f060b401416d23be1050e81</from>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>372c637c0f060b401416d23be1050e4e</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <to display_value="Accounting Approval">f32c637c0f060b401416d23be1050e47</to>
+    </wf_transition>
+    <wf_transition action="INSERT_OR_UPDATE">
+        <condition display_value="Always">332c637c0f060b401416d23be1050e47</condition>
+        <from display_value="Wait for State = Submitted">3b2c637c0f060b401416d23be1050e46</from>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>372c637c0f060b401416d23be1050e4f</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <to display_value="Manager Approval">ab2c6b3c0f060b401416d23be1050e82</to>
+    </wf_transition>
+    <wf_transition action="INSERT_OR_UPDATE">
+        <condition display_value="Always">332c6b3c0f060b401416d23be1050e88</condition>
+        <from display_value="Set State = Payroll Approved">eb2c6b3c0f060b401416d23be1050e87</from>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>3b2c637c0f060b401416d23be1050e4e</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <to display_value="End">ff2c637c0f060b401416d23be1050e4c</to>
+    </wf_transition>
+    <wf_transition action="INSERT_OR_UPDATE">
+        <condition display_value="Rejected">772c637c0f060b401416d23be1050e46</condition>
+        <from display_value="Payroll Manager Approval">f32c6b3c0f060b401416d23be1050e88</from>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>3b2c637c0f060b401416d23be1050e4f</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <to display_value="Set State to Open">f72c637c0f060b401416d23be1050e4c</to>
+    </wf_transition>
+    <wf_transition action="INSERT_OR_UPDATE">
+        <condition display_value="Rejected">632c6b3c0f060b401416d23be1050e87</condition>
+        <from display_value="Manager Approval">ab2c6b3c0f060b401416d23be1050e82</from>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>3f2c637c0f060b401416d23be1050e4e</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <to display_value="Set State to Open">f72c637c0f060b401416d23be1050e4c</to>
+    </wf_transition>
+    <wf_transition action="INSERT_OR_UPDATE">
+        <condition display_value="No">e72c6b3c0f060b401416d23be1050e82</condition>
+        <from display_value="Is user Consultant?">ab2c6b3c0f060b401416d23be1050e81</from>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>b32c637c0f060b401416d23be1050e4e</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <to display_value="Payroll Manager Approval">f32c6b3c0f060b401416d23be1050e88</to>
+    </wf_transition>
+    <wf_transition action="INSERT_OR_UPDATE">
+        <condition display_value="Rejected">bb2c637c0f060b401416d23be1050e4b</condition>
+        <from display_value="Accounting Approval">f32c637c0f060b401416d23be1050e47</from>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>b32c637c0f060b401416d23be1050e4f</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <to display_value="Set State to Open">f72c637c0f060b401416d23be1050e4c</to>
+    </wf_transition>
+    <wf_transition action="INSERT_OR_UPDATE">
+        <condition display_value="Always">f72c637c0f060b401416d23be1050e4d</condition>
+        <from display_value="Set State = Manager Approved">b32c637c0f060b401416d23be1050e4d</from>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>b72c637c0f060b401416d23be1050e4e</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <to display_value="Is user Consultant?">ab2c6b3c0f060b401416d23be1050e81</to>
+    </wf_transition>
+    <wf_transition action="INSERT_OR_UPDATE">
+        <condition display_value="Approved">f32c637c0f060b401416d23be1050e46</condition>
+        <from display_value="Payroll Manager Approval">f32c6b3c0f060b401416d23be1050e88</from>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>b72c637c0f060b401416d23be1050e4f</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <to display_value="Set State = Payroll Approved">eb2c6b3c0f060b401416d23be1050e87</to>
+    </wf_transition>
+    <wf_transition action="INSERT_OR_UPDATE">
+        <condition display_value="Always">3f2c637c0f060b401416d23be1050e4c</condition>
+        <from display_value="Set State to Open">f72c637c0f060b401416d23be1050e4c</from>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>bb2c637c0f060b401416d23be1050e4e</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <to display_value="Wait for State = Submitted">3b2c637c0f060b401416d23be1050e46</to>
+    </wf_transition>
+    <wf_transition action="INSERT_OR_UPDATE">
+        <condition display_value="Always">2b2c6b3c0f060b401416d23be1050e87</condition>
+        <from display_value="Begin">a72c6b3c0f060b401416d23be1050e87</from>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>bf2c637c0f060b401416d23be1050e4d</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <to display_value="Wait for State = Submitted">3b2c637c0f060b401416d23be1050e46</to>
+    </wf_transition>
+    <wf_transition action="INSERT_OR_UPDATE">
+        <condition display_value="Approved">e32c6b3c0f060b401416d23be1050e87</condition>
+        <from display_value="Manager Approval">ab2c6b3c0f060b401416d23be1050e82</from>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:46</sys_created_on>
+        <sys_id>bf2c637c0f060b401416d23be1050e4e</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:46</sys_updated_on>
+        <to display_value="Set State = Manager Approved">b32c637c0f060b401416d23be1050e4d</to>
+    </wf_transition>
+    <wf_estimated_runtime_config action="INSERT_OR_UPDATE">
+        <estimated_run_time/>
+        <no_of_data_points>1</no_of_data_points>
+        <percentage_threshold_ert>20</percentage_threshold_ert>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-24 13:26:45</sys_created_on>
+        <sys_id>a32c6b3c0f060b401416d23be1050e81</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 13:26:45</sys_updated_on>
+        <workflow_version display_value="Timesheet Approval">632c6b3c0f060b401416d23be1050e81</workflow_version>
+    </wf_estimated_runtime_config>
+    <wf_workflow_version action="update_multiple" query="workflow=94f66d880f8332001416d23be1050ed9^sys_id!=632c6b3c0f060b401416d23be1050e81">
+        <published>false</published>
+    </wf_workflow_version>
+</record_update>

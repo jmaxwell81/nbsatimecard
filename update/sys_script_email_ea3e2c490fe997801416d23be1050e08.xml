@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_email">
+    <sys_script_email action="INSERT_OR_UPDATE">
+        <name>add_cc_delegated_managers</name>
+        <new_lines_to_html>false</new_lines_to_html>
+        <script><![CDATA[(function runMailScript(/* GlideRecord */ current, /* TemplatePrinter */ template,
+          /* Optional EmailOutbound */ email, /* Optional GlideRecord */ email_action,
+          /* Optional GlideRecord */ event) {
+	var gr = new GlideRecord('sys_user');
+	new global.customDelegationUtil().getMyDelegates(current.manager).forEach(function(dm) {
+		if (gr.get(dm.toString()))
+			email.addAddress('cc', gr.email.toString());
+	});
+})(current, template, email, email_action, event);]]></script>
+        <sys_class_name>sys_script_email</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2018-04-16 18:03:54</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>ea3e2c490fe997801416d23be1050e08</sys_id>
+        <sys_mod_count>8</sys_mod_count>
+        <sys_name>add_cc_delegated_managers</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_email_ea3e2c490fe997801416d23be1050e08</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-04-16 19:01:32</sys_updated_on>
+    </sys_script_email>
+</record_update>

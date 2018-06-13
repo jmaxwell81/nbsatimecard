@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <client_script><![CDATA[function($scope, spUtil, $rootScope) {
+	/* widget controller */
+	var c = this;
+	
+	var filterQuery = 'time_sheet='+ $scope.data.timesheetId;
+	spUtil.recordWatch($scope, 'time_card', filterQuery, function(){
+		spUtil.update($scope);
+	});
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>#cal-container-1{&#13;
+  color: $color-text-dark;&#13;
+  font-size: 12px;&#13;
+  .cal-text{&#13;
+    padding:2px;&#13;
+  }&#13;
+  .cal-container-2{&#13;
+    text-align:center;&#13;
+    display: inline-block;&#13;
+    margin-right:1px;&#13;
+    outline: 0;&#13;
+    &#13;
+    &amp;:focus{&#13;
+      .day-of-week{&#13;
+        color: $color-accent;&#13;
+      }&#13;
+    }&#13;
+  &#13;
+    .day-of-week{&#13;
+      border-bottom: 2px solid transparent;&#13;
+      padding-bottom:0;&#13;
+    }&#13;
+    .day-selected{&#13;
+      color: $color-accent;&#13;
+      border-bottom-color: $color-accent;&#13;
+      outline: 0 !important;&#13;
+    }&#13;
+    .cal-container-3{&#13;
+      background-color: #f3f3f4;&#13;
+      color: $color-text-dark;&#13;
+      .cal-container-4{&#13;
+        background-color: $color-lighter;&#13;
+        font-size:24px;&#13;
+        font-weight: 300;&#13;
+        color: black;&#13;
+        padding: 27px 0px; &#13;
+      }&#13;
+    }&#13;
+  }&#13;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>timesheet-week-breakdown</id>
+        <internal>false</internal>
+        <link><![CDATA[function(scope){
+	var $rootScope = $injector.get('$rootScope');
+	
+	scope.selectDay = function(evt, breakdown){
+		scope.data.selected = (scope.data.selected == breakdown.date) ? '' : breakdown.date;
+		var field = scope.data.selected ? breakdown.field : '';
+		$rootScope.$broadcast('tcp.highlight.field', field);
+		if(!scope.data.selected)
+			$(evt.target).closest('.cal-container-2').get(0).blur();
+	};
+}]]></link>
+        <name>Time Sheet Week Breakdown</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+	
+	var userId = gs.getUserID();
+	//var timesheetId = $sp.getParameter('sysparm_timesheet_id') || input.timesheetId;
+	var timesheetId = '0e6b6eb81323fe007864bb722244b025'; //input.timesheetId || '';
+	//if(!timesheetId)
+		//timesheetId = new TimeSheetFactory().getTimeSheet(userId);
+	data.timesheetId = timesheetId;
+	data.breakdowns = new tenroxPortalService().getDayBreakdowns(data.timesheetId);
+
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-08-21 04:10:16</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>bac6c89c0f7c43001416d23be1050ef3</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>Time Sheet Week Breakdown</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sp_widget_bac6c89c0f7c43001416d23be1050ef3</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-08-21 05:04:49</sys_updated_on>
+        <template><![CDATA[<div id="cal-container-1">
+  <div class="cal-container-2" ng-repeat="breakdown in data.breakdowns track by $index" ng-click="selectDay($event, breakdown)" style=" width: calc((100% - 10px)/ 7);">
+    <div class="cal-text day-of-week" ng-class="{'day-selected' : breakdown.date == data.selected}">{{breakdown.dayOfWeek}}</div>
+    <div class="cal-container-3">
+      <div class="cal-text">{{breakdown.date}}</div>
+      <div class="cal-container-4">
+        <div ng-style="{'visibility' : breakdown.hours != 0 ? 'visible' : 'hidden'}">${{{breakdown.hours}} h}</div>
+      </div>
+      <div class="cal-text">
+        <div  ng-style="{'visibility' : breakdown.tasks > 0 ? 'visible' : 'hidden'}">
+          <div ng-show="breakdown.tasks <= 1">${{{breakdown.tasks}} Task}</div>
+          <div ng-show="breakdown.tasks > 1">${{{breakdown.tasks}} Tasks}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

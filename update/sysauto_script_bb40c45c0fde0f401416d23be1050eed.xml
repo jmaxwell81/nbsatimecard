@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>false</active>
+        <condition/>
+        <conditional>false</conditional>
+        <name>test111</name>
+        <run_as display_value="Lavlesh Garg">1ec1734e2baea000eef35700f8da1555</run_as>
+        <run_as_tz/>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period/>
+        <run_start>2017-11-03 17:14:57</run_start>
+        <run_time>1970-01-01 05:00:00</run_time>
+        <run_type>on_demand</run_type>
+        <script><![CDATA[var gdt = new GlideDateTime();
+var weekStart = '2017-11-12';
+var weekEnd = gdt.getDate();
+
+projectReturnFunction1(weekStart, weekEnd);
+function projectReturnFunction1(weekStart, weekEnd) {
+	gs.debug('test111: weekStart: {0}, weekEnd: {1}', [weekStart, weekEnd]);
+	if (!weekStart || !weekEnd) {
+		return;
+	}
+	var ret = 'sys_idIN';
+	var sn = new global.NBSA_SNUtils();
+	//var query = "startISEMPTY^ORstart<=javascript:gs.dateGenerate('2017-11-12','start')^endISEMPTY^ORend>=javascript:gs.dateGenerate('2017-11-06','end')";
+	var query = 'start<'+weekEnd;//'startISEMPTY';//^ORstart<=weekEnd';//^endISEMPTY^ORend>=weekStart';
+	//var prj = sn.getO('x_nykl3_tenroxnbsa_project', [query], ['sys_id']);
+	//gs.debug('test111: prj.length: '+prj.length);
+	var gr = new GlideRecord('x_nykl3_tenroxnbsa_project');
+	gr.addEncodedQuery(query);
+	gr.query();
+	gs.debug('test111: gr.getRowCount(): '+gr.getRowCount());
+	/*prj.forEach(function(x) {
+		ret += x.sys_id+',';
+	});*/
+	//gs.debug('test111: ret: '+ret);
+	//return ret;
+}
+]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-11-03 17:17:06</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>bb40c45c0fde0f401416d23be1050eed</sys_id>
+        <sys_mod_count>196</sys_mod_count>
+        <sys_name>test111</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sysauto_script_bb40c45c0fde0f401416d23be1050eed</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-01-02 12:44:22</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>

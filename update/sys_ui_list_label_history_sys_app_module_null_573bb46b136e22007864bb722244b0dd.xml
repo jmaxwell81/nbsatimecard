@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_ui_list parent="sys_app_module" relationship="" sys_domain="573bb46b136e22007864bb722244b0dd" table="label_history" version="2" view="">
+        <sys_ui_list action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element/>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <name>label_history</name>
+            <parent>sys_app_module</parent>
+            <position/>
+            <relationship/>
+            <sum>false</sum>
+            <sys_class_name>sys_ui_list</sys_class_name>
+            <sys_created_by>satom</sys_created_by>
+            <sys_created_on>2017-10-19 14:26:43</sys_created_on>
+            <sys_customer_update>true</sys_customer_update>
+            <sys_domain>573bb46b136e22007864bb722244b0dd</sys_domain>
+            <sys_domain_path>!!$/</sys_domain_path>
+            <sys_id>95f9cad713fdc7407864bb722244b035</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>label_history</sys_name>
+            <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+            <sys_update_name>sys_ui_list_label_history_sys_app_module_null_573bb46b136e22007864bb722244b0dd</sys_update_name>
+            <sys_updated_by>satom</sys_updated_by>
+            <sys_updated_on>2017-10-19 14:26:43</sys_updated_on>
+            <sys_user display_value="Manami Sato">f90842f90fd7b6001416d23be1050eb9</sys_user>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_list>
+    </sys_ui_list>
+</record_update>

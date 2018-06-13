@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>htmleditor</category>
+        <client_script><![CDATA[/*addLoadEvent(function() {
+	var endElement = gel('end_date');
+	endElement.onchange = checkEndDate;
+});
+
+function copyAssignment() {
+	if(emptyWeekStart()){
+        alert (getMessage('Please choose a valid approver to review and approve this contract extension'));
+    	return false;
+	}
+
+    var c = gel('hold_or_submit');
+    c.value = "submit";
+	return true;
+}
+
+function cancelCopy() {
+    var c = gel('hold_or_submit');
+    c.value = "cancel";
+    return true;
+}
+function emptyWeekStart() {
+	var a = document.getElementById("week_start").value;
+	if (a == '')
+		return true;
+}
+
+function calcEndDate() {
+    var yearInd = gel("extension_option").selectedIndex;
+	var year = gel("extension_option").options[yearInd].value;
+    var start = gel("start_date").value;
+	var startDateObj = new Date(getDateFromFormat(start, g_user_date_format));
+	var endValue = "";
+    if(yearInd != 0 && start != "" ){
+        var y = startDateObj.getFullYear();
+        var endYear = parseInt(y)+parseInt(year);
+		startDateObj.setFullYear(endYear);
+        endValue = formatDate(startDateObj, g_user_date_format);
+    }
+    if(yearInd == 0 && start != "" ){
+        endValue = start;
+    }
+	gel("end_date").value = endValue;
+}
+
+function costPercentAdjust() {
+    if(document.getElementById("cost_percent").value != 0)
+        document.getElementById("cost_adjust").value = 0;
+}
+
+function costAdjustPercent() {
+    if(document.getElementById("cost_adjust").value != 0)
+        document.getElementById("cost_percent").value = 0;
+}
+
+function checkEndDate(){
+	var startDate = gel('start_date').value;
+	var startTime = new Date(getDateFromFormat(startDate, g_user_date_format));
+	var endDate = document.getElementById('end_date').value;
+	var newTime = new Date(getDateFromFormat(endDate, g_user_date_format));
+	var endErrorHandle = document.getElementById('endErrorMessage');
+	var currentDate = new Date();
+	
+	if (newTime < currentDate){
+		endErrorHandle.innerHTML="<img src='images/outputmsg_error.gifx' alt='Error Message'>${gs.getMessage('End date should be later than current time')}";
+		endErrorHandle.style.backgroundColor="#FFEBE8";
+        return false;
+	}
+	else if (newTime < startTime) {
+		endErrorHandle.innerHTML="<img src='images/outputmsg_error.gifx' alt='Error Message'>${gs.getMessage('End date should be after the end of current active contract')}";
+		endErrorHandle.style.backgroundColor="#FFEBE8";
+        return false;
+	}
+		endErrorHandle.innerHTML="";
+    return true;
+}*/]]></client_script>
+        <description/>
+        <direct>false</direct>
+        <endpoint>x_nykl3_tenroxnbsa_copy_assignment_popup.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide"
+xmlns:j2="null" xmlns:g2="null">
+
+<g:ui_form>
+  <!-- Get values from dialog preferences passed in -->
+  <j:set var="jvar_sys_id" value="${RP.getWindowProperties().get('sys_id')}" />
+
+   <!-- Set up form fields and labels -->
+   <table width="100%">
+     <tr id="description_row" valign="top">
+        <th colspan="2">
+           ${jvar_short_text}
+        </th>
+     </tr>
+	 <tr style="height: 5px;"><td></td></tr> 
+	 <tr>
+	   <td width="50%">
+		   <div class="form-group form-horizontal">
+			   <div class="col-md-5 text-right">
+				   <g:form_label>${gs.getMessage("Copy Assignments from Week")}</g:form_label>
+			   </div>
+			   <div class="col-md-7">
+				   <g:ui_date class="form-control" name="week_start" id="week_start" value="${jvar_week_start}" />
+			   </div>
+		   </div>
+	  </td>
+	 </tr>
+     <tr>
+       <td colspan="2">
+         <div id="endErrorMessage"></div>
+       </td>
+     </tr>	   
+  </table>
+</g:ui_form>
+</j:jelly>]]></html>
+        <name>copy_assignment_popup</name>
+        <processing_script><![CDATA[/*if(hold_or_submit == "submit" || hold_or_submit == "hold"){
+    var cm = new GlideRecord("ast_contract");
+	var optionString = "";
+	if (extension_option.toString() == "1")
+		optionString = "1 year";
+	if (extension_option.toString() == "2" || extension_option.toString() == "3")
+		optionString = extension_option + " years";
+	
+    if (cm.get(current_sys_id)) {
+        cm.renewal_contact=extension_contact;
+        cm.renewal_date = start_date;
+        cm.renewal_end_date = end_date;
+        cm.renewal_options = optionString;
+        cm.cost_adjustment_type = cost_type;
+        cm.cost_adjustment = cost_adjust;
+        cm.cost_adjustment_percentage = cost_percent;
+		cm.approver = approver;
+        if(hold_or_submit == "submit")
+            cm.substate = 'under_review';
+        else
+            cm.substate = 'awaiting_review';
+        cm.process = 'extension';
+        cm.update();
+    }
+}
+
+if(hold_or_submit == "submit" || hold_or_submit == "hold" || hold_or_submit == "cancel") {
+    var urlOnStack = GlideSession.get().getStack().bottom();
+    response.sendRedirect(urlOnStack);
+}*/]]></processing_script>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-11-08 09:36:59</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>89a0c8f90f9643001416d23be1050e19</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>copy_assignment_popup</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_ui_page_89a0c8f90f9643001416d23be1050e19</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-11-08 15:34:30</sys_updated_on>
+    </sys_ui_page>
+</record_update>

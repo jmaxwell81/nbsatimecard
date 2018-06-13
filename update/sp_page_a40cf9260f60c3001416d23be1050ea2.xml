@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sp_page">
+    <sp_page action="INSERT_OR_UPDATE">
+        <css>body{&#13;
+  background-color: $color-white;&#13;
+  color: $color-darkest;&#13;
+  overflow: hidden;&#13;
+  section.page {&#13;
+  	padding-top: 0;&#13;
+    overflow: hidden;&#13;
+  }&#13;
+  main {&#13;
+    padding-top: 0;&#13;
+    .tcp-header{&#13;
+      box-shadow: 2px 2px 3px 1px $color-shadow;&#13;
+      -webkit-box-shadow: 2px 2px 3px 1px $color-shadow;&#13;
+      -moz-box-shadow: 2px 2px 3px 1px $color-shadow;&#13;
+      border: 1px solid $color-border;&#13;
+    }&#13;
+  }&#13;
+  &#13;
+  strong{&#13;
+    font-weight: 600;&#13;
+  }&#13;
+  &#13;
+  .flex-grow{&#13;
+    -ms-flex:1 1 auto;    /* IE 10 */&#13;
+  }&#13;
+  &#13;
+  .btn-link:hover, .btn-link:focus {&#13;
+    text-decoration: none;&#13;
+  }&#13;
+  &#13;
+  .btn-icon-default {&#13;
+    color: $color-light;&#13;
+    background-color: transparent;&#13;
+  }&#13;
+  .btn-icon-default:focus, .btn-icon-default.focus, .btn-icon-default:hover, .btn-icon-default:active, .btn-icon-default.active {&#13;
+	color: black;&#13;
+  }&#13;
+  .btn-icon-default:active:hover, .btn-icon-default:active:focus, .btn-icon-default.focus:active, .btn-icon-default.active:hover, .btn-icon-default.active:focus, .btn-icon-default.active.focus{&#13;
+    color: black;&#13;
+  }&#13;
+  &#13;
+  a:hover, a:focus {&#13;
+    text-decoration: underline;&#13;
+  }&#13;
+  &#13;
+  .dropdown-toggle:focus{&#13;
+    outline: thin dotted;&#13;
+    outline: 5px auto -webkit-focus-ring-color;&#13;
+    outline-offset: -2px;&#13;
+  }&#13;
+  &#13;
+  .dropdown-menu  &gt; li &gt; a{&#13;
+    color: $color-darker;&#13;
+  }&#13;
+  &#13;
+  .dropdown-menu &gt; li &gt; a:hover, .dropdown-menu &gt; li &gt; a:focus {&#13;
+    text-decoration: none;&#13;
+    color: #3d4854;&#13;
+    background-color: #f5f5f5;&#13;
+  }&#13;
+  &#13;
+   li &gt; a:hover, .select2-container &gt; a:hover, li &gt; a:focus, .select2-container &gt; a:focus{&#13;
+    color: inherit;&#13;
+    text-decoration: none;&#13;
+  } &#13;
+  &#13;
+  .form-control:focus {&#13;
+    border-color: $color-accent;&#13;
+  }&#13;
+  &#13;
+  .loader{&#13;
+    position : absolute;&#13;
+    top:0;&#13;
+    left:0;&#13;
+    width: 100%;&#13;
+    height:100%;&#13;
+    color : black;&#13;
+    font-size: 20px;&#13;
+  	z-index: 100;&#13;
+    &#13;
+    &amp;:before{&#13;
+      position: absolute;&#13;
+      content:"";&#13;
+      width:100%;&#13;
+      height:100%;&#13;
+      top: 0;&#13;
+      left: 0;&#13;
+      background: black;&#13;
+      opacity:.2;&#13;
+    }&#13;
+&#13;
+    .loader-content{&#13;
+      position:absolute;&#13;
+      width:100%;&#13;
+      text-align:center;&#13;
+      top:50%;&#13;
+      display:block;&#13;
+      transform: translateY(-50%);&#13;
+      &#13;
+      fa{&#13;
+        font-size : 30px;&#13;
+      }&#13;
+    }&#13;
+  }&#13;
+  .add-task-modal .modal-dialog, .copy-timesheet .modal-dialog{&#13;
+    max-width: 410px;&#13;
+  }&#13;
+  .modal-dialog{&#13;
+    .modal-title{&#13;
+      font-size: 17px;&#13;
+    }&#13;
+    .modal-footer{&#13;
+      padding-top: 0;&#13;
+      border: none;&#13;
+    }&#13;
+    .close{&#13;
+      font-size: 14px;&#13;
+      margin: 0;&#13;
+      line-height:1.42;&#13;
+    }&#13;
+    .section-title{&#13;
+      text-align: right;&#13;
+      padding: 7px 10px 0 0;&#13;
+    }&#13;
+    input[type="checkbox"]{&#13;
+      height: 34px;&#13;
+      margin: 0;&#13;
+    }&#13;
+    p.modal-text{&#13;
+      color: $color-dark;&#13;
+    }&#13;
+    p.text-danger{&#13;
+      margin: 0;&#13;
+    }&#13;
+    .fa.mandatory{&#13;
+      margin-right: 2px;&#13;
+      margin-top: 5px;&#13;
+      font-size: 11px;&#13;
+    }&#13;
+    &#13;
+    div[form_model]{&#13;
+      .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12{&#13;
+        padding-left: 15px;&#13;
+        padding-right: 15px;&#13;
+      }&#13;
+      .form-group{&#13;
+        margin-bottom: 6px;&#13;
+      }&#13;
+    }&#13;
+}</css>
+        <id>timesheet_portal</id>
+        <internal>false</internal>
+        <public>false</public>
+        <roles>x_nykl3_tenroxnbsa_tenrox_user</roles>
+        <short_description>Time sheet portal home page</short_description>
+        <sys_class_name>sp_page</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-08-16 02:13:25</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>a40cf9260f60c3001416d23be1050ea2</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>timesheet_portal</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sp_page_a40cf9260f60c3001416d23be1050ea2</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-08-16 02:13:25</sys_updated_on>
+        <title>Timesheet Portal</title>
+    </sp_page>
+</record_update>

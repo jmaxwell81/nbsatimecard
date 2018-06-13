@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_security_acl">
+    <sys_security_acl action="INSERT_OR_UPDATE">
+        <active>false</active>
+        <admin_overrides>true</admin_overrides>
+        <advanced>true</advanced>
+        <condition table="x_nykl3_tenroxnbsa_assignment">timesheet.state=Open^EQ<item endquery="false" field="timesheet.state" goto="false" newquery="false" operator="=" or="false" value="Open"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </condition>
+        <description>Allow create for records in x_nykl3_tenroxnbsa_assignment, for users with roles (x_nykl3_tenroxnbsa.tenrox_payroll, x_nykl3_tenroxnbsa.tenrox_admin), and if the ACL script returns true, and if the ACL condition (timesheet.state=Open^EQ) evaluates to true.</description>
+        <name>x_nykl3_tenroxnbsa_assignment</name>
+        <operation display_value="create">create</operation>
+        <script><![CDATA[answer = false;
+if (gs.getUserName() == current.timesheet.sys_created_by)
+	answer = true;]]></script>
+        <sys_class_name>sys_security_acl</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-11-01 18:56:15</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>89c38e2713024f407864bb722244b0ad</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>x_nykl3_tenroxnbsa_assignment</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_security_acl_89c38e2713024f407864bb722244b0ad</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-12-01 20:06:20</sys_updated_on>
+        <type display_value="record">record</type>
+    </sys_security_acl>
+</record_update>

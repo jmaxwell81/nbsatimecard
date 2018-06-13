@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <client_script><![CDATA[function($scope, spUtil) {
+	var c = this;
+	var filterQuery = 'time_sheet='+ $scope.data.timesheetId;
+	spUtil.recordWatch($scope, 'time_card', filterQuery, function(){
+		spUtil.update($scope).then($scope.renderChart);
+	});
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.highcharts-container{&#13;
+  border: 1px solid $color-border;&#13;
+}&#13;
+.highcharts-background{&#13;
+  fill: #F0F7FF;&#13;
+}&#13;
+.map-container{&#13;
+  padding-left: 9px;&#13;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>ts-treemap</id>
+        <internal>false</internal>
+        <link><![CDATA[function(scope){
+	
+	scope.renderChart = function(){
+		var chartOptions = {
+			chart: {
+				height: 130,
+				margin: [0, 0, 0, 0],
+				animation: false,
+				 style: {
+					 fontFamily: 'inherit',
+				 }
+			},
+			lang:{
+				noData: scope.data.messages.noData,
+				loading: scope.data.messages.loading
+			},
+			colorAxis: {
+				minColor: '#F0F7FF',
+				maxColor: '#8CC3FE',
+				type: 'linear'
+			},
+			series: [{
+				type: 'treemap',
+				states: {
+					'hover': {
+						enabled: false
+					}
+				},
+				dataLabels: {
+					enabled: true,
+					format: '{point.name}<br/>({point.total})',
+					overflow: 'none',
+					style: {
+						color: '#465565',
+						textShadow : 'none',
+						fontSize: '14px',
+						fontWeight: 'normal',
+						textOutline: 'none'
+					}
+				},
+				data: scope.data.mapSeriesData,
+			}],
+			
+			plotOptions: {
+				series: {
+					animation: false
+				},
+				treemap: {
+					borderWidth: 0
+				}
+			},
+			legend: {
+				enabled:false
+			},
+			exporting: {
+				enabled: false
+			},
+			title: {
+				text: ''
+			},
+			tooltip: {
+				pointFormat: '{point.name}: <b>{point.total}</b>',
+			},
+			credits: {
+				enabled: false
+			},
+			noData:{
+				style:{
+					color: '#343D47',
+					fill: '#343D47',
+					fontWeight: 'normal',
+					fontSize: '14px'
+				}
+			}
+		};
+		
+		$('#chart-area').highcharts(chartOptions);
+	};
+	scope.renderChart();
+}]]></link>
+        <name>Time Sheet treemap</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function($sp) {
+	var TABLE_TIMESHEET     = 'x_nykl3_tenroxnbsa_timesheet';
+	var TABLE_ASSIGNMENT    = 'x_nykl3_tenroxnbsa_assignment';
+	var TABLE_NON_WORK_TIME = 'x_nykl3_tenroxnbsa_non_work_time';
+	var userId = gs.getUserID();
+	//var timesheetId = $sp.getParameter('sysparm_timesheet_id') || input.timesheetId;
+	var timesheetId = '0e6b6eb81323fe007864bb722244b025'; //input.timesheetId || '';
+	//if(!timesheetId)
+		//timesheetId = new TimeSheetFactory().getTimeSheet(userId);
+	data.timesheetId = timesheetId;
+	var timesheet = new GlideRecord(TABLE_TIMESHEET);
+	timesheet.get(data.timesheetId);
+	data.total_hours = timesheet.getDisplayValue('total');
+	data.mapSeriesData = [];
+	var decimalSeperator = GlideLocale.get().getDecimalSeparator();
+	var agg = new GlideAggregate(TABLE_ASSIGNMENT);
+	agg.addNotNullQuery('task');
+	agg.addQuery('timesheet', data.timesheetId);
+	agg.addAggregate('SUM', 'total');
+	agg.groupBy('task.sys_class_name');
+	agg.query();
+	while(agg.next()){
+		var total = parseFloat(agg.getAggregate('SUM', 'total'));
+		if(total != 0){
+			var series = {};
+			var sysClassName = agg.getValue('task.sys_class_name');
+			//series.name = new GlideRecord(sysClassName).getPlural();
+			//var gr = new GlideRecord(sysClassName);
+			//series.name = gr.getLabel();
+			series.total = gs.getMessage('{0} hrs', total.toString().replace('.', decimalSeperator));
+			series.value = total;
+			series.colorValue = total;
+			data.mapSeriesData.push(series);
+		}
+	}
+	
+	agg = new GlideAggregate(TABLE_ASSIGNMENT);
+	//agg.addNullQuery('task');
+	agg.addQuery('time_sheet', data.timesheetId);
+	agg.addAggregate('SUM', 'total');
+	agg.groupBy('category');
+	agg.query();
+	while(agg.next()){
+		var sum = parseFloat(agg.getAggregate('SUM', 'total'));
+		if(sum != 0){
+			var seriesObj = {};
+			seriesObj.name = agg.getDisplayValue('category');
+			seriesObj.total = gs.getMessage('{0} hrs', sum.toString().replace('.', decimalSeperator));
+			seriesObj.value = sum;
+			seriesObj.colorValue = sum;
+			data.mapSeriesData.push(seriesObj);
+		}
+	}
+	
+	data.messages = {};
+	data.messages.noData = gs.getMessage('No data to display');
+	data.messages.loading = gs.getMessage('Loading...');
+	
+})($sp);]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-08-21 04:16:16</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>1938c4dc0f7c43001416d23be1050ead</sys_id>
+        <sys_mod_count>10</sys_mod_count>
+        <sys_name>Time Sheet treemap</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sp_widget_1938c4dc0f7c43001416d23be1050ead</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-08-21 05:30:11</sys_updated_on>
+        <template><![CDATA[<div class="map-container">
+  <div class="map-header"><span role="heading" aria-level="4" >${Time Sheet breakdown}</span><span class="pull-right" ng-if="data.total_hours != 0">${{{data.total_hours}} hrs}</span></div>
+  <div class="chart-container">
+    <div id="chart-area"></div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

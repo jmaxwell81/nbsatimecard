@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_view">
+    <sys_ui_view action="INSERT_OR_UPDATE">
+        <group/>
+        <hidden>false</hidden>
+        <name>sys_popup,hr</name>
+        <roles/>
+        <sys_class_name>sys_ui_view</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-06-15 14:23:47</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>69f0917213173e007864bb722244b0a2</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Sys_popup,hr</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_ui_view_69f0917213173e007864bb722244b0a2</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-06-15 14:23:47</sys_updated_on>
+        <title>Sys_popup,hr</title>
+        <user/>
+    </sys_ui_view>
+</record_update>

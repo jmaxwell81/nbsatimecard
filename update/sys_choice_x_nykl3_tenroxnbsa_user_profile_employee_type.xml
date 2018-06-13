@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_choice action="INSERT_OR_UPDATE" field="employee_type" table="x_nykl3_tenroxnbsa_user_profile" version="3">
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>employee_type</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Employee</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence>0</sequence>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 19:19:48</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>4f1ac4760fdd8b001416d23be1050eb7</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 19:19:48</sys_updated_on>
+            <value>Employee</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>employee_type</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Consultant</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence>1</sequence>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 19:19:48</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>071ac4760fdd8b001416d23be1050eb8</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 19:19:48</sys_updated_on>
+            <value>Consultant</value>
+        </sys_choice>
+        <sys_choice_set action="INSERT_OR_UPDATE">
+            <element>employee_type</element>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sys_class_name>sys_choice_set</sys_class_name>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 19:19:48</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
+            <sys_id>431ac4760fdd8b001416d23be1050eb8</sys_id>
+            <sys_mod_count>3</sys_mod_count>
+            <sys_name>employee_type</sys_name>
+            <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+            <sys_update_name>sys_choice_x_nykl3_tenroxnbsa_user_profile_employee_type</sys_update_name>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-09-28 15:43:22</sys_updated_on>
+        </sys_choice_set>
+    </sys_choice>
+</record_update>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_email">
+    <sys_script_email action="INSERT_OR_UPDATE">
+        <name>add_month_entry_complete</name>
+        <new_lines_to_html>false</new_lines_to_html>
+        <script><![CDATA[(function runMailScript(/* GlideRecord */ current, /* TemplatePrinter */ template,
+          /* Optional EmailOutbound */ email, /* Optional GlideRecord */ email_action,
+          /* Optional GlideRecord */ event) {
+
+     if (event.parm2 != '')
+		 template.print("For Week "+event.parm2+", please complete the hours till end of month and the click on the 'Month Entry Complete' check box to indicate the same.");
+
+})(current, template, email, email_action, event);]]></script>
+        <sys_class_name>sys_script_email</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2018-04-29 03:18:28</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>a8812ccd137593007864bb722244b092</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>add_month_entry_complete</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_email_a8812ccd137593007864bb722244b092</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-04-29 03:18:28</sys_updated_on>
+    </sys_script_email>
+</record_update>

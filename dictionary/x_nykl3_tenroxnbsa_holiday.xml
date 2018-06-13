@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="Holiday" max_length="40" name="x_nykl3_tenroxnbsa_holiday" type="collection">
+        <element label="Date" mandatory="true" max_length="40" name="date" type="glide_date" unique="true"/>
+        <element label="Name" mandatory="true" max_length="40" name="name" type="string"/>
+    </element>
+</database>

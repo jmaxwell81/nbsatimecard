@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sp_ng_template">
+    <sp_ng_template action="INSERT_OR_UPDATE">
+        <id>notes-modal</id>
+        <sp_widget display_value="Time Card Grid">2d57489c0f7c43001416d23be1050ee4</sp_widget>
+        <sys_class_name>sp_ng_template</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-08-21 04:14:11</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>4ce784dc0f7c43001416d23be1050e38</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>notes-modal</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sp_ng_template_4ce784dc0f7c43001416d23be1050e38</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-08-21 04:14:11</sys_updated_on>
+        <template><![CDATA[<div class="modal-header">
+  <span class="modal-title" id="modal-title">${Notes}</span>
+  <button type="button" class="btn icon-cross close pull-right" aria-label="${Close}" ng-click="cancel()"></button>
+</div>
+<div class="modal-body flex-column" id="modal-body" style="padding:0">
+  <div ng-if="data.showTask" style="margin-bottom:10px; padding: 10px 15px 0 15px; font-weight:lighter;">
+    <div ng-if="data.timecard['task.short_description'].display_value" style="font-size:18px;">{{::data.timecard['task.short_description'].display_value}}</div>
+    <div style="font-size:12px;color:#82878F;">{{::data.timecard['task.number'].display_value}}</div>
+  </div>
+  <div ng-if="!data.showTask" style="margin-bottom:10px; padding: 10px 15px 0 15px; font-weight:lighter;font-size:18px;">
+    {{::data.timecard.category.display_value}}
+  </div>
+  <sp-widget widget="data.notesWidget" ng-if="data.notesWidget" />
+</div>]]></template>
+    </sp_ng_template>
+</record_update>

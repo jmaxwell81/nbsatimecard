@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_choice action="INSERT_OR_UPDATE" field="employee_category" table="x_nykl3_tenroxnbsa_user_profile" version="3">
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value>Consultant</dependent_value>
+            <element>employee_category</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Consultant</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence/>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 19:24:52</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>302bc8760fdd8b001416d23be1050e9c</sys_id>
+            <sys_mod_count>5</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-09-28 15:42:29</sys_updated_on>
+            <value>Consultant</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value>Employee</dependent_value>
+            <element>employee_category</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Contracted</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence/>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 19:24:17</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>7fea48760fdd8b001416d23be1050eb2</sys_id>
+            <sys_mod_count>6</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-09-28 19:48:06</sys_updated_on>
+            <value>Contracted</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value>Employee</dependent_value>
+            <element>employee_category</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Exempt</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence/>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 19:21:51</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>cd9a8c720fdd8b001416d23be1050e6c</sys_id>
+            <sys_mod_count>5</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-09-28 15:42:29</sys_updated_on>
+            <value>Exempt</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value>Employee</dependent_value>
+            <element>employee_category</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Exempt Non-Manager</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence/>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-09-28 15:42:45</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>52f11264132dcf007864bb722244b001</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-09-28 15:42:45</sys_updated_on>
+            <value>Exempt Non-Manager</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value>Employee</dependent_value>
+            <element>employee_category</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Non-Exempt</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence/>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 19:23:23</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>79eac8760fdd8b001416d23be1050e9b</sys_id>
+            <sys_mod_count>7</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-09-28 19:47:59</sys_updated_on>
+            <value>Non-Exempt</value>
+        </sys_choice>
+        <sys_choice_set action="INSERT_OR_UPDATE">
+            <element>employee_category</element>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sys_class_name>sys_choice_set</sys_class_name>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 19:21:51</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
+            <sys_id>c19a8c720fdd8b001416d23be1050e6d</sys_id>
+            <sys_mod_count>28</sys_mod_count>
+            <sys_name>employee_category</sys_name>
+            <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+            <sys_update_name>sys_choice_x_nykl3_tenroxnbsa_user_profile_employee_category</sys_update_name>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-09-28 19:48:06</sys_updated_on>
+        </sys_choice_set>
+    </sys_choice>
+</record_update>

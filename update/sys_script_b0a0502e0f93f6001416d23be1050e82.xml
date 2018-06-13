@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_label/>
+        <action_name/>
+        <action_query>false</action_query>
+        <action_run_at>server</action_run_at>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <application/>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_nykl3_tenroxnbsa_non_work_time</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="x_nykl3_tenroxnbsa_non_work_time">nwt.vacation=true^EQ<item endquery="false" field="nwt.vacation" goto="false" newquery="false" operator="=" or="false" value="true"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Balance Leaves (New and Update)</name>
+        <onclick/>
+        <order>100</order>
+        <priority>100</priority>
+        <read_access_action>false</read_access_action>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+	//Assumption: Once a Non-Work Type is submitted, leave type can't be changed.
+
+	if (current.nwt.vacation == false)
+		return;
+
+	var tu = new tenroxUtil();
+	var timesheet = current.timesheet;
+	var employee  = timesheet.employee;
+	var weekStart = timesheet.week_start;
+	var nwtName   = current.nwt.name;
+	var leaveSNField = tu.labelToSnName(nwtName);
+	var weekDays = ['mon', 'tue', 'wed', 'thu', 'fri'];
+	var lt, curHrs, newHrs;
+
+	var usedLTArray = tu.getLeaveTimeArray(employee, 'Used', weekStart);
+	for (var l in usedLTArray) {
+		gs.debug(l+'. usedLTArray[l].sysID: '+usedLTArray[l].sysID+', usedLTArray[l].count: '+usedLTArray[l].count);
+	}
+	
+	var i=0, j=-1, day;
+	var appliedHrs = [0];
+
+	for (var w in weekDays) {
+		day = weekDays[w];
+		gs.debug('Balance Leaves (New and Update) BR: non work type: '+nwtName+', Timesheet: '+timesheet+', current.getValue(day): '+current.getValue(day)+', previous.getValue(day): '+previous.getValue(day));
+		if (++j == usedLTArray[i].count) {
+			appliedHrs[++i] = 0;
+			j=0;
+		}
+		appliedHrs[i] += current.getValue(day) ? parseFloat(current.getValue(day))  : 0;
+		appliedHrs[i] -= previous.getValue(day)? parseFloat(previous.getValue(day)) : 0;
+	}
+
+	// insert: At the time of Leave Time Insertion, add the total time into used time (leave time table)
+	// update: Add the changed time (may be positive, may be negative) into the used time
+	
+	for (var u in usedLTArray) {
+		lt = new GlideRecord(tu.TABLE_LEAVE_TIME);
+		lt.get(usedLTArray[u].sysID);
+		curHrs = lt.getValue(leaveSNField)? lt.getValue(leaveSNField): 0;
+		newHrs = parseFloat(curHrs) + parseFloat(appliedHrs[u]);
+		lt.setValue(leaveSNField, newHrs);
+		lt.update();
+	}
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-06-14 15:17:47</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>b0a0502e0f93f6001416d23be1050e82</sys_id>
+        <sys_mod_count>24</sys_mod_count>
+        <sys_name>Balance Leaves (New and Update)</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_b0a0502e0f93f6001416d23be1050e82</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-03-21 17:37:56</sys_updated_on>
+        <template/>
+        <when>after</when>
+    </sys_script>
+</record_update>

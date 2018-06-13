@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_user_role">
+    <sys_user_role action="INSERT_OR_UPDATE">
+        <assignable_by/>
+        <can_delegate>true</can_delegate>
+        <description>1) This role will provide users create access on the 'Project' table.&#13;
+2) 'Tenrox Admins' also has this access.&#13;
+3) Intention of this role is that few users other than admin might need to create 'Project'. So, instead of providing them tenrox_admin role (which has lot more other accesses), we provide them this role.</description>
+        <elevated_privilege>false</elevated_privilege>
+        <encryption_context/>
+        <grantable>true</grantable>
+        <includes_roles/>
+        <name>x_nykl3_tenroxnbsa.project_create</name>
+        <suffix>project_create</suffix>
+        <sys_class_name>sys_user_role</sys_class_name>
+        <sys_created_by>satom</sys_created_by>
+        <sys_created_on>2017-10-18 20:41:47</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>6926d2cf13b9c7407864bb722244b092</sys_id>
+        <sys_mod_count>4</sys_mod_count>
+        <sys_name>x_nykl3_tenroxnbsa.project_create</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>true</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_user_role_6926d2cf13b9c7407864bb722244b092</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-04-12 11:09:36</sys_updated_on>
+    </sys_user_role>
+</record_update>

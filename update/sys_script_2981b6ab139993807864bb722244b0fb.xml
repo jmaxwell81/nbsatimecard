@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_label/>
+        <action_name/>
+        <action_query>false</action_query>
+        <action_run_at>server</action_run_at>
+        <action_update>false</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <application/>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_nykl3_tenroxnbsa_user_profile</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="x_nykl3_tenroxnbsa_user_profile">employee_type=Employee^EQ<item endquery="false" field="employee_type" goto="false" newquery="false" operator="=" or="false" value="Employee"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Set Initial Leaves for New Tenrox Users</name>
+        <onclick/>
+        <order>100</order>
+        <priority>100</priority>
+        <read_access_action>false</read_access_action>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[/*
+ * Author: Lavlesh Garg, 6/8/17
+ * This Rule will setup initial leaves (SL, Vacation, DH) for new tenrox users (with )
+ * The calculation is done based upon the Joining Date (u_start_time from sys_user table) of the user
+ * If the joining Year is not current year, User is awarded default whole years leaves for SL and DH, HR can change them manually.
+ *     For Vacation, user is awarded 80 hours + 8 hours additional for each year of sevice completed - Max 160 hours
+ * If the joining Year is current year, leaves are calculated based up the remaining time in the year
+ * If the joining date is less than 15, provide leaves for whole month + rest of the months in the year
+ * If the joining date is 15 or more than that, provide leaves for half month + rest of the months in the year
+ */
+
+(function executeRule(current, previous /*null when async*/) {
+	
+	// Paid leaves are only available for Employees
+	if (current.employee_type != 'Employee')
+		return;
+	
+	/*
+ 	* If this user profile is created before month of December, create leave balance only for current year
+ 	* If it's created in the month of December, create default leave balance for next year as well
+ 	*/
+	
+	var validFrom, coVacExpiresOn;
+	var year, days;
+	var tu = new tenroxUtil();
+
+	var leaveBalanceArray;
+	var zeroLeaveBalanceArray = [['discretionary_holiday', 0], ['sick_leave', 0], ['vacation', 0], ['carry_over_vacation', 0], ['carry_over_dh', 0], ['paid_time_off', 0]];
+	var leaveType = ['Remaining', 'Used', 'Initial Balance'];
+
+	var gt = new GlideDateTime();
+	var currentMonth = gt.getMonthLocalTime();
+
+	//For current and next year
+	for (var i=0; i<2; i++) {
+		year = gt.getYearLocalTime();
+		
+		//Set Month and Day to 1 (jan) and 1 (first day) to make it 1st January of Current Year. That would be our validFrom
+		if (current.employee_category == 'Contracted') {
+			gt.setDisplayValue(current.start_date.toString());
+			gt.setYearLocalTime(year);
+			validFrom = gt.getDate();
+		} else {
+			gt.setMonthLocalTime(1);
+			gt.setDayOfMonthLocalTime(1);
+			validFrom = gt.getDate();
+		}
+		
+		if (current.carry_over_vacation_allowed_till_month) {
+			gt.setMonthLocalTime(current.getValue('carry_over_vacation_allowed_till_month'));
+			days = gt.getDaysInMonthLocalTime();
+			gt.setDayOfMonthLocalTime(days);
+			coVacExpiresOn = gt.getDate();
+		}
+		
+		gs.debug('year: '+year+', validFrom: '+validFrom+', coVacExpiresOn: '+coVacExpiresOn);
+		
+		for (var l in leaveType) {
+			
+			if (leaveType[l] == 'Used')
+				leaveBalanceArray = zeroLeaveBalanceArray;
+			else
+				leaveBalanceArray = tu.getLeaveBalanceArray(current, year);
+			
+			gs.debug('calling createLeaveTime for, type: '+leaveType[l]+', User: '+current.user.name+', validFrom: '+validFrom+', leaveBalanceArray: '+leaveBalanceArray+', coVacExpiresOn: '+coVacExpiresOn);
+			var error = tu.createLeaveTime(leaveType[l], current.sys_id, validFrom, leaveBalanceArray, coVacExpiresOn);
+			if (error) gs.warn(error);
+		}
+		
+		// If currentMonth is not December, don't create leave times for next year
+		// We will create leavetime for next year using a scheduled job in December
+		if (currentMonth != 12)
+			break;
+
+		//Add 1 Year to create leave times for next year
+		gt.addYearsLocalTime(1);
+	}	
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2018-04-12 11:38:33</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>2981b6ab139993807864bb722244b0fb</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Set Initial Leaves for New Tenrox Users</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_2981b6ab139993807864bb722244b0fb</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-04-12 11:38:33</sys_updated_on>
+        <template/>
+        <when>after</when>
+    </sys_script>
+</record_update>

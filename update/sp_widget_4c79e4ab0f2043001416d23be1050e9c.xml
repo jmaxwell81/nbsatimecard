@@ -1,0 +1,852 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <client_script><![CDATA[function($scope, tenroxPortalService, $window, $rootScope, $sanitize, spUtil) {
+	$scope.data.reverseSort = false;
+	$scope.data.selectedFilter = 'all_tasks';
+	_resetTasksSelected();
+	
+	$scope.cancelQuickAdd = function(e, record){
+		_preventDefault(e);
+		record.showQuickAdd = false;
+	};
+	
+	$scope.addTime = function(e, record, category){
+		_preventDefault(e);
+		var timecards = [];
+		var timecardObj = {};
+		var hours = $sanitize(record.quickAdd.hours);
+		if(!isValidNumber(hours)){
+			return;
+		}
+		record.loading = true;
+		var daySelected = record.quickAdd.daySelected;
+		if(daySelected == 'all'){
+			timecardObj.monday = hours;
+			timecardObj.tuesday = hours;
+			timecardObj.wednesday = hours;
+			timecardObj.thursday = hours;
+			timecardObj.friday = hours;
+		}else
+			timecardObj[daySelected] = hours;
+		var comment = $sanitize(record.quickAdd.comment);
+		if(comment)
+			timecardObj.notes = comment;
+		timecardObj.time_sheet = $scope.data.timesheetId;
+		timecardObj.category = category || 'task_work';
+		timecardObj.task = record.sys_id;
+		if(record.quickAdd.showProjectCategory){
+			var projectCategory = $scope.getProjectTimeCategory(record);
+			if(projectCategory)
+				timecardObj.project_time_category = projectCategory;
+		}
+		timecards.push(timecardObj);
+		createTimecards(timecards, 'quick_add').then(function(response){
+			record.loading = false;
+			var status = response.data.status;
+			if(status == 'success'){
+				record.showQuickAdd = false;
+				$rootScope.$broadcast('tcp.refresh.widgets');
+			}
+			else
+				spUtil.update($scope);
+		});
+	};
+	
+	$scope.addTimecardForTask = function(evt, record, taskId){
+		_preventDefault(evt);
+		record.loading = true;
+		var timecards = [];
+		timecards.push({
+				task: taskId,
+				time_sheet: $scope.data.timesheetId,
+				category: 'task_work'
+		});
+		createTimecards(timecards, 'add_to_timesheet').then(function(response){
+			record.loading = false;
+			var status = response.data.status;
+			if(status == 'success')
+				$rootScope.$broadcast('tcp.edit.timecard', response.data.ids);
+			else
+				spUtil.update($scope);
+		});
+	};
+	
+	$scope.addTimecardForCategory = function(evt, record, category){
+		_preventDefault(evt);
+		record.loading = true;
+		var timecards = [];
+		timecards.push({
+				time_sheet: $scope.data.timesheetId,
+				category: category
+		});
+		createTimecards(timecards, 'add_to_timesheet').then(function(response){
+			record.loading = false;
+			var status = response.data.status;
+			if(status == 'success')
+				$rootScope.$broadcast('tcp.edit.timecard', response.data.ids);
+			else
+				spUtil.update($scope);
+		});
+	};
+	
+	$scope.addSelectedTasksToTimesheet = function(){
+		var timecards = [];
+		var selectedTasks = $scope.data.selectedCards;
+		for(var i=0; i<selectedTasks.length; i++){
+			var timecard = {
+				task: selectedTasks[i],
+				time_sheet: $scope.data.timesheetId,
+				category: 'task_work'
+			};
+			timecards.push(timecard);
+		}
+		createTimecards(timecards, 'add_multiple_to_timesheet').then(function(response){
+			_resetTasksSelected();
+			var status = response.data.status;
+			if(status == 'error')
+				spUtil.update($scope);
+			else
+				$rootScope.$broadcast('tcp.refresh.widgets');
+		});
+	};
+	
+	function _preventDefault(evt){
+		evt.stopPropagation();
+		evt.preventDefault();
+	}
+	
+	function createTimecards(timecards, action){
+		return tenroxPortalService.addToTimesheet({
+			values:{
+				timecards: timecards,
+				timesheetId: $scope.data.timesheetId,
+				action : action
+			} 
+		});
+	}
+	
+	$scope.stopPropagation = function(evt){
+		evt.stopPropagation();
+	};
+	
+	$scope.filterTasks = function(filterKey){
+		$scope.data.selectedFilter = filterKey;
+		_resetTasksSelected();
+	};
+	
+	$scope.setSortDir = function(){
+		$scope.data.reverseSort = !$scope.data.reverseSort;
+	};
+	
+	$scope.sortCol = function(card){
+		return card.priority.value;
+	};
+	
+	$scope.validateHours = function(card, number){
+		if(!isValidNumber(number))
+			card.quickAdd.invalidHours = true;
+		else 
+			card.quickAdd.invalidHours = false;
+	};
+	
+	function isValidNumber(number){
+		var decimalSeperator = g_user_decimal_separator;
+		var regx =  new RegExp('^-?((\\d+(\\'+ decimalSeperator + '\\d+)?)|(\\' + decimalSeperator + '\\d+))$');
+		if(regx.test(number) && !isNaN(parseFloat(number))){
+			return true;
+		}
+		return false;
+	}
+	
+	function _resetTasksSelected(){
+		$scope.data.selectedCards = [];
+		var cards = $scope.data.cards;
+		for(var i in cards){
+			cards[i].selected = false;
+		}
+	}
+	
+	$scope.filterCards = function(item){
+		var keyword = $scope.data.keyword;
+		var sysClassName = $scope.data.taskFilters[$scope.data.selectedFilter].value;
+		if(!compareValues(item.sys_class_name, sysClassName, true))
+		   return false;
+		var displayFields = item.display_fields.split(',');
+		var matched = false;
+		for(var i in displayFields){
+			if(compareValues(item[displayFields[i]].display_value, keyword))
+				matched = true;
+		}
+		return matched;
+	};
+	
+	function compareValues(actual, expected, strict) {
+		if (angular.isUndefined(actual)) {
+			return false;
+		}
+		if (angular.isUndefined(expected)) {
+			return true;
+		}
+		if ((actual === null) || (expected === null)) {
+			return actual === expected;
+		}
+		if (angular.isObject(expected) || (angular.isObject(actual) && !angular.isFunction(actual.toString))) {
+			return false;
+		}
+		if(strict)
+			return (expected === '') || (actual === expected);
+		actual = angular.lowercase('' + actual);
+		expected = angular.lowercase('' + expected);
+		return actual.indexOf(expected) !== -1;
+    }
+	
+	var filterQuery = 'time_sheet='+ $scope.data.timesheetId;
+	spUtil.recordWatch($scope, 'time_card', filterQuery, function(record){
+		if(record.data.operation == 'insert')
+			spUtil.update($scope);
+	});
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.cards-panel-container{&#13;
+  background-color: $color-lighter;&#13;
+  height: 100%;&#13;
+  position: absolute;&#13;
+  top: 0;&#13;
+  bottom: 0;&#13;
+  width: 100%;&#13;
+  border: 1px solid $color-border;&#13;
+  box-shadow: 2px 2px 3px 1px $color-shadow;&#13;
+  -webkit-box-shadow: 2px 2px 3px 1px $color-shadow;&#13;
+  -moz-box-shadow: 2px 2px 3px 1px $color-shadow;&#13;
+  overflow: hidden;&#13;
+  &#13;
+  .no-cards-mssg{&#13;
+    position:absolute;&#13;
+    width:100%;&#13;
+    text-align:center;&#13;
+    top:50%;&#13;
+  }&#13;
+  &#13;
+  .link-button{&#13;
+    padding: 0;&#13;
+    border: none;&#13;
+    line-height: inherit;&#13;
+    font-size: inherit;&#13;
+    vertical-align:top;&#13;
+    &amp;:hover, &amp;:focus{&#13;
+      text-decoration: underline;&#13;
+    }&#13;
+  }&#13;
+  &#13;
+  .tab-content{&#13;
+    overflow: hidden;&#13;
+    position:relative;&#13;
+    &#13;
+    .tab-pane{&#13;
+      height: 100%;&#13;
+      position: absolute;&#13;
+      width: 100%;&#13;
+    }&#13;
+    .active.flex-column {&#13;
+      display: -ms-flexbox;&#13;
+      display: -moz-flex;&#13;
+      display: -webkit-box;&#13;
+      display: -webkit-flex;&#13;
+      display: flex;&#13;
+    }&#13;
+  }&#13;
+  &#13;
+  .tasks-panel{&#13;
+    .cards-panel-header{&#13;
+      color: $color-darker;&#13;
+      .btn-group.open .dropdown-toggle {&#13;
+        box-shadow: none;&#13;
+      }&#13;
+      .fa-caret-down{&#13;
+        color: inherit;&#13;
+        padding: 0 5px;&#13;
+      }&#13;
+      .btn-sort{&#13;
+        padding: 4px 2px;&#13;
+      }&#13;
+      .search-input-group{&#13;
+        width: 100%;&#13;
+        position: relative;&#13;
+        color: #999999;&#13;
+        .search-input-group-addon{&#13;
+          line-height: 1.6;&#13;
+          position: absolute;&#13;
+          font-size: 16px;&#13;
+          top: 3px;&#13;
+          padding: 2px 6px 2px 13px;&#13;
+        }&#13;
+        input{&#13;
+          padding-left: 32px;&#13;
+          border-radius: 0;&#13;
+        }&#13;
+        input[type=search]{&#13;
+          &amp;::-ms-clear{&#13;
+	          display: none;&#13;
+          }&#13;
+        }&#13;
+      }&#13;
+    }&#13;
+    .multi-select{&#13;
+      padding: 10px;&#13;
+      padding-bottom: 0;&#13;
+      .counter{&#13;
+        border-radius: 9px;&#13;
+        color:white;&#13;
+        background-color: $color-blue;&#13;
+        padding: 2px 8px;&#13;
+        font-size: 12px;&#13;
+        border-radius: 100px;&#13;
+        text-align: center;&#13;
+      }&#13;
+    }&#13;
+  }&#13;
+  &#13;
+  &#13;
+  .nav-tabs {&#13;
+    border-bottom: 1px solid #CED4D8;&#13;
+    li{&#13;
+      font-size: 16px;&#13;
+      a, a:hover{&#13;
+        color: inherit;&#13;
+        border-radius: 0px;&#13;
+        border: none;&#13;
+        background-color: inherit;&#13;
+      }&#13;
+      &#13;
+      a:hover{&#13;
+        border-bottom: 3px solid #CED4D8;&#13;
+      }&#13;
+    }&#13;
+    &#13;
+    li.active{&#13;
+      a, a:hover, a:focus{&#13;
+        background-color: inherit;&#13;
+        border-width: 0;&#13;
+        border-bottom: 3px solid $color-blue;&#13;
+      }&#13;
+    }&#13;
+  }&#13;
+ &#13;
+  .cards-panel-body{&#13;
+    overflow-y:auto;&#13;
+    padding: 13px;&#13;
+    padding-top:0;&#13;
+    margin-top: 10px;&#13;
+   &#13;
+    .card{&#13;
+      background-color: $color-white;&#13;
+      border-radius: 3px;&#13;
+      padding: 12px 13px;&#13;
+      margin-bottom: 10px;&#13;
+      border: 1px solid $color-border;&#13;
+      -webkit-box-shadow: 2px 2px 3px 1px $color-shadow;&#13;
+      -moz-box-shadow: 2px 2px 3px 1px $color-shadow;&#13;
+      box-shadow: 2px 2px 3px 1px $color-shadow;&#13;
+      cursor: pointer;&#13;
+      &#13;
+      .quick-links{&#13;
+        opacity: 0;&#13;
+        &amp;:focus{&#13;
+          opacity: 1;&#13;
+        }&#13;
+      }&#13;
+      &#13;
+      &amp;:hover, &amp;:focus, &amp;:active:focus{&#13;
+    	-webkit-box-shadow: 2px 4px 7px 1px $color-shadow;&#13;
+      	-moz-box-shadow: 2px 4px 7px 1px $color-shadow;&#13;
+      	box-shadow: 2px 4px 7px 1px $color-shadow;&#13;
+        .quick-links{&#13;
+          opacity: 1;&#13;
+        }&#13;
+         &#13;
+      }&#13;
+      &#13;
+      &amp;:focus, &amp;:active:focus{&#13;
+        outline: thin dotted;&#13;
+        outline: 5px auto -webkit-focus-ring-color;&#13;
+        outline-offset: -2px;&#13;
+      }&#13;
+      &#13;
+      .primary-field{&#13;
+        color: black;&#13;
+        font-size: 14px;&#13;
+      }&#13;
+      .secondary-fields{&#13;
+        color: $color-dark;&#13;
+        font-size: 12px;&#13;
+        &#13;
+        .separator{&#13;
+          font-size: 6px;&#13;
+          margin: 0 4px 0 2px;&#13;
+          line-height: 15px;&#13;
+          vertical-align: bottom;&#13;
+        }&#13;
+      }&#13;
+      .tags-container{&#13;
+        padding: 10px 0 13px 0;&#13;
+        .tag{&#13;
+          background-color: $color-lighter;&#13;
+          border-radius: 100px;&#13;
+          color: $color-text-dark;&#13;
+          font-size: 11px;&#13;
+    	  text-align: center;&#13;
+          padding: 2px 8px;&#13;
+          margin-right: 5px;&#13;
+        }&#13;
+      }&#13;
+      &#13;
+      .divider{&#13;
+        height: 1px;&#13;
+        overflow: hidden;&#13;
+        background-color: $color-lighter;&#13;
+      }&#13;
+      &#13;
+      .card-footer{&#13;
+        font-size: 13px;&#13;
+        padding-top: 8px;&#13;
+        text-align: center;&#13;
+        &#13;
+        .fa-ban{&#13;
+          color: $color-dark;&#13;
+          font-size: 16px;&#13;
+          line-height:18px;&#13;
+        }&#13;
+      }&#13;
+      &#13;
+      .quick-add{&#13;
+        font-size: 13px;&#13;
+        &#13;
+        .header{&#13;
+          padding: 13px 0 7px 0;&#13;
+          color: $color-text-dark&#13;
+        }&#13;
+        &#13;
+        .select2-choice{&#13;
+          text-decoration: none;&#13;
+          font-family: inherit;&#13;
+          font-size: inherit;&#13;
+        }&#13;
+        .select2-choice:hover{&#13;
+          text-decoration:none;&#13;
+          color: inherit;&#13;
+        }&#13;
+        .quick-control{&#13;
+          margin-bottom: 13px;&#13;
+        }&#13;
+        .error{&#13;
+          border: 1px solid $color-red !important;&#13;
+        }&#13;
+        .btn + .btn{&#13;
+          margin-left: 5px;&#13;
+        }&#13;
+      }&#13;
+    }&#13;
+    .card-selected{&#13;
+      border: 1px solid $color-blue;&#13;
+      box-shadow: inset 1px 1px 3px 1px $color-shadow-inset, 2px 2px 3px 1px $color-shadow !important;&#13;
+      -webkit-box-shadow: inset 1px 1px 3px 1px $color-shadow-inset, 2px 2px 3px 1px $color-shadow !important;&#13;
+      -moz-box-shadow: inset 1px 1px 3px 1px $color-shadow-inset, 2px 2px 3px 1px $color-shadow !important;&#13;
+    }&#13;
+    &#13;
+    .card-disabled{&#13;
+      cursor: default;&#13;
+      outline: 0 !important;&#13;
+      &amp;:hover, &amp;:focus{&#13;
+        cursor: default;&#13;
+        outline: 0 !important;&#13;
+      }&#13;
+    }&#13;
+    &#13;
+  }&#13;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>timecard-task-selector</id>
+        <internal>false</internal>
+        <link><![CDATA[function(scope, elem, attrs){
+	
+	var $timeout = $injector.get('$timeout');
+	
+	scope.switchTab = function(e, category){
+		e.preventDefault();
+		$(this).tab('show');
+	};
+	
+	function _initializeQuickAddSelectors(id){
+		$('#day-selector-'+id).select2({
+			placeholder: scope.data.messages.selectDay,
+			minimumResultsForSearch: Infinity
+		});
+		$('#project-category-'+id).select2({
+			placeholder: scope.data.messages.selectProjectCategory,
+			allowClear: true,
+			ajax: {
+				url: '/api/now/table/project_time_category',
+				dataType: 'json',
+				quietMillis: 250,
+				data: function(term, page) {
+					return {
+						sysparm_query: 'nameCONTAINS' + term,
+						sysparm_fields: 'name,sys_id',
+						sysparm_display_value: 'all',
+						sysparm_exclude_reference_link: true
+					};
+				},
+				results: function(data, page) {
+					var responseData = [];
+					if(data) {
+						var items = data.result;
+						for (var i = 0; i < items.length; i++) {
+							responseData.push({ 
+								"id": items[i].sys_id.value, 
+								"text": items[i].name.display_value
+							});
+						}
+					}
+					return { results: responseData};
+				}
+			},
+			formatNoMatches: function () {
+				return scope.data.messages.noMatchesFound; 
+			},
+			formatAjaxError: function (jqXHR, textStatus, errorThrown) { 
+				return scope.data.messages.loadingFailed;
+			},
+			formatLoadMore: function (pageNumber) {
+				return scope.data.messages.loadingMoreResults;
+			},
+			formatSearching: function () {
+				return scope.data.messages.searching;
+			}
+		});
+	}
+	
+	scope.toggleCard = function(evt, card){
+		var $quickAddEle = $('.quick-add')[0];
+		var tagName = evt.target.tagName;
+		if(scope.data.canCreateTimecards && !card.noTimeReporting && tagName != 'A' && tagName != 'BUTTON' &&(!$quickAddEle || !$quickAddEle.contains(evt.target))){
+			_preventDefault(evt);
+			card.selected = !card.selected;
+			if (card.selected)
+				scope.data.selectedCards.push(card.sys_id);
+			else {
+				scope.data.selectedCards.splice(scope.data.selectedCards.indexOf(card.sys_id), 1);
+				$(evt.target).closest('.card').get(0).blur();
+			}
+		}
+	};
+	
+	scope.quickAdd = function(evt, record, id){
+		_preventDefault(evt);
+		record.showQuickAdd = true;
+		record.quickAdd.hours = 0;
+		record.quickAdd.daySelected = 'all';
+		record.quickAdd.comment = '';
+		$timeout(function(){
+			_initializeQuickAddSelectors(id);
+			$('#day-selector-'+id).select2('val', 'all');
+			$('#project-category-'+id).select2('val', '');
+		}, 0);
+	};
+	
+	scope.getProjectTimeCategory = function(record){
+		return $('#project-category-'+record.sys_id).select2('val');
+	};
+	
+	function _preventDefault(evt){
+		if(evt){
+			evt.stopPropagation();
+			evt.preventDefault();
+		}
+	}
+}]]></link>
+        <name>Time Card Portal - Task Selector</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function($sp) {
+	var TABLE_TIMESHEET     = 'x_nykl3_tenroxnbsa_timesheet';
+	var TABLE_ASSIGNMENT    = 'x_nykl3_tenroxnbsa_assignment';
+	var TABLE_NON_WORK_TIME = 'x_nykl3_tenroxnbsa_non_work_time';
+	var TABLE_PROJECT       = 'x_nykl3_tenroxnbsa_project';
+	var TABLE_LEAVE_TYPE    = 'x_nykl3_tenroxnbsa_leave_type';
+	var tu = new tenroxUtil();
+	data.userId = gs.getUserID();
+	var timesheetId = '0e6b6eb81323fe007864bb722244b025'; //input.timesheetId || '';
+	//var timesheetId = $sp.getParameter('sysparm_timesheet_id') || input.timesheetId;
+	//if(!timesheetId)
+	//	timesheetId = new TimeSheetFactory().getTimeSheet(data.userId);
+	data.timesheetId = timesheetId;
+	var timesheet = new GlideRecord(TABLE_TIMESHEET);
+	timesheet.get(data.timesheetId);
+	
+	var assignmentGr = new GlideRecord(TABLE_ASSIGNMENT);
+	assignmentGr.newRecord();
+	data.canCreateTimecards = assignmentGr.canCreate();
+	
+	var dateObj = new GlideDate();
+	//dateObj.setValue(timesheet.getValue('week_starts_on'));
+	dateObj.setValue(timesheet.getValue('week_start'));
+	var weekStart = dateObj.toString();
+	//var weekStartsOnDateTime = TimeCardUtil.getWeekStartsOnDateTimeForUser(weekStart, data.userId);
+	var weekStartsOnDateTime = dateObj;//tu.getWeekStartsOnDateTimeForUser(weekStart, data.userId);
+	dateObj.addDaysUTC(6);
+	var weekEnd = dateObj.toString();
+	var weekEndsOnDateTime = new GlideDateTime(weekStartsOnDateTime);
+	weekEndsOnDateTime.addDaysUTC(7);
+	
+	var defaultTables = TABLE_PROJECT;
+	var defaultLayout = {
+		primary_field:'project',
+		secondary_fields:['sys_updated_by','sys_updated_on']
+	};
+	//data.tables = input.tables || options.tables || defaultTables;
+	//data.layout = input.layout || options.layout || defaultLayout;
+	
+	data.tables = defaultTables;
+	data.layout = defaultLayout;
+
+	data.ids = [];
+	data.cards = [];
+	data.taskFilters = {};
+	data.card_layouts = {};
+	data.defaultLayout = defaultLayout;
+	data.defaultFields = _getFieldsForLayout(defaultLayout);
+	
+	//var gr = new GlideRecordSecure(TABLE_ASSIGNMENT);
+	var gr = new GlideRecord(TABLE_ASSIGNMENT);
+	if (gr.isValid()) {
+		gr.addEncodedQuery('timesheet='+timesheetId);
+		gr.query();
+		_addRecordsToList(gr);
+	}
+		
+	data.taskFilters.all_tasks = {};
+	data.taskFilters.all_tasks.label = gs.getMessage('All Tasks');
+	data.taskFilters.all_tasks.value = '';
+	data.taskFilters.all_tasks.count = data.cards.length;
+	
+	var leaveTypeGr = new GlideRecord(TABLE_LEAVE_TYPE);
+	leaveTypeGr.addQuery('active', 'true');
+	leaveTypeGr.query();
+	while (leaveTypeGr.next()) {
+		leaveType = {name: leaveTypeGr.name, sys_id: leaveTypeGr.sys_id};
+		leaveType.quickAdd = {};
+		leaveType.quickAdd.daySelected = 'all';
+	}
+	//data.categories = JSON.parse(choiceList.toJSON());
+	
+	function _addRecordsToList(gr){
+		while(gr.next()){
+			var record = {};
+			var sysClassName = gr.getValue('sys_class_name');
+			record.sys_class_name = gr.getValue('sys_class_name');
+			record.sys_id = gr.getValue('sys_id');
+			var fields = _addLayoutAndGetFieldsForTable(sysClassName, data.defaultLayout, data.defaultFields);
+			record.display_fields = fields;
+			record.quickAdd = {};
+			record.quickAdd.daySelected = 'all';
+	
+			record.disabled = record.noTimeReporting || !data.canCreateTimecards;
+			
+			$sp.getRecordElements(record, gr, fields);
+			if(data.ids.indexOf(record.sys_id) == -1){
+				data.ids.push(record.sys_id);
+				data.cards.push(record);
+				if(!data.taskFilters[sysClassName]){
+					data.taskFilters[sysClassName] = {};
+					var labelGr = new GlideRecord(record.sys_class_name);
+					//data.taskFilters[sysClassName].label = labelGr.getPlural();
+					data.taskFilters[sysClassName].label = labelGr.getLabel();
+					data.taskFilters[sysClassName].value = sysClassName;
+					data.taskFilters[sysClassName].count = 0;
+				}
+				data.taskFilters[sysClassName].count++;
+			}
+		}
+	}
+	
+	function _addLayoutAndGetFieldsForTable(table){
+		var layout = data.layout[table];
+		var fields = '';
+		if(!layout){
+			layout = data.defaultLayout;
+			fields = data.defaultFields;
+		}
+		else{
+			fields = _getFieldsForLayout(layout);
+		}
+		if(!data.card_layouts[table])
+			data.card_layouts[table] = layout;
+		return fields;
+	}
+	
+	function _getFieldsForLayout(layout){
+		var fieldsArr = [];
+		//fieldsArr.push(layout.primary_field || 'short_description');
+		fieldsArr.push(layout.primary_field || 'project');
+		if(layout.secondary_fields)
+			fieldsArr = fieldsArr.concat(layout.secondary_fields);
+		return 'number,priority,' + fieldsArr.join(',');
+	}
+	
+	function _isEmpty(obj){
+		return !obj || Object.keys(obj).length === 0;
+	}
+	
+	if(!input){
+		//var ua = new TimecardUsageAnalytics();
+		//ua.workerPortalLaunch(data.cards.length);
+	}
+	
+	data.messages = {};
+	data.messages.selectProjectCategory = gs.getMessage('Select Project Category');
+	data.messages.noMatchesFound = gs.getMessage('No matches found');
+	data.messages.loadingFailed = gs.getMessage('Loading failed');
+	data.messages.loadingMoreResults = gs.getMessage('Loading more results…');
+	data.messages.searching = gs.getMessage('Searching…');
+	data.messages.selectDay = gs.getMessage('Select Day');
+		
+})($sp);]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-08-18 22:45:59</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>4c79e4ab0f2043001416d23be1050e9c</sys_id>
+        <sys_mod_count>15</sys_mod_count>
+        <sys_name>Time Card Portal - Task Selector</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sp_widget_4c79e4ab0f2043001416d23be1050e9c</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-08-21 04:59:41</sys_updated_on>
+        <template><![CDATA[<div class="cards-panel-container flex-column">
+  <ul class="nav nav-tabs nav-justified" role="tablist">
+    <li role="presentation" class="active"><a href="#tasks" data-toggle="tab" ng-click="switchTab($event, 'tasks')" role="tab" class="active" aria-controls="tasks">${Tasks}</a></li>
+    <li role="presentation"><a href="#other" data-toggle="tab" ng-click="switchTab($event, 'other')" role="tab" aria-controls="other">${Other}</a></li>
+  </ul>
+  <div class="tab-content flex-grow">
+    <div class="tasks-panel tab-pane active flex-column" id="tasks" role="tabpanel">
+      <div class="no-cards-mssg" ng-if="data.cards.length == 0">
+          ${No task assignments found}
+      </div>
+      <div class="cards-panel-header" ng-if="data.cards.length > 0">
+        <div style="padding: 10px 13px 5px 13px;">
+          <span class="btn-group" role="group">
+            <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding:0;background-color:transparent;">
+             {{data.taskFilters[data.selectedFilter].label}} ({{data.taskFilters[data.selectedFilter].count}})<span class="fa fa-caret-down"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-left" aria-label="${More Filters}">
+              <li ng-repeat="(key, value) in data.taskFilters" ng-if="key != data.selectedFilter && value.count!=0"><a href="javascript:void(0)" ng-click="filterTasks(key)">{{::value.label}} ({{::value.count}})</a></li>
+            </ul>
+          </span>
+          <span class="pull-right">
+            <button type="button" ng-click="setSortDir()" class="btn btn-link fa btn-sort" ng-class="{false: 'fa-sort-amount-asc', true: 'fa-sort-amount-desc'}[data.reverseSort]" aria-label="${Sort by}"></button>
+            <span>${Priority}</span>
+          </span>
+        </div>
+        <div class="search-input-group">
+          <span class="search-input-group-addon fa fa-search">
+          </span>
+          <label for="cards-search" class="sr-only">${Search}</label>
+          <input type="search" autocomplete="off" spellcheck="false" name="cards-search" id="cards-search" ng-model="data.keyword" class="form-control" placeholder="${Search}">
+        </div>
+      </div>
+      <div class="multi-select" ng-show="data.selectedCards.length > 1">
+         <span class="counter"><strong>${{{data.selectedCards.length}} Selected}</strong></span>
+         <button type="button" class="btn btn-link link-button pull-right" ng-click="addSelectedTasksToTimesheet()">${Add selected to Time Sheet}</button>
+      </div>
+      <div class="cards-panel-body flex-grow" role="listbox" aria-multiselectable="true" aria-label="${Tasks List}">
+        <div class="card" ng-repeat="card in data.cards | filter:filterCards | orderBy:sortCol:data.reverseSort track by card.sys_id" ng-class="{'card-selected': card.selected, 'card-disabled': card.disabled}" ng-click="toggleCard($event, card)" tabIndex="{{card.disabled ? -1 : 0}}" role="option" aria-selected="{{card.selected}}" aria-label="{{::card[data.card_layouts[card.sys_class_name].primary_field]['display_value']}}" aria-disabled="{{card.disabled}}">
+          <div class="primary-field"><strong>{{::card[data.card_layouts[card.sys_class_name].primary_field]['display_value']}}</strong></div>
+          <div class="secondary-fields">
+            <span ng-repeat="field in data.card_layouts[card.sys_class_name].secondary_fields">
+                <span ng-if="!$first" class="fa fa-circle separator" role="separator" aria-label="${Separator}"/><span uib-tooltip="{{::card[field]['label']}}" tooltip-placement="bottom"><i>{{::card[field]['display_value']}}</i></span>
+            </span>
+          </div>
+          <div class="tags-container">
+            <span class="tag" ng-repeat="tag in ::data.card_layouts[card.sys_class_name].tags track by $index" ng-style="::{'background-color': tag.colors[card[tag.field]['value']]['bgColor'], 'color': tag.colors[card[tag.field]['value']]['textColor']}"><span uib-tooltip="{{::card[tag.field]['label']}}" tooltip-placement="bottom"><strong>{{::card[tag.field]['display_value']}}</strong></span></span>
+          </div>
+          <div role="separator" class="divider"></div>
+          <div class="card-footer clearfix" ng-show="!card.showQuickAdd">
+            <a class="pull-left" target="_blank" ng-href="/{{::card.sys_class_name}}.do?sys_id={{::card.sys_id}}" ng-click="stopPropagation($event)">{{::card.number.display_value}}</a>
+            <button type="button" ng-if="::(data.canCreateTimecards && !card.hideQuickAdd)" class="btn btn-link link-button quick-links" ng-class="{'pull-right':card.hideAddToTimesheet}" ng-click="quickAdd($event, card, card.sys_id)">${Quick Add}</button>
+            <button type="button" ng-if="::(data.canCreateTimecards && !card.hideAddToTimesheet)" class="btn btn-link link-button quick-links pull-right" ng-click="addTimecardForTask($event, card, card.sys_id)" ng-disabled="card.loading">${Add to Time Sheet}</button>
+            <span ng-if="::card.noTimeReporting" class="fa fa-ban pull-right" uib-tooltip="${No time recording required for this task}" tooltip-placement="left"><span class="sr-only">${No time recording required for this task}</span></span>
+          </div>
+          <div ng-if="card.showQuickAdd" class="quick-add clearfix">
+            <div class="header">${Quick Add}</div>
+            <input id="project-category-{{::card.sys_id}}" ng-if="::card.quickAdd.showProjectCategory" class="control select2 project-category quick-control" name="project-category" type="hidden">  
+            <select class="day-selector quick-control" ng-model="card.quickAdd.daySelected" aria-label="${Select day}" id="day-selector-{{::card.sys_id}}">
+              <option selected="selected" value="all">${Monday - Friday}</option>
+              <option value="monday">${Monday}</option>
+              <option value="tuesday">${Tuesday}</option>
+              <option value="wednesday">${Wednesday}</option>
+              <option value="thursday">${Thursday}</option>
+              <option value="friday">${Friday}</option>
+              <option value="saturday">${Saturday}</option>
+              <option value="sunday">${Sunday}</option>
+            </select>
+            <div class="input-group quick-control">
+              <input type="text" class="form-control" id="quickadd-hours-{{::card.sys_id}}" name="quickadd-hours-{{::card.sys_id}}" ng-class="{'error': card.quickAdd.invalidHours}" ng-model="card.quickAdd.hours" aria-invalid="{{card.quickAdd.invalidHours}}" ng-required="true" ng-change="validateHours(card, card.quickAdd.hours)">
+              <label class="input-group-addon" for="quickadd-hours-{{::card.sys_id}}">${Hours}</label>
+            </div>
+            <label for="comment-{{::card.sys_id}}" class="sr-only">${Note}</label>
+            <input type="text" class="form-control quick-control" id="comment-{{::card.sys_id}}" name="comment-{{::card.sys_id}}" placeholder="${add a note}" ng-model="card.quickAdd.comment">
+            <div class="pull-right">
+              <button type="button" class="btn btn-default" ng-click="cancelQuickAdd($event, card)" ng-disabled="card.loading">${Cancel}</button>
+              <button type="button" class="btn btn-primary" ng-click="addTime($event, card)" ng-disabled="card.loading || card.quickAdd.invalidHours">${Add Time}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cards-panel-body tab-pane" id="other" role="tabpanel">
+      <div class="card" ng-repeat="card in data.categories track by card.value" aria-label="{{::card.label}}">
+        <div class="primary-field">{{::card.label}}</div>
+        <div class="card-footer clearfix" ng-show="!card.showQuickAdd">
+          <button type="button" ng-if="::data.canCreateTimecards" class="btn btn-link link-button quick-links pull-left" ng-click="quickAdd($event, card, card.value)">${Quick Add}</button>
+          <button type="button" ng-if="::data.canCreateTimecards" class="btn btn-link link-button quick-links pull-right" ng-disabled="card.loading" ng-click="addTimecardForCategory($event, card, card.value)">${Add to Time Sheet}</button>
+        </div>
+        <div ng-if="card.showQuickAdd" class="quick-add clearfix">
+          <div class="header">${Quick Add}</div>
+          <select class="day-selector quick-control" ng-model="card.quickAdd.daySelected" aria-label="${Select day}" id="day-selector-{{::card.value}}">
+            <option selected="selected" value="all">${Monday - Friday}</option>
+            <option value="monday">${Monday}</option>
+            <option value="tuesday">${Tuesday}</option>
+            <option value="wednesday">${Wednesday}</option>
+            <option value="thursday">${Thursday}</option>
+            <option value="friday">${Friday}</option>
+            <option value="saturday">${Saturday}</option>
+            <option value="sunday">${Sunday}</option>
+          </select>
+          <div class="input-group quick-control">
+            <input type="text" class="form-control" id="quickadd-hours-{{::card.value}}" name="quickadd-hours-{{::card.value}}" ng-class="{'error': card.quickAdd.invalidHours}" ng-model="card.quickAdd.hours" ng-change="validateHours(card, card.quickAdd.hours)" aria-invalid="{{card.quickAdd.invalidHours}}" ng-required="true">
+            <label class="input-group-addon" for="quickadd-hours-{{::card.value}}">${Hours}</label>
+          </div>
+          <label for="comment-{{::card.value}}" class="sr-only">${Note}</label>
+          <input type="text" class="form-control quick-control" id="comment-{{::card.value}}" name="comment-{{::card.value}}" placeholder="${add a note}" ng-model="card.quickAdd.comment">
+          <div class="pull-right">
+            <button type="button" class="btn btn-default" ng-click="cancelQuickAdd($event, card)" ng-disabled="card.loading">${Cancel}</button>
+            <button type="button" class="btn btn-primary" ng-click="addTime($event, card, card.value)" ng-disabled="card.loading || card.quickAdd.invalidHours">${Add Time}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

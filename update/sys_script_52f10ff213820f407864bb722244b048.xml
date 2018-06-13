@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_label/>
+        <action_name/>
+        <action_query>false</action_query>
+        <action_run_at>server</action_run_at>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <application/>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_nykl3_tenroxnbsa_non_work_time</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="x_nykl3_tenroxnbsa_non_work_time">nwt.name=Lunch Break^EQ<item endquery="false" field="nwt.name" goto="false" newquery="false" operator="=" or="false" value="Lunch Break"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Max Allowed NWT 8 Hours</name>
+        <onclick/>
+        <order>100</order>
+        <priority>100</priority>
+        <read_access_action>false</read_access_action>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[/*
+ * Author: Lavlesh Garg, 12/6/2017
+ * Purpose of this Business rule is to ensure that total non work time for any day for timesheet doesn't exceeds 8 hours
+ * So, whenever a new non-work-type is entered / edited, this business rule will run
+ * and check whether by allowing insertion / updation of this record, non work time for any day for this timesheet
+ * would exceed 8 hours, if it does, insertion / updation of the record would be aborted.
+ */
+(function executeRule(current, previous /*null when async*/) {
+	
+	var nwh = 0, diff = 0, totalNWH = 0;
+	var weekDays = ['mon', 'tue', 'wed', 'thu', 'fri'];
+	
+	//This is the array of total non work time for each day of the timesheet.
+	var timesheetNWH = [current.timesheet.mon_nwt, current.timesheet.tue_nwt, current.timesheet.wed_nwt, current.timesheet.thu_nwt, current.timesheet.fri_nwt];
+	
+	for (var w in weekDays) {
+		//nwh will store the already stored non work hours for this day (mon, tue ..) for the timesheet.
+		nwh = timesheetNWH[w] ? timesheetNWH[w] : 0;
+		
+		//diff will store the change in non work hour for this day (mon, tue ..) for this non work type
+		diff = current.getValue(weekDays[w]) ? parseFloat(current.getValue(weekDays[w])) : 0;
+		if (previous.getValue(weekDays[w]))
+			diff -= parseFloat(previous.getValue(weekDays[w]));
+		
+		//totalNWH will be the sum of nwf and diff
+		totalNWH = parseFloat(nwh)+parseFloat(diff);
+		
+		//totalNWH should be <= 8. If it's more than 8, show an error and about record submission
+		if (totalNWH > 8) {
+			gs.addErrorMessage('More than 8 hours not allowed in Total Non Work Times per timesheet day. For Non Work Type : '+current.nwt.name+', for '+weekDays[w]+', you entered '+current.getValue(weekDays[w])+' hours which makes total '+totalNWH+' hours for this day in timesheet');
+			current.setAbortAction(true);
+		}
+	}
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-30 15:30:11</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>52f10ff213820f407864bb722244b048</sys_id>
+        <sys_mod_count>26</sys_mod_count>
+        <sys_name>Max Allowed NWT 8 Hours</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_52f10ff213820f407864bb722244b048</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-03-21 17:54:27</sys_updated_on>
+        <template/>
+        <when>before</when>
+    </sys_script>
+</record_update>

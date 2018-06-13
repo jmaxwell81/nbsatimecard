@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sp_angular_provider">
+    <sp_angular_provider action="INSERT_OR_UPDATE">
+        <name>pwConfirmDialog</name>
+        <script><![CDATA[function pwConfirmDialog($rootScope, $uibModal){
+	return{
+		restrict: 'E',
+		replace: true,
+		template:'',
+		scope: {
+			data : '=',
+		},
+		link: function(scope, element, attr){
+			if (!scope.data)
+				return;
+			var opts = {
+				size : 'sm',
+				scope: scope,
+				template : '<div><div class="modal-header" style="padding:10px; border:none;"><h4 class="modal-title" style="display:inline-block;">{{::data.title}}</h4>'+
+				'<button type="button" id="confirmHeaderClose" class="btn fa fa-close close" ng-click="close()" style="font-size:17px;line-height:1.42;"></a></div>' +
+				 '<div class="modal-body" style="padding:10px;" ng-bind-html="data.text"></div>' +
+                 '<div class="modal-footer" style="padding:10px; border:none;">' +
+                 '<button id="confirmCancel" class="btn btn-default" ng-click="cancel()" style="float:left; width:48%">{{::data.cancelTxt}}</button>' +
+				 '<button id="confirmOk" class="btn btn-primary {{::data.okBtnClass}}" ng-click="ok()" style="width:48%">{{::data.okTxt}}</button>' +
+                 '</div>'+
+				 '<div class="loader" ng-if="data.loading" style="position:absolute;top:0;width:100%;height:100%;color:#000102;font-size: 35px;background-color : #ffffff;opacity:0.5">'+
+				 '<div class="loader-content" style="position:absolute;width:100%;text-align:center;top:50%;transform: translateY(-50%);">'+
+				 '<fa name="spinner" spin="true"></fa>'+
+				 '</div>'+
+				 '</div>'+
+				 '</div>',
+				controller : function($scope, $uibModalInstance){
+					$scope.ok = function () {
+						$scope.data.loading = true;
+						scope.data.ok.call();
+					};
+					$scope.cancel = function () {
+						$uibModalInstance.dismiss('cancel');
+					};
+					$scope.close = function () {
+						$uibModalInstance.close('Close');
+					};
+					$scope.data = scope.data;
+					$scope.data.loading = false;
+					
+				}
+			};
+			var modalInstance = $uibModal.open(opts);
+
+			modalInstance.rendered.then(function() {
+                $('#confirmOk').focus();
+			});
+			
+			if (scope.data.afterOpen)
+				scope.data.afterOpen.call(null, modalController(modalInstance));
+			
+			if (scope.data.afterClose)
+				modalInstance.closed.then(scope.data.afterClose);
+			
+			function modalController(instance){
+				return {
+					close: function(){
+						instance.close();
+					}
+				};
+			}
+		}
+	};
+}]]></script>
+        <sys_class_name>sp_angular_provider</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-08-21 04:13:30</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>f6b704dc0f7c43001416d23be1050ece</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>pwConfirmDialog</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sp_angular_provider_f6b704dc0f7c43001416d23be1050ece</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-08-21 04:13:30</sys_updated_on>
+        <type>directive</type>
+    </sp_angular_provider>
+</record_update>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>false</active>
+        <condition/>
+        <conditional>false</conditional>
+        <name>Tenrox - Reset Paid Time Off for Contractors</name>
+        <run_as/>
+        <run_as_tz>US/Eastern</run_as_tz>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period/>
+        <run_start>2017-11-03 10:16:01</run_start>
+        <run_time>1970-01-01 06:00:00</run_time>
+        <run_type>daily</run_type>
+        <script><![CDATA[/*
+ * Author: Lavlesh Garg 11/3/2017
+ * Application: Tenrox
+ * This job is scheduled to run daily and check if there is any contractor for whom the paid time off expires
+ * If yes, the remaining time expires and it resets to the paid time off mentioned in the user profile
+ */
+
+var date = new GlideDateTime();
+var currentDay = date.getDayOfMonthUTC();
+var currentMonth = date.getMonthUTC();
+
+var TABLE_USER_PROFILE = 'x_nykl3_tenroxnbsa_user_profile';
+gs.debug('Tenrox - Reset Paid Time Off for Contractors scheduled job: currentDay: '+currentDay+', currentMonth: '+currentMonth);
+
+var grup = new GlideRecord(TABLE_USER_PROFILE);
+var queryString = 'employee_type=Employee^employee_category=Contracted';
+grup.addQuery(queryString);
+grup.query();
+
+gs.debug('Tenrox - Reset Paid Time Off for Contractors scheduled job: Total Contractors: '+grup.getRowCount());
+
+var startDate, paidTimeOff;
+var startDay, startMonth;
+while (grup.next()) {
+	startDate = new GlideDateTime(grup.start_date.toString());
+	startDay = startDate.getDayOfMonthUTC();
+	startMonth = startDate.getMonthUTC();
+	paidTimeOff = grup.paid_time_off;
+	gs.debug('Tenrox - Reset Paid Time Off for Contractors scheduled job: user: '+grup.user.name+', startDate: '+startDate+', paidTimeOff: '+paidTimeOff+', startDay: '+startDay+', startMonth: '+startMonth);
+	
+	if (startDay == currentDay && startMonth == currentMonth) {
+		gs.debug('Tenrox - Reset Paid Time Off for Contractors scheduled job: calling resetPTO function');
+		resetPTO(grup);
+	}
+}
+
+function resetPTO(employee) {
+	gs.debug('Tenrox - Reset Paid Time Off for Contractors scheduled job: in resetPTO function for '+employee.user.name);
+	var leave = 'paid_time_off';
+	var types = ['Remaining', 'Used', 'Initial Balance'];
+	var TABLE_LEAVE = 'x_nykl3_tenroxnbsa_leave_time';
+	var lt = new GlideRecord(TABLE_LEAVE);
+	lt.addQuery('employee', employee.sys_id);
+	lt.query();
+	gs.debug('Tenrox - Reset Paid Time Off for Contractors Row Count for employee '+employee.user.name+' is '+lt.getRowCount());
+	while (lt.next()) {
+		gs.debug('Tenrox - Reset Paid Time Off for Contractors Row Count for employee '+employee.user.name+' and Type: '+lt.type+', leave balance for paid time off: '+lt.paid_time_off);
+		if (lt.type == 'Remaining' || lt.type == 'Initial Balance') {
+			lt.setValue(leave, employee.paid_time_off);
+		} else if (lt.type == 'Used') { //Used Leaves - Make them zero
+			lt.setValue(leave, 0);
+		}
+		lt.update();
+	}
+}]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-11-03 10:34:59</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>8f6022080f5e0f401416d23be1050e78</sys_id>
+        <sys_mod_count>17</sys_mod_count>
+        <sys_name>Tenrox - Reset Paid Time Off for Contractors</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sysauto_script_8f6022080f5e0f401416d23be1050e78</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-12-10 13:17:55</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>

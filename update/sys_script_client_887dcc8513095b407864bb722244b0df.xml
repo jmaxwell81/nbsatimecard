@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_script_client">
+    <sys_script_client action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <applies_extended>false</applies_extended>
+        <condition/>
+        <description/>
+        <field>sys_class_name</field>
+        <global>true</global>
+        <messages/>
+        <name> Alert Company Holiday or Weekend Hours</name>
+        <order/>
+        <script><![CDATA[function onSubmit(control, oldValue, newValue, isLoading, isTemplate) {
+	if (isLoading || newValue === '') {
+		return;
+	}
+	
+	var daysInWeek = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+	var holidays = g_form.getValue('timesheet.holidays');
+	holidays += ',sat,sun';
+	
+	if (holidays)
+		holidays = holidays.split(',');
+	
+	//This will be an array of true/false values
+	//if mon is holiday, holidayArray[0] = true and so on
+	var holidayArray = [];
+	for (var w in daysInWeek) {
+		holidayArray[w] = false;
+		for (var h in holidays) {
+			if (daysInWeek[w] == holidays[h]) {
+				holidayArray[w] = true;
+				break;
+			}
+		}
+	}
+	// Check and confirm for any days with zero hours
+	// If it's a company paid holiday, then check for non-zero hours
+	var question;
+	for(var d=0; d<daysInWeek.length; d++) {//} in daysInWeek) {
+		question = '';
+		if (holidayArray[d]) {
+			if (g_form.getValue(daysInWeek[d]) !=0)
+				question = 'Are you sure you want to put hours on a company holiday / weekend for ' + daysInWeek[d] + '?';
+		}
+		if(question != '') {
+			var answer = confirm(question);
+			if(answer != true) {
+				return false;
+			}
+		}
+	}
+}]]></script>
+        <sys_class_name>sys_script_client</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2018-03-22 19:01:34</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>887dcc8513095b407864bb722244b0df</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name> Alert Company Holiday or Weekend Hours</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_client_887dcc8513095b407864bb722244b0df</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-03-22 19:05:25</sys_updated_on>
+        <table>x_nykl3_tenroxnbsa_non_work_time</table>
+        <type>onSubmit</type>
+        <ui_type>0</ui_type>
+        <view/>
+    </sys_script_client>
+</record_update>

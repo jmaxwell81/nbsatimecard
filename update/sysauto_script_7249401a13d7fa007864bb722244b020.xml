@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>false</active>
+        <condition/>
+        <conditional>false</conditional>
+        <name>Tenrox - Reset All Carry Over DH on 1st Feb</name>
+        <run_as/>
+        <run_as_tz>US/Eastern</run_as_tz>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period>1971-01-01 00:00:00</run_period>
+        <run_start>2017-02-01 05:00:01</run_start>
+        <run_time>1970-01-01 05:00:01</run_time>
+        <run_type>monthly</run_type>
+        <script><![CDATA[/* 
+ * Author: Lavlesh Garg 6/13/2017
+ * Application: Tenrox
+ * This job is scheduled to run on 1st of every February and make all Carry Over Discretionary Holidays Zero
+ */
+
+var date = new Date();
+if (date.getMonth() == 1) { //1 Indicates it's Feb
+	var gr = new GlideRecord('x_nykl3_tenroxnbsa_leave_time');
+	gr.query();
+	while (gr.next()) {
+		gs.info('Employee: {0} ({1}), Type: {2}, Current Carry Over DH: {3} would be reset to Zero', gr.employee.user.name, gr.employee.user.user_name, gr.type, gr.carry_over_dh);	
+		gr.carry_over_dh = 0;
+		gr.update();
+	}
+}]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-06-13 19:59:00</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>7249401a13d7fa007864bb722244b020</sys_id>
+        <sys_mod_count>10</sys_mod_count>
+        <sys_name>Tenrox - Reset All Carry Over DH on 1st Feb</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sysauto_script_7249401a13d7fa007864bb722244b020</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-12-10 13:18:09</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_choice action="INSERT_OR_UPDATE" field="carry_over_vacation_allowed_till_month" table="x_nykl3_tenroxnbsa_user_profile" version="3">
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>carry_over_vacation_allowed_till_month</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Jan</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence>0</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-12-06 19:47:35</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>c19f1eba0fb20b001416d23be1050ed4</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-12-06 20:00:32</sys_updated_on>
+            <value>1</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>carry_over_vacation_allowed_till_month</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Feb</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence>1</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-12-06 19:53:27</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>13012efa0fb20b001416d23be1050e36</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-12-06 20:00:32</sys_updated_on>
+            <value>2</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>carry_over_vacation_allowed_till_month</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Mar</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence>2</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-12-06 19:53:36</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>291166fa0fb20b001416d23be1050e07</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-12-06 20:00:32</sys_updated_on>
+            <value>3</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>carry_over_vacation_allowed_till_month</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Apr</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence>3</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-12-06 19:53:45</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>2b112afa0fb20b001416d23be1050e46</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-12-06 20:00:33</sys_updated_on>
+            <value>4</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>carry_over_vacation_allowed_till_month</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>May</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence>4</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-12-06 19:53:57</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>e221eafa0fb20b001416d23be1050eba</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-12-06 20:00:33</sys_updated_on>
+            <value>5</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>carry_over_vacation_allowed_till_month</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Jun</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence>5</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-12-06 19:54:07</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>5131aafa0fb20b001416d23be1050ea0</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-12-06 20:00:33</sys_updated_on>
+            <value>6</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>carry_over_vacation_allowed_till_month</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Jul</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence>6</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-12-06 19:54:19</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>4041eafa0fb20b001416d23be1050e28</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-12-06 20:00:33</sys_updated_on>
+            <value>7</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>carry_over_vacation_allowed_till_month</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Aug</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence>7</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-12-06 19:54:28</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>56416efa0fb20b001416d23be1050e40</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-12-06 20:00:33</sys_updated_on>
+            <value>8</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>carry_over_vacation_allowed_till_month</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Sep</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence>8</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-12-06 19:54:37</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>a451eefa0fb20b001416d23be1050e34</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-12-06 20:00:33</sys_updated_on>
+            <value>9</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>carry_over_vacation_allowed_till_month</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Oct</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence>9</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-12-06 19:54:46</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>aa516efa0fb20b001416d23be1050ec3</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-12-06 20:00:33</sys_updated_on>
+            <value>10</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>carry_over_vacation_allowed_till_month</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Nov</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence>10</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-12-06 19:54:56</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>8d61623e0fb20b001416d23be1050e08</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-12-06 20:00:33</sys_updated_on>
+            <value>11</value>
+        </sys_choice>
+        <sys_choice_set action="INSERT_OR_UPDATE">
+            <element>carry_over_vacation_allowed_till_month</element>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sys_class_name>sys_choice_set</sys_class_name>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-12-06 19:47:35</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
+            <sys_id>1dbf9aba0fb20b001416d23be1050e0d</sys_id>
+            <sys_mod_count>15</sys_mod_count>
+            <sys_name>carry_over_vacation_allowed_till_month</sys_name>
+            <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+            <sys_update_name>sys_choice_x_nykl3_tenroxnbsa_user_profile_carry_over_vacation_allowed_till_month</sys_update_name>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-12-06 20:04:59</sys_updated_on>
+        </sys_choice_set>
+    </sys_choice>
+</record_update>

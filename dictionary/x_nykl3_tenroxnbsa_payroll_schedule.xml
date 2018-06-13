@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="Payroll Schedule" max_length="40" name="x_nykl3_tenroxnbsa_payroll_schedule" type="collection">
+        <element label="ADP Transmit Date" mandatory="true" max_length="40" name="adp_transmit_date" type="glide_date" unique="true"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="NJBATCH" label="Batch ID" mandatory="true" max_length="40" name="batch_id" type="string"/>
+        <element label="Exception Date End" mandatory="true" max_length="40" name="exception_date_end" type="glide_date" unique="true"/>
+        <element label="Exception Date Start" mandatory="true" max_length="40" name="exception_date_start" type="glide_date" unique="true"/>
+        <element label="Pay Date" mandatory="true" max_length="40" name="pay_date" type="glide_date" unique="true"/>
+        <index name="index">
+            <element name="exception_date_start"/>
+        </index>
+        <index name="index2">
+            <element name="pay_date"/>
+        </index>
+        <index name="index3">
+            <element name="exception_date_end"/>
+        </index>
+        <index name="index4">
+            <element name="adp_transmit_date"/>
+        </index>
+    </element>
+</database>

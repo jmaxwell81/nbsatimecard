@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_security_acl">
+    <sys_security_acl action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <admin_overrides>false</admin_overrides>
+        <advanced>true</advanced>
+        <condition table="x_nykl3_tenroxnbsa_non_work_time">timesheet.state=Open^nwt.name!=Lunch Break^nwt.name!=Company Paid Holiday^EQ<item endquery="false" field="timesheet.state" goto="false" newquery="false" operator="=" or="false" value="Open"/>
+            <item endquery="false" field="nwt.name" goto="false" newquery="false" operator="!=" or="false" value="Lunch Break"/>
+            <item endquery="false" field="nwt.name" goto="false" newquery="false" operator="!=" or="false" value="Company Paid Holiday"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </condition>
+        <description>Allow write for records in x_nykl3_tenroxnbsa_non_work_time, for users with roles (x_nykl3_tenroxnbsa.tenrox_payroll, x_nykl3_tenroxnbsa.tenrox_admin), and if the ACL script returns true, and if the ACL condition (timesheet.state=Open^nwt.name!=Lunch Break^nwt.name!=Company Paid Holiday^EQ) evaluates to true.</description>
+        <name>x_nykl3_tenroxnbsa_non_work_time</name>
+        <operation display_value="write">write</operation>
+        <script><![CDATA[answer = false;
+if (gs.getUserName() == current.timesheet.sys_created_by)
+	answer = true;]]></script>
+        <sys_class_name>sys_security_acl</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-11-01 19:01:43</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>e515066713024f407864bb722244b092</sys_id>
+        <sys_mod_count>8</sys_mod_count>
+        <sys_name>x_nykl3_tenroxnbsa_non_work_time</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_security_acl_e515066713024f407864bb722244b092</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-12-08 21:32:08</sys_updated_on>
+        <type display_value="record">record</type>
+    </sys_security_acl>
+</record_update>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="Project Work Type" max_length="40" name="x_nykl3_tenroxnbsa_project_work_type" type="collection">
+        <element label="Default" max_length="40" name="default" type="boolean"/>
+        <element display="true" label="Project Work Type" max_length="400" name="project_work_type" type="string"/>
+        <index name="index">
+            <element name="project_work_type"/>
+        </index>
+    </element>
+</database>

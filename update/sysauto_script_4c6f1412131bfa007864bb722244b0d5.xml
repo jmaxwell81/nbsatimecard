@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>false</active>
+        <condition/>
+        <conditional>false</conditional>
+        <name>Tenrox - Re-calculate All Leaves on 1st Jan</name>
+        <run_as/>
+        <run_as_tz>US/Eastern</run_as_tz>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period>1971-01-01 00:00:00</run_period>
+        <run_start>2017-02-01 05:00:01</run_start>
+        <run_time>1970-01-01 05:00:01</run_time>
+        <run_type>monthly</run_type>
+        <script><![CDATA[/*
+ * Author: Lavlesh Garg 6/13/2017
+ * Application: Tenrox
+ * This job is scheduled to run on 1st of every Januray and re-calculate leaves
+ */
+
+var date = new Date();
+
+//0 Indicates it's Jan
+if (date.getMonth() == 9) {
+	var leaves = ['carry_over_dh', 'carry_over_vacation', 'discretionary_holiday', 'sick_leave', 'vacation'];
+	var types = ['Remaining', 'Used', 'Initial Balance'];
+	var TABLE_LEAVE = 'x_nykl3_tenroxnbsa_leave_time';
+	var employee, countEmployee, lt;
+	var remaining = {};
+	var gr = new GlideAggregate(TABLE_LEAVE);
+	gr.addAggregate('COUNT', 'employee');
+	gr.query();
+	while(gr.next()) {
+		for (var l in leaves) remaining[leaves[l]] = 0;
+		employee = gr.employee;
+		countEmployee = gr.getAggregate('COUNT', 'employee');
+		gs.info('employee: '+employee+', conutEmployee: '+countEmployee);
+		if (countEmployee == 3 && employee.employee_type == 'Employee' && employee.employee_categor != 'Contracted') {
+			for (var t in types) {
+				lt = new GlideRecord(TABLE_LEAVE);
+				lt.addQuery('employee', employee);
+				lt.addQuery('type', types[t]);
+				lt.query();
+				if (lt.getRowCount() == 1 && lt.next()) {
+					//for (var l in leaves) gs.info(types[t]+': ' +leaves[l]+ ': getValue: '+lt.getValue(leaves[l]));
+					//Remaining Leaves - Store them in an object called 'remaining' and then make them 0
+					//We will use this object 'remaining' for carry over
+					if (lt.type == types[0]) {
+						for (var l in leaves) {
+							remaining[leaves[l]] = lt.getValue(leaves[l]);
+							lt.setValue(leaves[l], 0);
+						}
+					} else if (lt.type == types[1]) { //Used Leaves - Make them zero
+						for (var l in leaves) lt.setValue(leaves[l], 0);
+					} else if (lt.type == types[2]) { //Initial Balance
+						//Carry over remaining DH
+						lt.carry_over_dh = remaining.discretionary_holiday; 
+
+						//Refill DH to 24
+						lt.discretionary_holiday = 24;
+						
+						//Refill Sick Leave - max 168 hours, can accrual from past year (56 hours for each year)
+						lt.sick_leave = remaining.sick_leave > 112 ? 168 : parseFloat(remaining.sick_leave) + parseFloat(56);
+						
+						//Carry Over Vacation
+						lt.carry_over_vacation = remaining.vacation;
+						
+						//80 hours of vacation for first year
+						//For each year of service, add 8 hours
+						//Max 168 hours
+						lt.vacation = lt.vacation < 80 ? 80 : lt.vacation > 152 ? 160 : parseFloat(lt.vacation) + parseFloat(8);
+					}
+				}
+				lt.update();
+				//for (var l in leaves) gs.info(types[t]+': ' +leaves[l]+ ': remaining leaves: '+remaining[leaves[l]]);
+			}
+		}	
+	}
+}]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-06-13 21:30:10</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>4c6f1412131bfa007864bb722244b0d5</sys_id>
+        <sys_mod_count>21</sys_mod_count>
+        <sys_name>Tenrox - Re-calculate All Leaves on 1st Jan</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sysauto_script_4c6f1412131bfa007864bb722244b0d5</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-12-10 13:18:50</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>

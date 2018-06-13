@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sp_instance">
+    <sp_instance action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <class_name/>
+        <color>default</color>
+        <css/>
+        <glyph/>
+        <id/>
+        <order>1</order>
+        <short_description/>
+        <size>md</size>
+        <sp_column/>
+        <sp_widget display_value="Time Sheet Portal Main Container">3e4f71c7132c03007864bb722244b063</sp_widget>
+        <sys_class_name>sp_instance</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-08-17 15:51:18</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>21a0428f132c03007864bb722244b0fb</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Time Sheet Main Container</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sp_instance_21a0428f132c03007864bb722244b0fb</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-08-17 15:51:18</sys_updated_on>
+        <title>Time Sheet Main Container</title>
+        <url/>
+        <widget_parameters/>
+    </sp_instance>
+</record_update>

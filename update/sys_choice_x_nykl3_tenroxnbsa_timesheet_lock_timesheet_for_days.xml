@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_choice action="INSERT_OR_UPDATE" field="lock_timesheet_for_days" table="x_nykl3_tenroxnbsa_timesheet" version="3">
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>lock_timesheet_for_days</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>all</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sequence>0</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-22 17:53:25</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>ee4ffd960fea83001416d23be1050e89</sys_id>
+            <sys_mod_count>2</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-22 17:53:40</sys_updated_on>
+            <value>all</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>lock_timesheet_for_days</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>mon</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sequence>1</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-20 18:50:06</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>5f193f65132a83007864bb722244b024</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-20 18:50:06</sys_updated_on>
+            <value>mon</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>lock_timesheet_for_days</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>tue</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sequence>2</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-20 18:50:49</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>b5497fa5132a83007864bb722244b0fe</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-20 18:50:49</sys_updated_on>
+            <value>tue</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>lock_timesheet_for_days</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>wed</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sequence>3</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-20 18:51:00</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>a059fba5132a83007864bb722244b056</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-20 18:51:00</sys_updated_on>
+            <value>wed</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>lock_timesheet_for_days</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>thu</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sequence>4</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-20 18:51:22</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>b169f7a5132a83007864bb722244b001</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-20 18:51:22</sys_updated_on>
+            <value>thu</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>lock_timesheet_for_days</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>fri</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sequence>5</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-20 18:51:32</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>6c79b3a5132a83007864bb722244b045</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-20 18:51:32</sys_updated_on>
+            <value>fri</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>lock_timesheet_for_days</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>sat</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sequence>6</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-20 18:55:09</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>d54a77e5132a83007864bb722244b00a</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-20 18:55:09</sys_updated_on>
+            <value>sat</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>lock_timesheet_for_days</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>sun</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sequence>7</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-20 18:55:19</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>334abfa5132a83007864bb722244b080</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-20 18:55:19</sys_updated_on>
+            <value>sun</value>
+        </sys_choice>
+        <sys_choice_set action="INSERT_OR_UPDATE">
+            <element>lock_timesheet_for_days</element>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sys_class_name>sys_choice_set</sys_class_name>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-20 18:50:06</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
+            <sys_id>63193f65132a83007864bb722244b025</sys_id>
+            <sys_mod_count>10</sys_mod_count>
+            <sys_name>lock_timesheet_for_days</sys_name>
+            <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+            <sys_update_name>sys_choice_x_nykl3_tenroxnbsa_timesheet_lock_timesheet_for_days</sys_update_name>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-22 17:53:40</sys_updated_on>
+        </sys_choice_set>
+    </sys_choice>
+</record_update>

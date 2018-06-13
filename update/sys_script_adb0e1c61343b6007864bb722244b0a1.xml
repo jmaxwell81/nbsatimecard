@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_label/>
+        <action_name/>
+        <action_query>false</action_query>
+        <action_run_at>server</action_run_at>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <application/>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_nykl3_tenroxnbsa_assignment</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="x_nykl3_tenroxnbsa_assignment">monVALCHANGES^ORtueVALCHANGES^ORwedVALCHANGES^ORthuVALCHANGES^ORfriVALCHANGES^ORsatVALCHANGES^ORsunVALCHANGES^EQ<item endquery="false" field="mon" goto="false" newquery="false" operator="VALCHANGES" or="false" value=""/>
+            <item endquery="false" field="tue" goto="false" newquery="false" operator="VALCHANGES" or="true" value=""/>
+            <item endquery="false" field="wed" goto="false" newquery="false" operator="VALCHANGES" or="true" value=""/>
+            <item endquery="false" field="thu" goto="false" newquery="false" operator="VALCHANGES" or="true" value=""/>
+            <item endquery="false" field="fri" goto="false" newquery="false" operator="VALCHANGES" or="true" value=""/>
+            <item endquery="false" field="sat" goto="false" newquery="false" operator="VALCHANGES" or="true" value=""/>
+            <item endquery="false" field="sun" goto="false" newquery="false" operator="VALCHANGES" or="true" value=""/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Calculate Time for Assignment Changes</name>
+        <onclick/>
+        <order>100</order>
+        <priority>100</priority>
+        <read_access_action>false</read_access_action>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[/*
+ * Author: Lavlesh Garg 12/6/2017
+ * Purpose of this Business Rule is to calculate the assignment changes and update the regular days (mon_reg, tue_reg, ... ) of the timesheet
+ */
+
+(function executeRule(current, previous /*null when async*/) {
+	
+	
+	(function executeRule(current, previous /*null when async*/) {
+		var TABLE_TIMESHEET = 'x_nykl3_tenroxnbsa_timesheet';
+		var ts = new GlideRecord(TABLE_TIMESHEET);
+		
+		var weekDays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+		
+		if (ts.get(current.timesheet)) {
+
+			// getTotalHrsForEachDayAssignments function will return array of total assignment hours for each day for the timesheet
+			// Return array will be a 2 dimension array of below format
+			// [['mon', a], ['tue', b], ['wed', c], ['thu', d], ['fri', e], ['sat', f], ['sun', g], ['reg', h], ['nwt', i]];
+			// where a, b, c ... are total hours for corresponding days.
+			
+			var totalHrsForEachDayAssignments = new tenroxUtil().getTotalHrsForEachDayAssignments(current.timesheet);
+			
+			// We are only concerned about mon to sun, so will only iterate till then
+			for (var w in weekDays) {
+				ts.setValue(weekDays[w]+'_reg', totalHrsForEachDayAssignments[w][1]);
+			}
+			
+			ts.update();
+		}
+	})(current, previous);
+	
+	/*var TABLE_TIMESHEET = 'x_nykl3_tenroxnbsa_timesheet';
+	var ts = new GlideRecord(TABLE_TIMESHEET);
+	var weekDays = ['mon', 'tue', 'wed', 'thu', 'fri'];
+	if (ts.get(current.timesheet)) {
+		var totalHrsForEachDay = new tenroxUtil().getTotalHrsForEachDay(current.timesheet);
+		totalHrsForEachDay.forEach(function(d) {
+			ts.setValue(d[0], d[1]);
+		});
+		
+		var totalHrsForEachDayNWT = new tenroxUtil().getTotalHrsForEachDayNWT(current.timesheet);
+		for (var w in weekDays) {
+			ts.setValue(weekDays[w]+'_nwt', totalHrsForEachDayNWT[w][1]);
+		}
+		
+		ts.update();
+	}*/
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-05-31 21:29:28</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>adb0e1c61343b6007864bb722244b0a1</sys_id>
+        <sys_mod_count>42</sys_mod_count>
+        <sys_name>Calculate Time for Assignment Changes</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_adb0e1c61343b6007864bb722244b0a1</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-12-05 19:31:39</sys_updated_on>
+        <template/>
+        <when>after</when>
+    </sys_script>
+</record_update>

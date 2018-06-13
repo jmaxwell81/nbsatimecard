@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_ui_action">
+    <sys_ui_action action="INSERT_OR_UPDATE">
+        <action_name>lock_timesheet</action_name>
+        <active>true</active>
+        <client>true</client>
+        <comments/>
+        <condition>gs.hasRole('x_nykl3_tenroxnbsa.tenrox_admin')</condition>
+        <form_action>true</form_action>
+        <form_button>true</form_button>
+        <form_context_menu>false</form_context_menu>
+        <form_link>false</form_link>
+        <hint/>
+        <list_action>false</list_action>
+        <list_banner_button>false</list_banner_button>
+        <list_button>false</list_button>
+        <list_choice>false</list_choice>
+        <list_context_menu>false</list_context_menu>
+        <list_link>false</list_link>
+        <list_save_with_form_button>false</list_save_with_form_button>
+        <name>Lock Timesheet</name>
+        <onclick>confirmLock()</onclick>
+        <order>100</order>
+        <script><![CDATA[// This Reject UI Action is for Manager
+// Remark are necessary for recalling
+
+//Client-side 'onclick' function
+function confirmLock() {
+	
+	var answer = confirm("Are you sure you want to Lock all timesheets days between "+g_form.getValue('start_date')+" and "+g_form.getValue('end_date')+" for employee type: " + g_form.getValue('employee_type') + "?");
+	if(answer != true) {
+		return false;
+	}
+	//Call the UI Action and skip the 'onclick' function
+	gsftSubmit(null, g_form.getFormElement(), 'lock_timesheet'); //MUST call the 'Action name' set in this UI Action
+}
+
+//Code that runs without 'onclick'
+if(typeof window == 'undefined')
+	lockTimesheet();
+
+//Server-side function
+function lockTimesheet() {
+	var tu = new tenroxUtil();
+	var log = 'Locking Timesheets:';
+	
+	gs.debug('startDate: '+current.start_date+', endDate: '+current.end_date+', employeeType: '+current.employee_type);
+	
+	var firstWeekMonday = tu.getStartOfWeekByDate(current.start_date);
+	var lastWeekMonday = tu.getStartOfWeekByDate(current.end_date);
+	
+	//gs.debug('firstWeekMonday: '+firstWeekMonday+', lastWeekMonday: '+lastWeekMonday+', employeeType: '+current.employee_type);
+	
+	var grts = new GlideRecord(tu.TABLE_TIMESHEET);
+	grts.addQuery('employee_type='+current.employee_type);
+	grts.addQuery('week_start>='+firstWeekMonday);
+	grts.addQuery('week_start<='+lastWeekMonday);
+	grts.query();
+	gs.debug('Total Timesheets in Range: '+grts.getRowCount());
+	log += '\nTotal Timesheets in Range to be Locked: '+grts.getRowCount();
+
+	var dateRangeArray = getDateRangeArray(current.start_date, current.end_date);
+	gs.debug('dateRangeArray.length: {0}, dateRangeArray: {1}', dateRangeArray.length, dateRangeArray.toString());
+
+	var tsStartDate = new GlideDateTime();
+	var weekDaysToLock;
+	while (grts.next()) {
+		weekDaysToLock = getWeekDaysToLock(grts.week_start, dateRangeArray, grts.lock_timesheet_for_days.toString());
+		gs.debug('grts.timesheet: '+grts.timesheet+', weekDaysToLock: '+weekDaysToLock);
+		log += '\ntimesheet: '+grts.timesheet+', Week Days to be Locked: '+weekDaysToLock;
+		if (weekDaysToLock) {
+			grts.lock_timesheet_for_days = weekDaysToLock;
+			grts.update();
+		}
+	}
+	current.log = log;
+	current.update();
+	action.setRedirectURL(current);
+}
+
+function getDateRangeArray(start, end) {
+	var startDateTime = new GlideDateTime(start.toString());
+	var endDateTime = new GlideDateTime(end.toString());
+	
+	var dateRangeArray = [];
+	var i=0;
+	while (GlideDate.subtract(startDateTime.getDate(), endDateTime.getDate()).getDisplayValue()) {
+		dateRangeArray[i] = startDateTime.getDate().getDisplayValue();
+		startDateTime.addDaysUTC(1);
+		i++;
+	}
+	return dateRangeArray;
+}
+
+function getWeekDaysToLock(weekStart, dateRangeArray, alreadyLockedDays) {
+	var week = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+	var weekDaysToLock = '';
+	var finalWeekDaysToLock = '';
+	var au = new global.ArrayUtil();
+	alreadyLockedDays = alreadyLockedDays.toString();
+	
+	var tsStartDate = new GlideDateTime(weekStart.toString());
+	tsStartDate.addDaysUTC(-1);
+	for (var i in week) {
+		tsStartDate.addDaysUTC(1);
+		d = tsStartDate.getDate().getDisplayValue();
+		var con = au.contains(dateRangeArray, d);
+		//gs.debug('dateRangeArray contains {0} is {1}', d, con);
+		if (con) {
+			weekDaysToLock += week[i] + ',';
+		}
+	}
+	
+	if (weekDaysToLock == undefined || weekDaysToLock.length == 0)
+		return;
+	
+	if (weekDaysToLock.endsWith(',')) {
+		weekDaysToLock = weekDaysToLock.substr(0, weekDaysToLock.length-1);
+	}
+	
+	if (weekDaysToLock.split(',').length == 7) {
+		return 'all';
+	}
+	
+	if (alreadyLockedDays && alreadyLockedDays.endsWith(',')) {
+		alreadyLockedDays = alreadyLockedDays.substr(0, alreadyLockedDays.length-1);
+	}
+	
+	if (alreadyLockedDays == undefined || alreadyLockedDays.length ==0)
+		return weekDaysToLock;
+	
+	finalWeekDaysToLock = alreadyLockedDays +','+ weekDaysToLock;
+	finalWeekDaysToLock = au.unique(finalWeekDaysToLock.split(','));
+	
+	if (finalWeekDaysToLock.length == 7)
+		return 'all';
+	
+	return finalWeekDaysToLock.toString();
+	
+}]]></script>
+        <show_insert>false</show_insert>
+        <show_multiple_update>false</show_multiple_update>
+        <show_query>false</show_query>
+        <show_update>true</show_update>
+        <sys_class_name>sys_ui_action</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-11-22 20:48:12</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>11fb16920f2e83001416d23be1050e3f</sys_id>
+        <sys_mod_count>9</sys_mod_count>
+        <sys_name>Lock Timesheet</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_ui_action_11fb16920f2e83001416d23be1050e3f</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-12-02 12:26:50</sys_updated_on>
+        <table>x_nykl3_tenroxnbsa_lock_timesheet</table>
+        <ui11_compatible>true</ui11_compatible>
+        <ui16_compatible>false</ui16_compatible>
+    </sys_ui_action>
+</record_update>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_script_client">
+    <sys_script_client action="INSERT_OR_UPDATE">
+        <active>false</active>
+        <applies_extended>true</applies_extended>
+        <condition/>
+        <description>Do not allow a Non-Exempt employee to enter time against the Personal Time Out of Office code.</description>
+        <field>non_work_type</field>
+        <global>true</global>
+        <messages/>
+        <name>disable set Personal Time Out of Office</name>
+        <order/>
+        <script><![CDATA[function onLoad() {
+	//Type appropriate comment here, and begin script below
+	var userName = g_user.userName;
+	var userCategory = g_form.getElement('employee_category');
+	alert(userCategory);
+	//alert('in client script');
+	//alert(parent.sys_id);
+	
+	var caller = g_form.getReference('parent');
+	alert(caller.employee);
+	
+	
+	/*
+	var user = new GlideRecord('sys_user');
+		alert('in client script');
+	user.addQuery('user_name', userName);
+	user.query();
+
+	
+	var gr = new GlideRecord('x_nykl3_tenroxnbsa_user_profile');
+	if(user.next()){
+		gr.addQuery('user', user.sys_id);
+		gr.query();
+	}
+	if(gr.employee_category =='Non-Exempt'){
+		g_form.removeOption('non_work_type','Company Paid Holiday');
+	}*/
+}]]></script>
+        <sys_class_name>sys_script_client</sys_class_name>
+        <sys_created_by>satom</sys_created_by>
+        <sys_created_on>2017-10-17 19:15:05</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>281ae47e13f1c7407864bb722244b022</sys_id>
+        <sys_mod_count>53</sys_mod_count>
+        <sys_name>disable set Personal Time Out of Office</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_client_281ae47e13f1c7407864bb722244b022</sys_update_name>
+        <sys_updated_by>satom</sys_updated_by>
+        <sys_updated_on>2017-10-23 18:00:25</sys_updated_on>
+        <table>x_nykl3_tenroxnbsa_non_work_time</table>
+        <type>onLoad</type>
+        <ui_type>0</ui_type>
+        <view/>
+    </sys_script_client>
+</record_update>

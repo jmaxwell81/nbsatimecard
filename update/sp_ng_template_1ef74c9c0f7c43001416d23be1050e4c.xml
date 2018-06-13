@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sp_ng_template">
+    <sp_ng_template action="INSERT_OR_UPDATE">
+        <id>add-task-modal</id>
+        <sp_widget display_value="Time Card Grid">2d57489c0f7c43001416d23be1050ee4</sp_widget>
+        <sys_class_name>sp_ng_template</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-08-21 04:14:27</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>1ef74c9c0f7c43001416d23be1050e4c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>add-task-modal</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sp_ng_template_1ef74c9c0f7c43001416d23be1050e4c</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-08-21 04:14:27</sys_updated_on>
+        <template><![CDATA[<div class="modal-header">
+  <span class="modal-title" id="modal-title">${Add unassigned tasks to Time Sheet}</span>
+  <button type="button" class="btn icon-cross close pull-right" aria-label="${Close}" ng-click="cancel()"></button>
+</div>
+<div class="modal-body" id="modal-body">
+  <p class="modal-text">${Search a task that you have worked during the week and add to the Time Sheet.}</p>
+  <div class="row form-group">
+    <span class="col-sm-12">
+      <input id="task-selector" class="control select2" name="task-selector" type="hidden" aria-label="Task">
+      <p ng-if="data.addTaskModal.isTaskIdEmpty" class="text-danger" style="margin:0;">${Task cannot be empty}</p>
+    </span>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-default" type="button" ng-click="cancel()">${Cancel}</button>
+  <button class="btn btn-primary" type="button" ng-click="ok()">${OK}</button>
+</div>
+ <div ng-if="data.addTaskModal.loader" class="loader">
+   <div class="loader-content">
+     <fa name="spinner" spin="true"></fa>
+   </div>
+</div>]]></template>
+    </sp_ng_template>
+</record_update>

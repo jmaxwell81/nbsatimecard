@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_label/>
+        <action_name/>
+        <action_query>false</action_query>
+        <action_run_at>server</action_run_at>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <application/>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_nykl3_tenroxnbsa_non_work_time</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Validate Non-Work Time</name>
+        <onclick/>
+        <order>100</order>
+        <priority>100</priority>
+        <read_access_action>false</read_access_action>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[/*
+ * Author: Lavlesh Garg - 6/8/17
+ *
+ 
+ **** Employee Category Specifi Rules ****
+ * Rule 1: Exempt: Can apply only 4 or 8 hours of Vacation Time per day
+ 
+ * Rule 2: Non-Exempt: Can apply in multiples of 0.50
+ * Rule 3: Non-Exempt: Can't use - "Personal Time out of office" and "Travel (Exempt)" 
+
+ * Rule 4: Contracted Employess: can't use SL, Vacation, DH, Carry Over Vacation, Carry Over DH
+ 
+ **** Leave Type Specific Rules ****
+ 
+ * Rule 5: Paid Time Off: Only Contracted Employees can use 
+ 
+ **** Generic Rules *****
+ 
+ * Rule 6: Can't use vacation time you don't have
+ * Rule 7: Non-Work Time can only be applied by the user to which timesheet belongs or by the person who created it (in case HR/Admin creates timesheet on behalf of employee)
+ * Rule 8: Non-Work Time can only be applied to the 'Open' timesheets
+ */
+(function executeRule(current, previous /*null when async*/) {
+	
+	var au = new global.ArrayUtil();
+	var tu = new tenroxUtil();
+
+	var error;
+	var nonContractorVacations = ['Sick Leave', 'Vacation', 'Discretionary Holiday', 'Carry Over Vacation', 'Carry Over DH'];
+	var timesheet = current.timesheet;
+	var nwt       = current.nwt;
+	var nwtName   = nwt.name;
+	var employee  = timesheet.employee;
+	var weekStart = timesheet.week_start;
+	var employeeCategory = timesheet.employee_category;
+	var weekDays = ['mon', 'tue', 'wed', 'thu', 'fri'];
+	var count;
+	
+	gs.debug('Validate Non-Work Time BR: Non Work Time sys_id: {0}, Timesheet: {1}, non work type: {2}, old non work type: {3}, employee category: {4}', [current.sys_id, timesheet.timesheet, nwtName, previous.nwt.name, employeeCategory]);
+	
+	if (timesheet == '')
+		error = "Timesheet field can't be empty in an Non-work time";
+	else if (timesheet.state != 'Open')
+		error = "Non-work time can be udpated and inserted only in 'Open' timesheets";
+	else if (employee.user != gs.getUserID() && timesheet.sys_created_by != gs.getUserName())
+		error = "Non-work time can be udpated only by the user to which timesheet belongs or by the person who created it";
+	else if (employeeCategory != 'Contracted' && nwtName == 'Paid Time Off')
+		error = "Only Contracted employees can use Paid Time Off";
+	else if (employeeCategory == 'Contracted' && au.contains(nonContractorVacations, nwtName))
+		error = "Contracted employees can't use "+nwtName;
+	else if (employeeCategory == 'Non-Exempt' && (nwtName == 'Personal Time Out of Office' || nwtName == 'Travel (Exempt)')) {
+		error = "Non-Exempt employees can't use "+nwtName;		
+	}
+
+	if (error) return abort(current, error);
+	
+	var hoursForEachWeekDay = weekDays.map(function(d) {
+		return current.getValue(d)? current.getValue(d) : 0;
+	});
+	
+	error = tu.isDuplicateNonWorkTime(current) || tu.validateNonWorkHours(hoursForEachWeekDay, nwt, employeeCategory);
+	if (error) return abort(current, error);
+	
+	// Further, we need to go only if it's a paid vacation (Vacation, SL, DH, PTO, CO DH, CO Vac)
+	if (!nwt.vacation)
+		return;
+
+	var remainingLTArray = tu.getLeaveTimeArray(employee, 'Remaining', weekStart);
+	count = 0;
+	for (var l in remainingLTArray) {
+		gs.debug(l+'. remainingLTArray[l].sysID: '+remainingLTArray[l].sysID+', remainingLTArray[l].count: '+remainingLTArray[l].count);
+		count += parseFloat(remainingLTArray[l].count);
+	}
+	
+	if (count != 5) {
+		error = "Leave Calendar to cover all days for this timesheet period doesn't exists. Please contact HR/Admin to create a Leave Calendar for you";
+		return abort (current, error);
+	}
+	
+	var i=0, j=-1, day;
+	var appliedHrs = [0];
+
+	for (var w in weekDays) {
+		day = weekDays[w];
+		gs.debug('Validate Non-Work Time BR: non work type: '+nwtName+', Timesheet: '+timesheet+', current.getValue(day): '+current.getValue(day)+', previous.getValue(day): '+previous.getValue(day));
+		if (++j == remainingLTArray[i].count) {
+			appliedHrs[++i] = 0;
+			j=0;
+		}
+		appliedHrs[i] += current.getValue(day) ? parseFloat(current.getValue(day))  : 0;
+		appliedHrs[i] -= previous.getValue(day)? parseFloat(previous.getValue(day)) : 0;
+	}
+	gs.debug('Validate Non-Work Time BR: non work type: '+nwtName+', appliedHrs: '+appliedHrs+', Timesheet: '+timesheet);
+	
+	error = tu.isVacationAvailable(weekStart, nwtName, remainingLTArray, appliedHrs, hoursForEachWeekDay);
+	if (error) return abort(current, error);
+	
+})(current, previous);
+
+function abort(current, error) {
+	gs.addErrorMessage(error);
+	current.setAbortAction(true);
+}]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-06-08 23:50:55</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>d8d9cfa80fd376001416d23be1050e8e</sys_id>
+        <sys_mod_count>43</sys_mod_count>
+        <sys_name>Validate Non-Work Time</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_d8d9cfa80fd376001416d23be1050e8e</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-05-10 18:41:04</sys_updated_on>
+        <template/>
+        <when>before</when>
+    </sys_script>
+</record_update>

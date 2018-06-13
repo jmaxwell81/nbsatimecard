@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_choice action="INSERT_OR_UPDATE" field="tenrox_status" table="x_nykl3_tenroxnbsa_user_profile" version="3">
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>tenrox_status</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Active</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence>0</sequence>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 19:19:49</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>db1ac4760fdd8b001416d23be1050eba</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 19:19:49</sys_updated_on>
+            <value>Active</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>tenrox_status</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Suspended</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence>1</sequence>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 19:19:49</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>931ac4760fdd8b001416d23be1050ebb</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 19:19:49</sys_updated_on>
+            <value>Suspended</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>tenrox_status</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Terminated</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sequence>2</sequence>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 19:19:49</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>d71ac4760fdd8b001416d23be1050ebb</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 19:19:49</sys_updated_on>
+            <value>Terminated</value>
+        </sys_choice>
+        <sys_choice_set action="INSERT_OR_UPDATE">
+            <element>tenrox_status</element>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <sys_class_name>sys_choice_set</sys_class_name>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 19:19:49</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
+            <sys_id>df1ac4760fdd8b001416d23be1050eba</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_name>tenrox_status</sys_name>
+            <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+            <sys_update_name>sys_choice_x_nykl3_tenroxnbsa_user_profile_tenrox_status</sys_update_name>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 19:19:49</sys_updated_on>
+        </sys_choice_set>
+    </sys_choice>
+</record_update>

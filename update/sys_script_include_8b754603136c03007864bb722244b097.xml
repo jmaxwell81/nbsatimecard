@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_nykl3_tenroxnbsa.tenroxFactory</api_name>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>tenroxFactory</name>
+        <script><![CDATA[var tenroxFactory = Class.create();
+tenroxFactory.prototype = {
+	initialize: function() {
+		this.TABLE_TIMESHEET = 'x_nykl3_tenroxnbsa_timesheet';
+	},
+	
+	getTimeSheet: function(userId, weekStartsOn) {
+		if (JSUtil.nil(userId))
+			userId = gs.getUserID();
+		
+		if (JSUtil.nil(weekStartsOn))
+			weekStartsOn = new tenroxUtil().getStartOfCurrentWeek(userId);
+		
+		var sysId;
+		var gr = new GlideRecord(this.TABLE_TIMESHEET);
+		gr.addQuery("week_start", weekStartsOn);
+		gr.addQuery("employee", userId);
+		gr.query();
+		
+		if (gr.next())
+			sysId = gr.getUniqueValue();
+		else {
+			gr = new GlideRecord(this.TABLE_TIMESHEET);
+			gr.setValue("week_start", weekStartsOn);
+			gr.setValue("employee", userId);
+			sysId = gr.insert();
+		}
+		
+		return sysId;
+	},
+	
+	type: 'tenroxFactory'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-08-17 16:11:10</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>8b754603136c03007864bb722244b097</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>tenroxFactory</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_include_8b754603136c03007864bb722244b097</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-08-17 18:40:41</sys_updated_on>
+    </sys_script_include>
+</record_update>

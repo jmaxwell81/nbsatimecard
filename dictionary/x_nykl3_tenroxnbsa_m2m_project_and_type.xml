@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="Tenroxnbsa M2m Project And Type" max_length="40" name="x_nykl3_tenroxnbsa_m2m_project_and_type" sizeclass="6216" type="collection">
+        <element label="Project" max_length="32" name="project" reference="x_nykl3_tenroxnbsa_project" type="reference"/>
+        <element label="Project Work Type" max_length="32" name="project_work_type" reference="x_nykl3_tenroxnbsa_project_work_type" type="reference"/>
+        <index name="index">
+            <element name="project_work_type"/>
+        </index>
+        <index name="index2">
+            <element name="project"/>
+        </index>
+    </element>
+</database>

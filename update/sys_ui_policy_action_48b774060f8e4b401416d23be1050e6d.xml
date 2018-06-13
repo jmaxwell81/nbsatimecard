@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_policy_action">
+    <sys_ui_policy_action action="INSERT_OR_UPDATE">
+        <disabled>ignore</disabled>
+        <field>alternate_manager</field>
+        <mandatory>ignore</mandatory>
+        <sys_class_name>sys_ui_policy_action</sys_class_name>
+        <sys_created_by>satom</sys_created_by>
+        <sys_created_on>2017-10-27 21:30:41</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>48b774060f8e4b401416d23be1050e6d</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>alternate_manager</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_ui_policy_action_48b774060f8e4b401416d23be1050e6d</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-12-01 17:31:27</sys_updated_on>
+        <table>x_nykl3_tenroxnbsa_timesheet</table>
+        <ui_policy display_value="Hide Alternate Manager if Empty">93e63cc20f8e4b401416d23be1050edf</ui_policy>
+        <visible>false</visible>
+    </sys_ui_policy_action>
+</record_update>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="ADP Report" max_length="40" name="x_nykl3_tenroxnbsa_adp_report" type="collection">
+        <element label="Batch ID" max_length="40" name="batch_id" type="string"/>
+        <element label="CO Code" max_length="40" name="co_code" type="string"/>
+        <element label="File #" max_length="40" name="file_number" type="integer"/>
+        <element label="Hours 3 Amount" max_length="40" name="hours_3_amount_1" type="float"/>
+        <element label="Hours 3 Amount" max_length="40" name="hours_3_amount_2" type="float"/>
+        <element label="Hours 3 Amount" max_length="40" name="hours_3_amount_3" type="float"/>
+        <element label="Hours 3 Amount" max_length="40" name="hours_3_amount_4" type="float"/>
+        <element label="Hours 3 Amount" max_length="40" name="hours_3_amount_5" type="float"/>
+        <element label="Hours 3 Code" max_length="40" name="hours_3_code_1" type="string"/>
+        <element label="Hours 3 Code" max_length="40" name="hours_3_code_2" type="string"/>
+        <element label="Hours 3 Code" max_length="40" name="hours_3_code_3" type="string"/>
+        <element label="Hours 3 Code" max_length="40" name="hours_3_code_4" type="string"/>
+        <element label="Hours 3 Code" max_length="40" name="hours_3_code_5" type="string"/>
+        <element label="Hours 4 Amount" max_length="40" name="hours_4_amount_1" type="float"/>
+        <element label="Hours 4 Amount" max_length="40" name="hours_4_amount_2" type="float"/>
+        <element label="Hours 4 Amount" max_length="40" name="hours_4_amount_3" type="float"/>
+        <element label="Hours 4 Amount" max_length="40" name="hours_4_amount_4" type="float"/>
+        <element label="Hours 4 Amount" max_length="40" name="hours_4_amount_5" type="float"/>
+        <element label="Hours 4 Code" max_length="40" name="hours_4_code_1" type="string"/>
+        <element label="Hours 4 Code" max_length="40" name="hours_4_code_2" type="string"/>
+        <element label="Hours 4 Code" max_length="40" name="hours_4_code_3" type="string"/>
+        <element label="Hours 4 Code" max_length="40" name="hours_4_code_4" type="string"/>
+        <element label="Hours 4 Code" max_length="40" name="hours_4_code_5" type="string"/>
+        <element label="Hours 5 Amount" max_length="40" name="hours_5_amount_1" type="float"/>
+        <element label="Hours 5 Amount" max_length="40" name="hours_5_amount_2" type="float"/>
+        <element label="Hours 5 Amount" max_length="40" name="hours_5_amount_3" type="float"/>
+        <element label="Hours 5 Amount" max_length="40" name="hours_5_amount_4" type="float"/>
+        <element label="Hours 5 Amount" max_length="40" name="hours_5_amount_5" type="float"/>
+        <element label="Hours 5 Code" max_length="40" name="hours_5_code_1" type="string"/>
+        <element label="Hours 5 Code" max_length="40" name="hours_5_code_2" type="string"/>
+        <element label="Hours 5 Code" max_length="40" name="hours_5_code_3" type="string"/>
+        <element label="Hours 5 Code" max_length="40" name="hours_5_code_4" type="string"/>
+        <element label="Hours 5 Code" max_length="40" name="hours_5_code_5" type="string"/>
+        <element label="O/T Hours" max_length="40" name="o_t_hours" type="float"/>
+        <element label="Reg Hours" max_length="40" name="reg_hours" type="float"/>
+    </element>
+</database>

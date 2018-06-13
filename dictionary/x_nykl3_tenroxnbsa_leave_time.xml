@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="Leave Time" max_length="40" name="x_nykl3_tenroxnbsa_leave_time" type="collection">
+        <element default="0" label="Carry Over DH (hrs)" mandatory="true" max_length="40" name="carry_over_dh" type="float"/>
+        <element default="0" label="Carry Over Vacation (hrs)" mandatory="true" max_length="40" name="carry_over_vacation" type="float"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="CO DH Expires On" max_length="40" name="co_dh_expires_on" type="glide_date"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="CO Vac Expires On" max_length="40" name="co_vac_expires_on" type="glide_date"/>
+        <element default="0" label="Discretionary Holiday (hrs)" mandatory="true" max_length="40" name="discretionary_holiday" type="float"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Employee" mandatory="true" max_length="32" name="employee" reference="x_nykl3_tenroxnbsa_user_profile" type="reference"/>
+        <element default="0" label="Paid Time Off (hrs)" max_length="40" name="paid_time_off" type="float"/>
+        <element default="0" label="Sick Leave (hrs)" mandatory="true" max_length="40" name="sick_leave" type="float"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" choice="3" label="Type" mandatory="true" max_length="40" name="type" type="choice">
+            <choice>
+                <element label="Used" sequence="1" value="Used"/>
+                <element label="Remaining" sequence="2" value="Remaining"/>
+                <element label="Initial Balance" sequence="3" value="Initial Balance"/>
+            </choice>
+        </element>
+        <element default="0" label="Vacation (hrs)" mandatory="true" max_length="40" name="vacation" type="float"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Validity Year" max_length="4" name="validity_year" read_only="true" type="string"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Valid From" mandatory="true" max_length="40" name="valid_from" type="glide_date"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Valid Till" max_length="40" name="valid_till" read_only="true" type="glide_date"/>
+        <index name="index">
+            <element name="employee"/>
+        </index>
+    </element>
+</database>

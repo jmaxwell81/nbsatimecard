@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_ui_related sys_domain="global" table="x_nykl3_tenroxnbsa_user_profile" version="2" view="">
+        <sys_ui_related_list_entry action="INSERT_OR_UPDATE">
+            <filter/>
+            <list_id display_value="User Profile - Default view" name="x_nykl3_tenroxnbsa_user_profile" related_list="NULL" sys_domain="global" view="Default view">ba53587013999f407864bb722244b08f</list_id>
+            <order_by/>
+            <position>0</position>
+            <related_list>x_nykl3_tenroxnbsa_bill_rate.user</related_list>
+            <sys_class_name>sys_ui_related_list_entry</sys_class_name>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2018-04-03 11:03:29</sys_created_on>
+            <sys_id>be53587013999f407864bb722244b08f</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2018-04-03 11:03:29</sys_updated_on>
+        </sys_ui_related_list_entry>
+        <sys_ui_related_list_entry action="INSERT_OR_UPDATE">
+            <filter/>
+            <list_id display_value="User Profile - Default view" name="x_nykl3_tenroxnbsa_user_profile" related_list="NULL" sys_domain="global" view="Default view">ba53587013999f407864bb722244b08f</list_id>
+            <order_by/>
+            <position>1</position>
+            <related_list>x_nykl3_tenroxnbsa_timesheet.employee</related_list>
+            <sys_class_name>sys_ui_related_list_entry</sys_class_name>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2018-04-03 11:03:29</sys_created_on>
+            <sys_id>7253587013999f407864bb722244b090</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2018-04-03 11:03:29</sys_updated_on>
+        </sys_ui_related_list_entry>
+        <sys_ui_related_list_entry action="INSERT_OR_UPDATE">
+            <filter/>
+            <list_id display_value="User Profile - Default view" name="x_nykl3_tenroxnbsa_user_profile" related_list="NULL" sys_domain="global" view="Default view">ba53587013999f407864bb722244b08f</list_id>
+            <order_by/>
+            <position>2</position>
+            <related_list>x_nykl3_tenroxnbsa_leave_time.employee</related_list>
+            <sys_class_name>sys_ui_related_list_entry</sys_class_name>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2018-04-03 11:03:29</sys_created_on>
+            <sys_id>3653587013999f407864bb722244b090</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2018-04-03 11:03:29</sys_updated_on>
+        </sys_ui_related_list_entry>
+        <sys_ui_related_list action="INSERT_OR_UPDATE">
+            <calculated_name>User Profile - Default view</calculated_name>
+            <filter/>
+            <name>x_nykl3_tenroxnbsa_user_profile</name>
+            <order_by/>
+            <position/>
+            <related_list/>
+            <sys_class_name>sys_ui_related_list</sys_class_name>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2018-04-03 11:03:29</sys_created_on>
+            <sys_customer_update>true</sys_customer_update>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>ba53587013999f407864bb722244b08f</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>User Profile - Default view</sys_name>
+            <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+            <sys_update_name>sys_ui_related_x_nykl3_tenroxnbsa_user_profile_null</sys_update_name>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2018-04-03 11:03:29</sys_updated_on>
+            <sys_user/>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_related_list>
+    </sys_ui_related>
+</record_update>

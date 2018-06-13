@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_index">
+    <sys_index action="INSERT_OR_UPDATE">
+        <col_name_string>project_work_type</col_name_string>
+        <index_col_name element="project_work_type" name="x_nykl3_tenroxnbsa_project_work_type">a42f41000f8332001416d23be1050e1d</index_col_name>
+        <logical_table_name>x_nykl3_tenroxnbsa_project_work_type</logical_table_name>
+        <sys_class_name>sys_index</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2018-03-14 10:47:20</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>43df011e0f709b401416d23be1050e8c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_nykl3_tenroxnbsa_project_work_type</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_index_x_nykl3_tenroxnbsa_project_work_type_project_work_type</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-03-14 10:47:20</sys_updated_on>
+        <table display_value="Project Work Type" name="x_nykl3_tenroxnbsa_project_work_type">4d0f45cc0f4332001416d23be1050eab</table>
+        <unique_index>false</unique_index>
+    </sys_index>
+</record_update>

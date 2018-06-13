@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element attributes="email_client=true" audit="true" label="User Profile" max_length="40" name="x_nykl3_tenroxnbsa_user_profile" type="collection">
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Alternate Manager" max_length="32" name="alternate_manager" reference="sys_user" type="reference"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" choice="1" default="1" label="Carry Over Vacation Allowed Till Month" max_length="2" name="carry_over_vacation_allowed_till_month" type="integer">
+            <choice>
+                <element label="Jan" sequence="0" value="1"/>
+                <element label="Feb" sequence="1" value="2"/>
+                <element label="Mar" sequence="2" value="3"/>
+                <element label="Apr" sequence="3" value="4"/>
+                <element label="May" sequence="4" value="5"/>
+                <element label="Jun" sequence="5" value="6"/>
+                <element label="Jul" sequence="6" value="7"/>
+                <element label="Aug" sequence="7" value="8"/>
+                <element label="Sep" sequence="8" value="9"/>
+                <element label="Oct" sequence="9" value="10"/>
+                <element label="Nov" sequence="10" value="11"/>
+            </choice>
+        </element>
+        <element attributes="edge_encryption_enabled=true" label="Comments" max_length="1000" name="comments" type="journal_input"/>
+        <element choice="1" dependent="employee_type" dependent_on_field="employee_type" label="User Category" mandatory="true" max_length="40" name="employee_category" type="choice" use_dependent_field="true">
+            <choice>
+                <element dependent_value="Consultant" label="Consultant" value="Consultant"/>
+                <element dependent_value="Employee" label="Contracted" value="Contracted"/>
+                <element dependent_value="Employee" label="Exempt" value="Exempt"/>
+                <element dependent_value="Employee" label="Exempt Non-Manager" value="Exempt Non-Manager"/>
+                <element dependent_value="Employee" label="Non-Exempt" value="Non-Exempt"/>
+            </choice>
+        </element>
+        <element choice="3" label="User Type" mandatory="true" max_length="40" name="employee_type" type="choice">
+            <choice>
+                <element label="Employee" sequence="0" value="Employee"/>
+                <element label="Consultant" sequence="1" value="Consultant"/>
+            </choice>
+        </element>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Enable Alternate Manager?" max_length="40" name="enable_alternate_manager" type="boolean"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="End Date" max_length="40" name="end_date" type="glide_date"/>
+        <element label="File#" max_length="40" name="file" type="string" unique="true"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Hire Date" max_length="40" name="hire_date" type="glide_date"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="isManager?" max_length="40" name="ismanager" type="boolean"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Network ID" max_length="40" name="network_id" type="string"/>
+        <element label="Paid Time Off" max_length="40" name="paid_time_off" type="float"/>
+        <element label="Start Date" max_length="40" name="start_date" type="glide_date"/>
+        <element choice="1" label="Tenrox Status" mandatory="true" max_length="40" name="tenrox_status" type="choice">
+            <choice>
+                <element label="Active" sequence="0" value="Active"/>
+                <element label="Suspended" sequence="1" value="Suspended"/>
+                <element label="Terminated" sequence="2" value="Terminated"/>
+            </choice>
+        </element>
+        <element display="true" label="User" mandatory="true" max_length="32" name="user" reference="sys_user" type="reference" unique="true"/>
+        <element label="User Policy" max_length="32" name="user_policy" reference="x_nykl3_tenroxnbsa_time_card_policy" type="reference"/>
+        <index name="index">
+            <element name="alternate_manager"/>
+        </index>
+        <index name="index2">
+            <element name="user_policy"/>
+        </index>
+        <index name="index3">
+            <element name="file"/>
+        </index>
+        <index name="index4">
+            <element name="user"/>
+        </index>
+    </element>
+</database>

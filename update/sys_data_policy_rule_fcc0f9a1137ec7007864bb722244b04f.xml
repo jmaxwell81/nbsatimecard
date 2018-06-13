@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_data_policy_rule">
+    <sys_data_policy_rule action="INSERT_OR_UPDATE">
+        <disabled>true</disabled>
+        <field>user</field>
+        <mandatory>ignore</mandatory>
+        <sys_class_name>sys_data_policy_rule</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-12-02 19:10:22</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_data_policy display_value="User Read-Only if Non-empty">a17039a1137ec7007864bb722244b0ca</sys_data_policy>
+        <sys_id>fcc0f9a1137ec7007864bb722244b04f</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>user</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_data_policy_rule_fcc0f9a1137ec7007864bb722244b04f</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-12-02 19:10:22</sys_updated_on>
+        <table>x_nykl3_tenroxnbsa_user_profile</table>
+    </sys_data_policy_rule>
+</record_update>

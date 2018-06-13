@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="Time Card Policy" max_length="40" name="x_nykl3_tenroxnbsa_time_card_policy" type="collection">
+        <element label="CO Code" max_length="40" name="co_code" type="string"/>
+        <element label="Increment Exempt" max_length="40" name="increment_exempt" type="float"/>
+        <element label="Increment Non Exempt" max_length="40" name="increment_non_exempt" type="float"/>
+        <element label="Increment Paid Time Off" max_length="40" name="increment_pto" type="float"/>
+        <element label="Max Leave Hours" max_length="40" name="max_leave_hours" type="float"/>
+        <element label="Max Paid Time Off Hours" max_length="40" name="max_pto_hours" type="float"/>
+        <element label="Minimum Employee Hours" max_length="40" name="min_emp_hours" type="integer"/>
+        <element label="Minimum Lunch Hours" max_length="40" name="min_lnch_hours" type="integer"/>
+        <element label="OT ENM" max_length="40" name="ot_enm" type="float"/>
+        <element label="OT ENM Holiday Threshold" max_length="40" name="ot_enm_hld_thld" type="float"/>
+        <element label="OT ENM Weekday Threshold" max_length="40" name="ot_enm_wkdy_thld" type="float"/>
+        <element display="true" label="Policy Name" max_length="40" name="policy_name" type="string"/>
+        <element label="Registered Hours" max_length="40" name="registered_hours" type="float"/>
+    </element>
+</database>

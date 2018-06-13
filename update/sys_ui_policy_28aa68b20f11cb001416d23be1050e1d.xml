@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_ui_policy">
+    <sys_ui_policy action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <conditions table="x_nykl3_tenroxnbsa_user_profile">tenrox_statusINSuspended,Terminated^EQ<item endquery="false" field="tenrox_status" goto="false" newquery="false" operator="IN" or="false" value="Suspended,Terminated"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </conditions>
+        <description/>
+        <global>true</global>
+        <inherit>false</inherit>
+        <model_id/>
+        <model_table/>
+        <on_load>true</on_load>
+        <order>100</order>
+        <reverse_if_false>true</reverse_if_false>
+        <run_scripts>false</run_scripts>
+        <script_false><![CDATA[function onCondition() {
+
+}]]></script_false>
+        <script_true><![CDATA[function onCondition() {
+
+}]]></script_true>
+        <set_values/>
+        <short_description>Comments mandatory when user suspended or terminated</short_description>
+        <sys_class_name>sys_ui_policy</sys_class_name>
+        <sys_created_by>RAWATS</sys_created_by>
+        <sys_created_on>2017-09-22 21:44:16</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>28aa68b20f11cb001416d23be1050e1d</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Comments mandatory when user suspended or terminated</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_ui_policy_28aa68b20f11cb001416d23be1050e1d</sys_update_name>
+        <sys_updated_by>RAWATS</sys_updated_by>
+        <sys_updated_on>2017-09-22 21:44:16</sys_updated_on>
+        <table>x_nykl3_tenroxnbsa_user_profile</table>
+        <ui_type>0</ui_type>
+        <view/>
+    </sys_ui_policy>
+</record_update>

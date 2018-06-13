@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element extends="sys_import_set_row" label="Import Set Project Work Types" max_length="40" name="x_nykl3_tenroxnbsa_import_set_project_work_types" type="collection">
+        <element attributes="import_attribute_name=Project Work Type,edge_encryption_enabled=true" label="Project Work Type" max_length="161" name="u_project_work_type" type="string"/>
+    </element>
+</database>

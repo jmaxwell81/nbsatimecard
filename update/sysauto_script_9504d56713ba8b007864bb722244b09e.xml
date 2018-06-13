@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <condition/>
+        <conditional>false</conditional>
+        <name>Tenrox - Yearly Creation of Leave Times for Next Year for All Employees (Except Contracted) in Dec</name>
+        <run_as/>
+        <run_as_tz/>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period/>
+        <run_start>2017-12-08 22:12:20</run_start>
+        <run_time>1970-01-01 05:11:00</run_time>
+        <run_type>monthly</run_type>
+        <script><![CDATA[/*
+ * Author: Lavlesh Garg 12/9/2017
+ * Application: Tenrox
+ * This job is scheduled to run on 1st of every December and Create Leave times (Initial Balance, Used and Remaining) for all Active / Suspended employees but Contracted
+ */
+
+var date = new Date();
+
+//0 Indicates it's Jan
+var DEC = 11;
+if (date.getMonth() == DEC) {
+	var validFrom, coVacExpiresOn;
+	var nextYear, days;
+	var tu = new tenroxUtil();
+	
+	var leaveBalanceArray;
+	var zeroLeaveBalanceArray = [['discretionary_holiday', 0], ['sick_leave', 0], ['vacation', 0], ['carry_over_vacation', 0], ['carry_over_dh', 0]];
+	var leaveType = ['Remaining', 'Used', 'Initial Balance'];
+	
+	var gt = new GlideDateTime();
+	
+	//Add one year to current data to make in next year as we are going to calculate leave times for next year
+	gt.addYearsLocalTime(1);
+	nextYear = gt.getYearLocalTime();
+	
+	//Set Month and Day to 1 (jan) and 1 (first day) to make it 1st January of Current Year. That would be our validFrom
+	gt.setMonthLocalTime(1);
+	gt.setDayOfMonthLocalTime(1);
+	validFrom = gt.getDate();
+
+	gs.debug('nextYear: '+nextYear+', validFrom: '+validFrom);
+	
+	// Get all 'Active/Suspended' Exempt, Non-Exempt or Exempt Non-Manager Employees
+	// For Contracted Employees, will create leave times using a different daily scheduled job
+	// As Contracted Employees have different start days and their PTO period starts at their start day and not the beginning of the year
+	var grup = new GlideRecord(tu.TABLE_USER_PROFILE);
+	grup.addEncodedQuery('tenrox_statusINActive,Suspended^employee_type=Employee^employee_categoryINExempt,Exempt Non-Manager,Non-Exempt');
+	grup.query();
+	
+	gs.debug('Total User Profiles (Active and Suspended, Exempt, Non-Exempt or Exempt Non-Manager Employees): '+grup.getRowCount());
+	
+	while (grup.next()) {
+		
+		coVacExpiresOn = undefined;
+		
+		if (grup.carry_over_vacation_allowed_till_month) {
+			
+			//Set Month to till Carry Over Vacations are allowed to be taken. Day will be set to end of that month.
+			gt.setMonthLocalTime(grup.getValue('carry_over_vacation_allowed_till_month'));
+			days = gt.getDaysInMonthLocalTime();
+			gt.setDayOfMonthLocalTime(days);
+			coVacExpiresOn = gt.getDate();
+			gs.debug('User: '+grup.user.name+', coVacExpiresOn: '+coVacExpiresOn);
+		}
+
+		for (var l in leaveType) {
+			if (leaveType[l] == 'Used')
+				leaveBalanceArray = zeroLeaveBalanceArray;
+			else
+				leaveBalanceArray = tu.getLeaveBalanceArray(grup, nextYear);
+			gs.debug('calling createLeaveTime for, type: '+leaveType[l]+', User: '+grup.user.name+', validFrom: '+validFrom+', leaveBalanceArray: '+leaveBalanceArray+', coVacExpiresOn: '+coVacExpiresOn);
+			var error = tu.createLeaveTime(leaveType[l], grup.sys_id, validFrom, leaveBalanceArray, coVacExpiresOn);
+			if (error) gs.warn(error);
+		}
+	}
+}]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-12-08 22:24:25</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>9504d56713ba8b007864bb722244b09e</sys_id>
+        <sys_mod_count>7</sys_mod_count>
+        <sys_name>Tenrox - Yearly Creation of Leave Times for Next Year for All Employees (Except Contracted) in Dec</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sysauto_script_9504d56713ba8b007864bb722244b09e</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-12-09 14:03:09</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>

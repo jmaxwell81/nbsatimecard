@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sp_ng_template">
+    <sp_ng_template action="INSERT_OR_UPDATE">
+        <id>copy-timesheet-modal</id>
+        <sp_widget display_value="Time Sheet Portal Header">89dd354f132c03007864bb722244b00e</sp_widget>
+        <sys_class_name>sp_ng_template</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-08-18 21:23:02</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>e29694670f2043001416d23be1050e46</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>copy-timesheet-modal</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sp_ng_template_e29694670f2043001416d23be1050e46</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-08-18 21:23:02</sys_updated_on>
+        <template><![CDATA[<div class="modal-header">
+  <span class="modal-title" id="modal-title">${Copy from previous Time Sheet}</span>
+  <button type="button" class="btn icon-cross close pull-right" aria-label="${Close}" ng-click="cancel()"></button>
+</div>
+<div class="modal-body" id="modal-body">
+  <div class="row form-group">
+    <label for="timesheet-selector" class="section-title col-sm-4">
+      <span class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled' : data.previousTimesheet.value}"/>${Select Time Sheet}
+    </label>
+    <span class="col-sm-8">
+      <sn-record-picker field="data.previousTimesheet"  default-query="timesheetFilter" table="'time_sheet'" display-field="'week_starts_on'" value-field="'sys_id'" search-fields="'week_starts_on'"  options="{allowClear: false}" placeholder="${Select a Timesheet}" tabindex="-1" />
+    </span>
+    <div class="col-sm-4"></div>
+    <p ng-if="data.isPreviousTimesheetIdEmpty" class="text-danger col-sm-8">${Time Sheet cannot be empty}</p>
+  </div>
+  <div class="row">
+    <label for="copy-time" class="section-title col-sm-4">
+      ${Copy time logged}
+    </label>
+    <span class="col-sm-8">
+      <input type="checkbox" id="copy-time" name="copy-time" ng-model="data.copyTimeLogged" aria-checked="{{data.copyTimeLogged}}"/>
+    </span>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-default" type="button" ng-click="cancel()">${Cancel}</button>
+  <button class="btn btn-primary" type="button" ng-click="ok()">${OK}</button>
+</div>
+ <div ng-if="data.loader" class="loader">
+   <div class="loader-content">
+     <fa name="spinner" spin="true"></fa>
+   </div>
+</div>]]></template>
+    </sp_ng_template>
+</record_update>

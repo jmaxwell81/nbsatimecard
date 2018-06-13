@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_ui_section caption="" section_id="42a4907a0fdd8b001416d23be1050e99" sys_domain="global" table="x_nykl3_tenroxnbsa_time_card_policy" version="3" view="">
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>policy_name</element>
+            <position>0</position>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 20:08:31</sys_created_on>
+            <sys_id>7445d4fa0fdd8b001416d23be1050e62</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_nykl3_tenroxnbsa_time_card_policy" sys_domain="global" view="Default view">42a4907a0fdd8b001416d23be1050e99</sys_ui_section>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 20:08:31</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>co_code</element>
+            <position>1</position>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 20:08:31</sys_created_on>
+            <sys_id>f445d4fa0fdd8b001416d23be1050e62</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_nykl3_tenroxnbsa_time_card_policy" sys_domain="global" view="Default view">42a4907a0fdd8b001416d23be1050e99</sys_ui_section>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 20:08:31</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>max_leave_hours</element>
+            <position>2</position>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 20:08:31</sys_created_on>
+            <sys_id>7845d4fa0fdd8b001416d23be1050e62</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_nykl3_tenroxnbsa_time_card_policy" sys_domain="global" view="Default view">42a4907a0fdd8b001416d23be1050e99</sys_ui_section>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 20:08:31</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>max_pto_hours</element>
+            <position>3</position>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 20:08:31</sys_created_on>
+            <sys_id>f845d4fa0fdd8b001416d23be1050e62</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_nykl3_tenroxnbsa_time_card_policy" sys_domain="global" view="Default view">42a4907a0fdd8b001416d23be1050e99</sys_ui_section>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 20:08:31</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>registered_hours</element>
+            <position>4</position>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 20:08:31</sys_created_on>
+            <sys_id>7c45d4fa0fdd8b001416d23be1050e62</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_nykl3_tenroxnbsa_time_card_policy" sys_domain="global" view="Default view">42a4907a0fdd8b001416d23be1050e99</sys_ui_section>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 20:08:31</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>increment_non_exempt</element>
+            <position>5</position>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 20:08:31</sys_created_on>
+            <sys_id>fc45d4fa0fdd8b001416d23be1050e62</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_nykl3_tenroxnbsa_time_card_policy" sys_domain="global" view="Default view">42a4907a0fdd8b001416d23be1050e99</sys_ui_section>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 20:08:31</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>increment_pto</element>
+            <position>6</position>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 20:08:31</sys_created_on>
+            <sys_id>7045d4fa0fdd8b001416d23be1050e63</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_nykl3_tenroxnbsa_time_card_policy" sys_domain="global" view="Default view">42a4907a0fdd8b001416d23be1050e99</sys_ui_section>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 20:08:31</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.split</element>
+            <position>7</position>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 20:08:31</sys_created_on>
+            <sys_id>f045d4fa0fdd8b001416d23be1050e63</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_nykl3_tenroxnbsa_time_card_policy" sys_domain="global" view="Default view">42a4907a0fdd8b001416d23be1050e99</sys_ui_section>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 20:08:31</sys_updated_on>
+            <sys_user/>
+            <type>.split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>ot_enm</element>
+            <position>8</position>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 20:08:31</sys_created_on>
+            <sys_id>7445d4fa0fdd8b001416d23be1050e63</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_nykl3_tenroxnbsa_time_card_policy" sys_domain="global" view="Default view">42a4907a0fdd8b001416d23be1050e99</sys_ui_section>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 20:08:31</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>ot_enm_hld_thld</element>
+            <position>9</position>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 20:08:31</sys_created_on>
+            <sys_id>f445d4fa0fdd8b001416d23be1050e63</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_nykl3_tenroxnbsa_time_card_policy" sys_domain="global" view="Default view">42a4907a0fdd8b001416d23be1050e99</sys_ui_section>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 20:08:31</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>ot_enm_wkdy_thld</element>
+            <position>10</position>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 20:08:31</sys_created_on>
+            <sys_id>7845d4fa0fdd8b001416d23be1050e63</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_nykl3_tenroxnbsa_time_card_policy" sys_domain="global" view="Default view">42a4907a0fdd8b001416d23be1050e99</sys_ui_section>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 20:08:31</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>min_emp_hours</element>
+            <position>11</position>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 20:08:31</sys_created_on>
+            <sys_id>f845d4fa0fdd8b001416d23be1050e63</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_nykl3_tenroxnbsa_time_card_policy" sys_domain="global" view="Default view">42a4907a0fdd8b001416d23be1050e99</sys_ui_section>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 20:08:31</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>min_lnch_hours</element>
+            <position>12</position>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 20:08:31</sys_created_on>
+            <sys_id>7c45d4fa0fdd8b001416d23be1050e63</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_nykl3_tenroxnbsa_time_card_policy" sys_domain="global" view="Default view">42a4907a0fdd8b001416d23be1050e99</sys_ui_section>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 20:08:31</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>increment_exempt</element>
+            <position>13</position>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 20:08:31</sys_created_on>
+            <sys_id>fc45d4fa0fdd8b001416d23be1050e63</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_nykl3_tenroxnbsa_time_card_policy" sys_domain="global" view="Default view">42a4907a0fdd8b001416d23be1050e99</sys_ui_section>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 20:08:31</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_section action="INSERT_OR_UPDATE">
+            <caption/>
+            <header>false</header>
+            <name>x_nykl3_tenroxnbsa_time_card_policy</name>
+            <roles/>
+            <sys_class_name>sys_ui_section</sys_class_name>
+            <sys_created_by>RAWATS</sys_created_by>
+            <sys_created_on>2017-09-22 20:05:53</sys_created_on>
+            <sys_customer_update>true</sys_customer_update>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>42a4907a0fdd8b001416d23be1050e99</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>x_nykl3_tenroxnbsa_time_card_policy</sys_name>
+            <sys_overrides/>
+            <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+            <sys_update_name>sys_ui_section_42a4907a0fdd8b001416d23be1050e99</sys_update_name>
+            <sys_updated_by>RAWATS</sys_updated_by>
+            <sys_updated_on>2017-09-22 20:05:53</sys_updated_on>
+            <sys_user/>
+            <title>true</title>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_section>
+    </sys_ui_section>
+</record_update>

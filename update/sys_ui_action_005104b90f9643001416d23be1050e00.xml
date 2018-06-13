@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_ui_action">
+    <sys_ui_action action="INSERT_OR_UPDATE">
+        <action_name>copy_assignment</action_name>
+        <active>true</active>
+        <client>false</client>
+        <comments/>
+        <condition>(current.state == 'Open' &amp;&amp; (current.employee.user == gs.getUserID() || current.sys_created_by == gs.getUserName()))</condition>
+        <form_action>true</form_action>
+        <form_button>true</form_button>
+        <form_context_menu>false</form_context_menu>
+        <form_link>false</form_link>
+        <hint/>
+        <list_action>false</list_action>
+        <list_banner_button>false</list_banner_button>
+        <list_button>false</list_button>
+        <list_choice>false</list_choice>
+        <list_context_menu>false</list_context_menu>
+        <list_link>false</list_link>
+        <list_save_with_form_button>false</list_save_with_form_button>
+        <name>Copy Assignments from Last Week</name>
+        <onclick/>
+        <order>100</order>
+        <script><![CDATA[/*
+ * Author: Lavlesh Garg
+ * Purpose: This UI Action will copy all the assignments from the last week's timesheet for the user if it exists
+ * It will only copy the project and project work types for the assignment and not the actual time filled in last week.
+ */
+
+// Generate Value for timesheet field for last week which is 'week_start : employee_name'
+var currentWeekStart = current.week_start.toString();
+var gdt = new GlideDateTime();
+gdt.setDisplayValue(currentWeekStart); // Get Week Start Date for current timesheet
+gdt.addDaysUTC(-7); // Deduct 7 days to get the last week's timesheet's week start
+
+// Add 1 Hour to handle the Daylight Savings Changes in March when the Clocks moves 1 hour forward
+// If we don't do it, issue would be that when you subtract 7 days from let's say 12th March, it will become 4th March 23:00:00 instead of 5th March 00:00:00
+var millSecInAnHour = 3600000;
+gdt.add(millSecInAnHour);
+
+var ts = current.employee.user.name + ' : ' +gdt.getLocalDate();
+var TABLE_ASSIGNMENT = 'x_nykl3_tenroxnbsa_assignment';
+var sn = new global.NBSA_SNUtils();
+
+var assignmentObj = {timesheet: current.sys_id, project: '', project_work_type: ''}; //This is the assignment record object which we will insert
+
+// Get all the Assignments for last week's timesheet
+sn.getO(TABLE_ASSIGNMENT, ['timesheet.timesheet='+ts], ['project', 'project_work_type']).forEach(function(assignment) {
+	//check if a similar assignment (with same project and project work type) already exists for current timesheet. If it does exists, do not create a new one
+	if (sn.getO(TABLE_ASSIGNMENT, ['timesheet='+current.sys_id, 'project='+assignment.project, 'project_work_type='+assignment.project_work_type]).length == 0) {
+		//If an assignment for this project and project work type doesn't already exists of this timesheet, insert new
+		assignmentObj.project = assignment.project;
+		assignmentObj.project_work_type = assignment.project_work_type;
+		sn.grI(TABLE_ASSIGNMENT, assignmentObj);
+	}
+});
+action.setRedirectURL(current);]]></script>
+        <show_insert>false</show_insert>
+        <show_multiple_update>false</show_multiple_update>
+        <show_query>false</show_query>
+        <show_update>true</show_update>
+        <sys_class_name>sys_ui_action</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-11-08 09:18:39</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>005104b90f9643001416d23be1050e00</sys_id>
+        <sys_mod_count>29</sys_mod_count>
+        <sys_name>Copy Assignments from Last Week</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_ui_action_005104b90f9643001416d23be1050e00</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-03-21 13:40:02</sys_updated_on>
+        <table>x_nykl3_tenroxnbsa_timesheet</table>
+        <ui11_compatible>true</ui11_compatible>
+        <ui16_compatible>false</ui16_compatible>
+    </sys_ui_action>
+</record_update>

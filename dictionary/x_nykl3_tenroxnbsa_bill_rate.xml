@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="Bill Rate" max_length="40" name="x_nykl3_tenroxnbsa_bill_rate" type="collection">
+        <element display="true" label="Effective From Date" mandatory="true" max_length="40" name="effective_from_date" type="glide_date"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Effective Till Date" max_length="40" name="effective_till_date" type="glide_date"/>
+        <element label="Rate" mandatory="true" max_length="40" name="rate" type="float"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="0" label="Total Hours On This Rate" max_length="40" name="total_hours_on_this_rate" read_only="true" type="float"/>
+        <element label="User" mandatory="true" max_length="32" name="user" reference="x_nykl3_tenroxnbsa_user_profile" type="reference"/>
+        <index name="index">
+            <element name="user"/>
+        </index>
+    </element>
+</database>

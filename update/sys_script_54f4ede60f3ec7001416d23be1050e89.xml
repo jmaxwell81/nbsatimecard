@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>true</action_delete>
+        <action_insert>false</action_insert>
+        <action_label/>
+        <action_name/>
+        <action_query>false</action_query>
+        <action_run_at>server</action_run_at>
+        <action_update>false</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <application/>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_nykl3_tenroxnbsa_non_work_time</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="x_nykl3_tenroxnbsa_non_work_time">nwt.name=Lunch Break^EQ<item endquery="false" field="nwt.name" goto="false" newquery="false" operator="=" or="false" value="Lunch Break"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Calculate Time for Lunch Break Delete</name>
+        <onclick/>
+        <order>100</order>
+        <priority>100</priority>
+        <read_access_action>false</read_access_action>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[/*
+ * Author: Lavlesh Garg 12/6/2017
+ * Purpose of this Business Rule is to calculate the assignment changes and update
+ * the regular days (mon_reg, tue_reg, ... ) of the timesheet for Lunch Break deletes (which shall not happen ideally)
+ * as Lunch Break is considered into Regular hours for employees
+ */
+
+(function executeRule(current, previous /*null when async*/) {
+	
+	var TABLE_TIMESHEET = 'x_nykl3_tenroxnbsa_timesheet';
+	var ts = new GlideRecord(TABLE_TIMESHEET);
+	
+	var weekDays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+	
+	//timesheetReg array stores regular hours for each day of the timesheet
+	var timesheetReg = [current.timesheet.mon_reg, current.timesheet.tue_reg, current.timesheet.wed_reg, current.timesheet.thu_reg, current.timesheet.fri_reg, current.timesheet.sat_reg, current.timesheet.sun_reg];
+	
+	var newReg;
+	if (ts.get(current.timesheet)) {
+		
+		for (var w in weekDays) {
+			// newReg will store the new Regular hours for each day of the week
+			// by subtracting the deleting assignment hours from the current timesheet regular hours
+			newReg = parseFloat(timesheetReg[w]) - parseFloat(current.getValue(weekDays[w]));
+			if (!newReg || newReg < 0)
+				newReg = 0;
+			ts.setValue(weekDays[w]+'_reg', newReg);
+		}
+		ts.update();
+	}
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-12-05 20:55:45</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>54f4ede60f3ec7001416d23be1050e89</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Calculate Time for Lunch Break Delete</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_54f4ede60f3ec7001416d23be1050e89</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-12-05 20:55:45</sys_updated_on>
+        <template/>
+        <when>before</when>
+    </sys_script>
+</record_update>

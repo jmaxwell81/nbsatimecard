@@ -1,0 +1,746 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <client_script><![CDATA[function($scope, TimeCardPortalService, spUtil, $sanitize, $rootScope, $window, $timeout) {
+	var c = this;
+	_highlightField();
+	var skipNextRecordWatchUpdate = false;
+	
+	$scope.cancelEdit = function(evt, index){
+		if(_isEmptyObject($scope.data.editTimecardObj))
+			return;
+		_preventDefault(evt);
+		$scope.data.list[index] = $scope.data.editTimecardObj;
+		$scope.data.editTimecardObj = {};
+		$scope.data.timecardInEditMode = '';
+	};
+	
+	$scope.saveRecord = function(evt, record){
+		_preventDefault(evt);
+		var data = {};
+		var editabelFields = $scope.data.editable_fields;
+		for (var i in editabelFields){
+			var field = editabelFields[i];
+			var val = $sanitize(record[field].display_value);
+			if(!isValidNumber(val))
+				return false;
+			else
+				data[field] = val;
+		}
+		$scope.data.timecardInEditMode = '';
+		$scope.data.editTimecardObj = {};
+		TimeCardPortalService.updateTimeCard(record.sys_id, data, editabelFields.join(',')+',total').then(function(response){
+			var result = response.data.result;
+			for(var field in result){
+				record[field].display_value = result[field].display_value;
+				record[field].value = result[field].value;
+			}
+			var status = response.data.status;
+			if(status == 'error')
+				refreshWidget();
+			else
+				skipNextRecordWatchUpdate = true;
+		});
+	};
+	
+	$scope.deleteRecord = function(evt, record, index){
+		var confirmModalCtrl;
+		$scope.data.confirmDialogOpts = {
+			title: $scope.data.messages.confirmDlgTitle,
+			text: $scope.data.messages.confirmMssg,
+			okTxt: $scope.data.messages['delete'],
+			cancelTxt: $scope.data.messages.cancel,
+			okBtnClass: 'btn-danger',
+			ok: function(){
+				TimeCardPortalService.deleteTimeCard(record.sys_id).then(function(response){
+					$scope.data.list.splice(index, 1);
+					skipNextRecordWatchUpdate = true;
+				});
+				confirmModalCtrl.close();
+			},
+			afterOpen: function(ctrl){
+				confirmModalCtrl = ctrl;
+			},
+			afterClose : function(){
+				$scope.showConfirm = false;
+				confirmModalCtrl = null;
+				$scope.data.confirmDialogOpts = null;
+			}
+		};
+		$scope.showConfirm = true;
+		$scope.safeDigest();
+		_preventDefault(evt);
+	};
+	
+	$scope.generateTimecards = function(){
+		TimeCardPortalService.generateTimecards({
+			timesheet_id: $scope.data.timesheetId
+		}).then(function(response){
+			spUtil.addInfoMessage(response.data.message);
+		});
+	};
+	
+	$scope.copyFromPreviousTimesheet = function(){
+		$rootScope.$broadcast('tcp.copy.timesheet');
+	};
+	
+	$scope.validateInput = function(field){
+		var val = field.display_value;
+		if(isValidNumber(val))
+			field.invalid = false;
+		else
+			field.invalid = true;
+	};
+	
+	function isValidNumber(number){
+		var decimalSeperator = g_user_decimal_separator;
+		var regx =  new RegExp('^-?((\\d+(\\'+ decimalSeperator + '\\d+)?)|(\\' + decimalSeperator + '\\d+))$');
+		if(regx.test(number) && !isNaN(parseFloat(number))){
+			return true;
+		}
+		return false;
+	}
+	
+	function refreshWidget(){
+		spUtil.update($scope).then(function(){
+			var timecardToEdit = $scope.data.timecardToEdit;
+			if(timecardToEdit){
+				$scope.data.timecardToEdit = '';
+				$scope.showTimecardInEditMode(timecardToEdit);
+			}
+		});
+	}
+	
+	var filterQuery = 'time_sheet='+ $scope.data.timesheetId;
+	var recordWatcherTimer;
+	spUtil.recordWatch($scope, 'time_card', filterQuery, function(){
+		$timeout.cancel(recordWatcherTimer);
+		recordWatcherTimer = $timeout(function(){
+			if (skipNextRecordWatchUpdate)
+				skipNextRecordWatchUpdate = false;
+			else
+				refreshWidget();
+		}, 250);
+	});
+	
+	$scope.$on('tcp.refresh.widgets', function(){
+		skipNextRecordWatchUpdate = true;
+		refreshWidget();
+	});
+	
+	$scope.$on('tcp.highlight.field',function(scope, field){
+		_highlightField(field);
+	});
+	
+	$scope.$on('tcp.edit.timecard', function(scope, timecardId){
+		$scope.showTimecardInEditMode(timecardId);
+	});
+	
+	$scope.showTimecardInEditMode = function(timecardId){
+		var record = $scope.data.list.filter(function(record){
+			return record.sys_id == timecardId; 
+		});
+		if(record.length > 0)
+			$scope.enableEditMode(record[0]);
+		else{
+			$scope.data.timecardToEdit = timecardId;
+			skipNextRecordWatchUpdate = true;
+			refreshWidget();
+		}
+	};
+	
+	function _highlightField(field){
+		if(field)
+			$scope.data.highlightedField = field;
+		else 
+			$scope.data.highlightedField = $scope.data.defaultField;
+	}
+	
+	function _preventDefault(evt){
+		if(evt){
+			evt.stopPropagation();
+			evt.preventDefault();
+		}
+	}
+	
+	function _isEmptyObject(obj){
+		return !obj || Object.keys(obj).length === 0;
+	}
+	
+	$scope.openTimecard = function(ev, sysId){
+		_preventDefault(ev);
+		spUtil.get('widget-modal', {embeddedWidgetId: 'widget-form', embeddedWidgetOptions: {table:'time_card', sys_id: sysId, view: 'worker_portal'}}).then(function(widget){
+			var modalCtrl;
+			var unregister = $scope.$on('sp.form.record.updated', function(){
+				skipNextRecordWatchUpdate = true;
+				spUtil.update($scope);
+				modalCtrl.close();
+			});
+			widget.options.afterClose = function(){
+				unregister();
+				$scope.data.modalInstance = null;
+				modalCtrl = null;
+			};
+			widget.options.afterOpen = function(ctrl){
+				modalCtrl = ctrl;
+			};
+			$scope.data.modalInstance = widget;
+		});
+	};
+
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>#tc-grid{&#13;
+  .grid-header{&#13;
+    border-bottom: 1px solid $color-border;&#13;
+    position: relative;&#13;
+    #add-task{&#13;
+      position: relative;&#13;
+      right: 21px;&#13;
+      padding: 0;&#13;
+      border: none;&#13;
+      line-height: inherit;&#13;
+      &amp;:hover, &amp;:focus{&#13;
+        text-decoration: underline;&#13;
+      }&#13;
+    }&#13;
+    .fa-question-circle{&#13;
+      position:absolute;&#13;
+      top: 2px;&#13;
+      right: 0;&#13;
+      color: $color-dark;&#13;
+      font-size: 18px;&#13;
+    }&#13;
+  }&#13;
+  .table-responsive{&#13;
+    margin-top: 14px;&#13;
+    &#13;
+    .table{&#13;
+      margin: 0;&#13;
+      font-size: 13px;&#13;
+      .grid-action{&#13;
+        padding: 2px;&#13;
+        font-size: 18px;&#13;
+        opacity: 0;&#13;
+        display: inline-block;&#13;
+        &#13;
+        &amp;:focus{&#13;
+          opacity: 1;&#13;
+        }&#13;
+      }&#13;
+      thead{&#13;
+        tr{&#13;
+          th{&#13;
+            border: none;&#13;
+            color: $color-text-dark;&#13;
+            min-width: 64px;&#13;
+          }&#13;
+        }&#13;
+      }&#13;
+      tbody{&#13;
+        tr.disabled{&#13;
+          cursor:default;&#13;
+          outline: 0 !important;&#13;
+        }&#13;
+        tr{&#13;
+          cursor: pointer;&#13;
+          td{&#13;
+            vertical-align: middle;&#13;
+            border-top: 1px solid $color-border;&#13;
+            color: black;&#13;
+            .edit-mode{&#13;
+              text-align: center;&#13;
+              input{&#13;
+                width: 45px;&#13;
+                background-color: #F5F5F5;&#13;
+                box-shadow: inset 0 1px 3px 0 rgba(0,0,0,0.34);&#13;
+                border: 1px solid #979797;&#13;
+                border-radius: 3px;&#13;
+&#13;
+                &amp;:focus{&#13;
+                  border-color: $color-accent;&#13;
+                  box-shadow: inset 0 1px 3px 0 rgba(61,154,252,0.37);&#13;
+                }&#13;
+              }&#13;
+              input.error{&#13;
+                border: 1px solid $color-red !important;&#13;
+              }&#13;
+              .grid-action{&#13;
+                opacity: 1;&#13;
+              }&#13;
+            }&#13;
+          }&#13;
+          &amp;:focus{&#13;
+            outline: thin dotted;&#13;
+            outline: -webkit-focus-ring-color auto 5px;&#13;
+            outline-offset: -2px;&#13;
+          }&#13;
+          &amp;:hover, &amp;:focus{&#13;
+            .grid-action{&#13;
+              opacity: 1;&#13;
+            }&#13;
+          }&#13;
+        }&#13;
+      }&#13;
+      &#13;
+      th.selected, td.selected{&#13;
+        background-color: $color-blue-lighter;&#13;
+      }&#13;
+    }&#13;
+    &#13;
+    .table-hover &gt; tbody &gt; tr.active, .table &gt; tbody &gt; tr.active{&#13;
+      outline: 1px solid $color-blue !important;&#13;
+      outline-offset: 0;&#13;
+      -webkit-box-shadow: inset 0 3px 5px $color-shadow;&#13;
+      box-shadow: inset 0 3px 5px $color-shadow;&#13;
+    }&#13;
+    &#13;
+    .table-hover &gt; tbody &gt; tr.active &gt; td, .table-hover &gt; tbody &gt; tr.active &gt; td{&#13;
+       background-color: $color-lighter !important;&#13;
+       background-image: none;&#13;
+    }&#13;
+  }&#13;
+  &#13;
+  #empty-state{&#13;
+    .btn{&#13;
+      display: block;&#13;
+      margin: 0 auto;&#13;
+      background-color: $color-lighter;&#13;
+      border: 1px solid $color-light;&#13;
+      min-width: 202px;&#13;
+    }&#13;
+    .btn + .btn {&#13;
+      margin-top: 18px;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>tc-grid</id>
+        <internal>false</internal>
+        <link><![CDATA[function(scope, element, attrs){
+	
+	var $uibModal = $injector.get('$uibModal'),
+		timecardPortalService = $injector.get('TimeCardPortalService'),
+		$timeout = $injector.get('$timeout'),
+		$sanitize = $injector.get('$sanitize'),
+		$document = $injector.get('$document'),
+		spUtil = $injector.get('spUtil'); 
+	
+	scope.data.pageSize = 50;
+	
+	scope.keyHandler = function(evt, record, index){
+		var $target = $(evt.target);
+		var key = evt.which || evt.keyCode;
+		if(key === 27 && scope.data.timecardInEditMode == record.sys_id){   //Escape Key
+			scope.cancelEdit(evt, index);
+			$target.closest('tr').focus();
+		}else if(record.canEdit && $target.hasClass('tc-row-input') && key === 13){  //Enter Key
+			scope.saveRecord(evt, record);
+			$target.closest('tr').focus();
+		}else if($target.hasClass('tc-row')){
+			if(record.canDelete && key === 8){     // Delete Key
+				scope.deleteRecord(evt, record, index);
+				var $nextRow = $target.closest('tr').next();
+				if($nextRow)
+					$nextRow.focus();
+			} else if(record.canEdit && key === 13){   //Enter Key
+				scope.editRow(evt, record);
+			}else if (key === 38) {    //Up Arrow
+				var prev = $target.prev();
+				if(prev)prev.focus();
+			}else if (key === 40) {    //Down Arrow
+				var next = $target.next();
+				if(next)next.focus();
+			}
+		}
+	};
+	
+	scope.editRow = function(evt, record){
+		evt.stopPropagation();
+		evt.preventDefault();
+		scope.enableEditMode(record, evt);
+	};
+	
+	scope.enableEditMode = function(record, evt){
+		if(!record.canEdit || record.sys_id == scope.data.timecardInEditMode)
+			return;
+		cancelGridEditMode();
+		scope.data.editTimecardObj = JSON.parse(JSON.stringify(record));
+		scope.data.timecardInEditMode = record.sys_id;
+		var closestElem;
+		if(evt && evt.target)
+			closestElem = $(evt.target).closest('td');
+		$timeout(function(){
+			var $input;
+			if(closestElem)
+				$input = closestElem.find('input').get(0);
+			if(!$input) 
+				$input = $('#'+record.sys_id).find('input').get(0);
+			if($input){
+				$input.focus();
+				$input.select();
+			}
+		}, 0);
+	};
+	
+	function cancelGridEditMode(){
+		if(scope.data.timecardInEditMode){
+			var index = scope.data.list.map(function(item){
+				return item.sys_id;
+			}).indexOf( scope.data.timecardInEditMode);
+			scope.cancelEdit('', index);
+		}
+	}
+	
+	function clickHandler(e){
+		var grid = $('#tc-grid-table')[0];
+		if (grid && !grid.contains(e.target)) {
+			cancelGridEditMode();
+			scope.safeDigest();
+		}
+	}
+	
+	$document.on('click', clickHandler);
+	
+	scope.addTask = function(){
+		var modalInstance = $uibModal.open({
+			templateUrl : 'add-task-modal',
+			scope: scope,
+			windowClass: 'add-task-modal',
+			controller:function($scope, $uibModalInstance){
+				$scope.data.addTaskModal = {};
+				$scope.ok = function(){
+					var taskId = $scope.data.addTaskModal.taskId;
+					if(!taskId){
+						$scope.data.addTaskModal.isTaskIdEmpty = true;
+						
+					}else{
+						$scope.data.addTaskModal.isTaskIdEmpty = false;
+						$scope.data.addTaskModal.loader = true;
+						_addTaskToTimesheet(taskId);
+					}
+				};
+				$scope.cancel = function () {
+					$uibModalInstance.dismiss('cancel');
+				};
+				
+				function _addTaskToTimesheet(taskId){
+					var timecards = [];
+					timecards.push({
+						task: taskId,
+						time_sheet: $scope.data.timesheetId,
+						category: 'task_work',
+					});
+					timecardPortalService.addToTimesheet({
+						values:{
+							timecards: timecards,
+							timesheetId: $scope.data.timesheetId,
+							allowDuplicates: false,
+							action: 'add_unassigned_to_timesheet'
+						} 
+					}).then(function(response){
+						$uibModalInstance.dismiss('close');
+						var status = response.data.status;
+						if(status == 'error')
+							spUtil.update($scope);
+						else if(status == 'success')
+							$scope.showTimecardInEditMode(response.data.ids);
+					});
+				}	
+			}
+		});
+		modalInstance.rendered.then(function(){
+			var taskSelector = $('#task-selector');
+			taskSelector.select2({
+				placeholder: scope.data.messages.selectATask,
+				minimumInputLength: 1,
+				ajax: {
+					url: '/api/now/table/task',
+					dataType: 'json',
+					quietMillis: 250,
+					data: function(term, page) {
+						return {
+							sysparm_query: 'short_descriptionCONTAINS' + term + '^ORnumberCONTAINS'+ term,
+							sysparm_fields: 'sys_id,short_description,number,sys_class_name',
+							sysparm_display_value: 'all',
+							sysparm_limit: scope.data.pageSize,
+							sysparm_offset: (page-1)*scope.data.pageSize,
+							sysparm_exclude_reference_link: true,
+						};
+					},
+					transport: function(params) {
+						var callback = params.success;
+						params.success = function(data, textStatus, jqXHR) {
+							callback({
+								items: data.result,
+								total: jqXHR.getResponseHeader('X-Total-Count')
+							}, textStatus, jqXHR);
+						};
+						return $.ajax(params);
+					},
+					results: function(data, page) {
+						var more = (page * scope.data.pageSize) < data.total;
+						var responseData = [];
+						if(data && data.items) {
+							var items = data.items;
+							if(items.length < scope.data.pageSize)
+								more = false;
+							for (var i = 0; i < items.length; i++) {
+								var text = $sanitize(items[i].number.display_value);
+								var shortDesc = $sanitize(items[i].short_description.display_value);
+								if(shortDesc)
+									text += ' - ' + shortDesc;
+								responseData.push({ 
+									"id": items[i].sys_id.value, 
+									"text": text
+								});
+							}
+                        }
+                    	return { results: responseData, more: more };
+					}
+				},
+				formatNoMatches: function() { 
+					return scope.data.messages.noMatchesFound; 
+				},
+				formatAjaxError: function(jqXHR, textStatus, errorThrown) { 
+					return scope.data.messages.noMatchesFound; 
+				},
+				formatLoadMore: function(pageNumber) { 
+					return scope.data.messages.loadingMoreResults; 
+				},
+				formatSearching: function() { 
+					return scope.data.messages.searching; 
+				},
+				formatInputTooShort: function(){
+					return scope.data.messages.inputTooShort;
+				}
+			});
+			taskSelector.on('change', function(evt){
+				scope.data.addTaskModal.taskId = evt.val;
+				if(scope.data.addTaskModal.taskId)
+					scope.data.addTaskModal.isTaskIdEmpty = false;
+				else
+					scope.data.addTaskModal.isTaskIdEmpty = true;
+				scope.safeDigest();
+			});
+		});
+	};
+	
+	scope.updateNotes = function(evt, item){
+		var modalScope = scope.$new();
+		var modalInstance = $uibModal.open({
+			templateUrl : 'notes-modal',
+			scope: modalScope,
+			windowClass: 'notes-modal',
+			controller:function($scope, $uibModalInstance){
+				$scope.data = {};
+				$scope.data.timecard = item;
+				spUtil.get('timecard-notes', {
+					timecard: item
+				}).then(function(response){
+					$scope.data.notesWidget = response;
+				});
+				var task = item['task.sys_id'].value;
+				if(task)
+					$scope.data.showTask = true;
+				$scope.ok = function(){
+					$uibModalInstance.dismiss('close');
+				};
+				$scope.cancel = function () {
+					$uibModalInstance.dismiss('cancel');
+				};
+			}
+		});
+	};
+	
+	scope.safeDigest = function(){
+		scope.$$phase || scope.$root && scope.$root.$$phase || scope.$digest();
+	};
+	
+	scope.$on('$destroy', function(){
+		$document.off('click', clickHandler);
+	});
+	
+}]]></link>
+        <name>Time Card Grid</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function($sp) {
+	var TABLE_TIMESHEET     = 'x_nykl3_tenroxnbsa_timesheet';
+	var TABLE_ASSIGNMENT    = 'x_nykl3_tenroxnbsa_assignment';
+	data.userId = gs.getUserID();
+	//var timesheetId = $sp.getParameter('sysparm_timesheet_id') || input.timesheetId;
+	var timesheetId = '0e6b6eb81323fe007864bb722244b025'; //input.timesheetId || '';
+	//if(!timesheetId)
+		//timesheetId = new TimeSheetFactory().getTimeSheet(data.userId);
+	data.timesheetId = timesheetId;
+	var timesheet = new GlideRecord(TABLE_TIMESHEET);
+	timesheet.get(timesheetId);
+	var timecardGr = new GlideRecord(TABLE_ASSIGNMENT);
+	timecardGr.newRecord();
+	data.canCreateTimecards = timecardGr.canCreate();
+		
+	var tcps = new tenroxPortalService();
+	//data.week_range = tcps.getWeekRange(timesheet.week_starts_on.getGlideObject());
+	data.week_range = tcps.getWeekRange(new GlideDateTime(timesheet.week_start).getDate());
+	var state = timesheet.getValue('state');
+	var dayFields = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+	data.fields = ['task.number', 'task.short_description', 'state'];
+	//var dayObj = timesheet.week_starts_on.getGlideObject();
+	var dayObj = new GlideDateTime(timesheet.week_start).getDate();
+	var day = dayObj.getDayOfWeekUTC();
+	for(var i = 1; i<=7;i++){
+		data.fields.push(dayFields[day-1]);
+		day = (day + 1 <= 7) ? day + 1  : 1;
+	}
+	data.fields.push('total');
+	
+	var field_labels = {
+		'task.number' : gs.getMessage('Task Number'),
+		'task.short_description' : gs.getMessage('Task'),
+		'monday' : gs.getMessage('Mon'),
+		'tuesday': gs.getMessage('Tue'),
+		'wednesday': gs.getMessage('Wed'),
+		'thursday': gs.getMessage('Thu'),
+		'friday': gs.getMessage('Fri'),
+		'saturday': gs.getMessage('Sat'),
+		'sunday': gs.getMessage('Sun'),
+	};
+	
+	data.column_meta = {};
+	data.editable_fields = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+	var grForLabels = new GlideRecordSecure('time_card');
+	for (var i in data.fields) {
+		var field = data.fields[i];
+		var ge = grForLabels.getElement(field);
+		if (ge == null)
+			continue;
+		data.column_meta[field] = {};
+		data.column_meta[field]['label'] = field_labels[field] || ge.getLabel();
+	}
+	for (i in data.editable_fields){
+		data.column_meta[data.editable_fields[i]]['editable'] = true;
+	}
+	data.list = [];
+	var gr = new GlideRecordSecure('time_card');
+	gr.addQuery('time_sheet', data.timesheetId);
+	gr.orderByDesc('sys_created_on');
+	gr.query();
+	data.fields_array = data.fields.concat(['category', 'task.sys_id', 'task.sys_class_name', 'project_time_category']);
+	data.actionableRows = 0;
+	while (gr.next()) {
+		var record = {};
+		$sp.getRecordElements(record, gr, data.fields_array);
+		record.sys_id = gr.getValue('sys_id');
+		record.comments = gr.getDisplayValue('comments');
+		record.canEdit = gr.canWrite();
+		record.canDelete = gr.canDelete();
+		if(record.canEdit || record.canDelete)
+			data.actionableRows++;
+		if(JSUtil.nil(record['task.short_description']['value']))
+			record['task.short_description'] = record['category'];
+		var projectTimeCategory = record['project_time_category']['display_value'];
+		if(JSUtil.notNil(projectTimeCategory)){
+			record['task.short_description'].display_value += ' (' + projectTimeCategory +')';
+		}
+		data.list.push(record);
+	}
+	
+	data.defaultField = 'total';
+	//data.canGenerateTimeCards = (new TimeSheetUIActionHelper(timesheet)).canGenerateTimeCards();
+	data.canGenerateTimeCards = (new timeSheetUIActionHelper(timesheet)).canGenerateAssignments();
+
+	data.messages = {};
+	data.messages.selectATask = gs.getMessage('Select a Task');
+	data.messages.noMatchesFound = gs.getMessage('No matches found');
+	data.messages.loadingFailed = gs.getMessage('Loading failed');
+	data.messages.loadingMoreResults = gs.getMessage('Loading more results…');
+	data.messages.searching = gs.getMessage('Searching…');
+	data.messages.inputTooShort = gs.getMessage('Enter task number or short description');
+	data.messages.confirmDlgTitle = gs.getMessage('Delete Time Card');
+	data.messages.confirmMssg = gs.getMessage('Are you sure, you want to delete this time card?');
+	data.messages['delete'] = gs.getMessage('Delete');
+	data.messages.cancel = gs.getMessage('Cancel');
+
+})($sp);]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-08-21 04:12:42</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>2d57489c0f7c43001416d23be1050ee4</sys_id>
+        <sys_mod_count>7</sys_mod_count>
+        <sys_name>Time Card Grid</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sp_widget_2d57489c0f7c43001416d23be1050ee4</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-08-21 05:13:15</sys_updated_on>
+        <template><![CDATA[<div id="tc-grid">
+  <div class="grid-header clearfix">
+    <span style="font-size:18px;" role="heading" aria-level="4">${Week ({{::data.week_range}})}</span>
+    <span class="pull-right" ng-if="::data.canCreateTimecards">
+      <button type="button" class="btn btn-link pull-right" ng-click="addTask()" id="add-task" aria-haspopup="true">${Add unassigned tasks to Time Sheet}</button>
+      <div class="fa fa-question-circle" uib-tooltip="${Search any task that you have worked during the week and add to the Time Sheet.}" tooltip-placement="left" aria-label="${Help}"></div>
+    </span>
+  </div>
+  <div ng-if="data.list.length">
+      <div style="font-size:12px;" role="heading" aria-level="5">${Logged Time Cards}</div>
+      <div class="table-responsive">
+        <table class="table" role="grid" ng-class="{'table-hover': data.canCreateTimecards}" id="tc-grid-table">
+          <thead>
+            <tr>
+              <th scope="col" ng-repeat="field in ::data.fields track by $index" ng-class="{'selected':data.highlightedField == field}">
+                <div class="th-title"><strong>{{::data.column_meta[field].label}}</strong></div>
+              </th>
+              <th scope="col" ng-if="data.actionableRows > 0" style="min-width: 84px;"><span class="sr-only">${Actions}</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="item in data.list track by item.sys_id" class="tc-row" id="{{::item.sys_id}}" ng-class="{'active': data.timecardInEditMode == item.sys_id, 'disabled': !item.canEdit}" tabIndex="{{item.canEdit ? 0 : -1}}" ng-dblclick="editRow($event, item);" ng-keydown="keyHandler($event, item, $index)" aria-disabled="{{!item.canEdit}}" role="row" aria-selected="{{data.timecardInEditMode == item.sys_id}}">
+              <td ng-repeat="field in ::data.fields" data-field="{{::field}}" data-th="{{::data.column_meta[field].label}}" ng-class="{'selected':data.highlightedField == field}" role="gridcell">
+                <div ng-if="data.timecardInEditMode != item.sys_id || !data.column_meta[field].editable">
+                  <a ng-if="$first && item[field].value" target="_blank" ng-href="/{{::item['task.sys_class_name'].value}}.do?sys_id={{::item['task.sys_id'].value}}">{{item[field].display_value}}</a>
+                  <div ng-if="!$first">{{item[field].display_value}}</div>
+                </div>
+                <div ng-if="data.timecardInEditMode == item.sys_id && data.column_meta[field].editable" class="edit-mode">
+                  <label class="sr-only" for="{{field}}">{{field}}</label>
+                  <input type="text" id="{{field}}" name="{{field}}" ng-model="item[field].display_value" class="tc-row-input" ng-class="{'error': item[field].invalid}" ng-change="validateInput(item[field])" aria-invalid="{{item[field].invalid}}" aria-required="true" required/>
+                </div>
+              </td>
+              <td ng-if="data.actionableRows > 0">
+                <div ng-if="data.timecardInEditMode != item.sys_id" style="text-align:center;">
+                  <button  style="font-size:15px;" type="button" class="btn btn-link icon-comment grid-action" uib-tooltip="${Notes}" tooltip-placement="bottom" ng-click="updateNotes($event, item);"><span class="sr-only">${Notes}</span></button><button type="button" ng-if="item.canEdit" class="btn btn-icon-default fa fa-pencil grid-action" ng-click="openTimecard($event, item.sys_id)" uib-tooltip="${Edit}" tooltip-placement="bottom"><span class="sr-only">${Edit}</span></button><button type="button" ng-if="item.canDelete" class="btn btn-icon-default fa fa-trash grid-action" ng-click="deleteRecord($event, item, $index)" uib-tooltip="${Delete}" tooltip-placement="bottom"><span class="sr-only">${Delete}</span></button>
+                </div>
+                <div ng-if="data.timecardInEditMode == item.sys_id" class="edit-mode">
+                  <button type="button" class="btn fa btn-link fa-check-circle grid-action" ng-click="saveRecord($event, item);" uib-tooltip="${Save}" tooltip-placement="bottom" aria-label="${Save}"><span class="sr-only">${Save}</span></button><button type="button" class="btn btn-icon-default fa fa-times-circle grid-action" ng-click="cancelEdit($event, $index);" uib-tooltip="${Cancel}" tooltip-placement="bottom"><span class="sr-only">${Cancel}</span></button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+  <div ng-if="!data.list.length">
+    <div id="empty-state">
+      <div style="font-size:12px;">${No Time Cards logged yet.}</div>
+      <div style="margin-top:26px;text-align:center;" ng-if="::data.canCreateTimecards">
+        <button type="button" class="btn" ng-if="data.canGenerateTimeCards" ng-click="generateTimecards()">${Generate Time Cards}</button>
+        <button type="button" class="btn" ng-click="copyFromPreviousTimesheet()" aria-haspopup="true">${Copy from previous Time Sheet}</button>
+      </div>
+    </div>
+  </div>
+  <sp-widget widget="data.modalInstance" ng-if="data.modalInstance"></sp-widget>
+  <pw-confirm-dialog data="data.confirmDialogOpts" ng-if="showConfirm"></pw-confirm-dialog>
+</div>]]></template>
+    </sp_widget>
+</record_update>

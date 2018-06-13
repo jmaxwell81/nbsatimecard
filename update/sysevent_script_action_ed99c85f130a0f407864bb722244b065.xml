@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sysevent_script_action">
+    <sysevent_script_action action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <condition_script/>
+        <description/>
+        <event_name>x_nykl3_tenroxnbsa.timesheet.freeze</event_name>
+        <name>Freeze Timesheet Tenrox</name>
+        <order>100</order>
+        <script><![CDATA[var FRM = event.parm1;
+var GTO = event.parm2;
+
+var timesheet1 = new GlideRecord('x_nykl3_tenroxnbsa_timesheet');
+query = 'employee.employee_type=Consultant^employee.tenrox_status=Active^week_start<=FRM^week_end>=FRM';
+timesheet.addEncodedQuery(query);
+timesheet1.addQuery('week_start','<=',FRM);
+timesheet1.addQuery('week_end','=>',FRM);
+timesheet.query();]]></script>
+        <synchronous>false</synchronous>
+        <sys_class_name>sysevent_script_action</sys_class_name>
+        <sys_created_by>RAWATS</sys_created_by>
+        <sys_created_on>2017-10-31 17:11:45</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>ed99c85f130a0f407864bb722244b065</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>Freeze Timesheet Tenrox</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sysevent_script_action_ed99c85f130a0f407864bb722244b065</sys_update_name>
+        <sys_updated_by>RAWATS</sys_updated_by>
+        <sys_updated_on>2017-10-31 21:59:09</sys_updated_on>
+    </sysevent_script_action>
+</record_update>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_label/>
+        <action_name/>
+        <action_query>false</action_query>
+        <action_run_at>server</action_run_at>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <application/>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_nykl3_tenroxnbsa_leave_time</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="x_nykl3_tenroxnbsa_leave_time">typeINUsed,Initial Balance^EQ<item endquery="false" field="type" goto="false" newquery="false" operator="IN" or="false" value="Used,Initial Balance"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Remaining Leave Calculation</name>
+        <onclick/>
+        <order>100</order>
+        <priority>100</priority>
+        <read_access_action>false</read_access_action>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+	var TABLE_LEAVE = 'x_nykl3_tenroxnbsa_leave_time';
+	var getType;
+	var multiply = 1;
+
+	if (current.type == 'Initial Balance')
+		getType = 'Used';
+	else if (current.type == 'Used') {
+		getType = 'Initial Balance';
+		multiply = -1;
+	}
+	
+	gs.debug('Remaining Leave Calculation BR: Employee: {0}, Current Type: {1}, getType: {2}, multiply: {3}', current.employee.user.name, current.type, getType, multiply);
+	if (getType) {
+		var gr = new GlideRecord(TABLE_LEAVE);
+		var query = 'employee='+current.employee+'^type='+getType+'^valid_from='+current.valid_from+'^valid_till='+current.valid_till;
+		gr.addEncodedQuery(query);
+		gr.query();
+		gs.debug('Remaining Leave Calculation BR: Employee: {0}, Records count for Type {1}: {2}', current.employee.user.name, getType, gr.getRowCount());
+		if (gr.next()) {
+			var remaining = new GlideRecord(TABLE_LEAVE);
+			query = 'employee='+current.employee+'^type=Remaining^valid_from='+current.valid_from+'^valid_till='+current.valid_till;
+			remaining.addEncodedQuery(query);
+			remaining.query();
+			gs.debug('Remaining Leave Calculation BR: Employee: {0}, Records count for Type Remaining: {1}', current.employee.user.name, remaining.getRowCount());
+			if (remaining.next()) {
+				remaining.carry_over_dh         = (current.carry_over_dh - gr.carry_over_dh)*multiply;
+				remaining.carry_over_vacation   = (current.carry_over_vacation - gr.carry_over_vacation)*multiply;
+				remaining.discretionary_holiday = (current.discretionary_holiday - gr.discretionary_holiday)*multiply;
+				remaining.sick_leave            = (current.sick_leave - gr.sick_leave)*multiply;
+				remaining.vacation              = (current.vacation - gr.vacation)*multiply;
+				remaining.paid_time_off         = (current.paid_time_off - gr.paid_time_off)*multiply;
+				remaining.update();
+			}
+		}
+	}
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-06-07 21:35:55</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>0742219013137a007864bb722244b07c</sys_id>
+        <sys_mod_count>15</sys_mod_count>
+        <sys_name>Remaining Leave Calculation</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_0742219013137a007864bb722244b07c</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-12-08 20:52:30</sys_updated_on>
+        <template/>
+        <when>after</when>
+    </sys_script>
+</record_update>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysevent_register">
+    <sysevent_register action="INSERT_OR_UPDATE">
+        <description>Generate automatic email notification to manager for review / approval of resource's time sheet afte</description>
+        <event_name>x_nykl3_tenroxnbsa.timesheet.submitted</event_name>
+        <fired_by/>
+        <queue/>
+        <suffix>timesheet.submitted</suffix>
+        <sys_class_name>sysevent_register</sys_class_name>
+        <sys_created_by>satom</sys_created_by>
+        <sys_created_on>2017-10-19 19:05:53</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>9b5943d70ff187401416d23be1050e36</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>x_nykl3_tenroxnbsa.timesheet.submitted</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sysevent_register_9b5943d70ff187401416d23be1050e36</sys_update_name>
+        <sys_updated_by>satom</sys_updated_by>
+        <sys_updated_on>2017-10-27 15:27:44</sys_updated_on>
+        <table>x_nykl3_tenroxnbsa_timesheet</table>
+    </sysevent_register>
+</record_update>

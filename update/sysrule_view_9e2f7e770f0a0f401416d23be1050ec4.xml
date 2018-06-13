@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sysrule_view">
+    <sysrule_view action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <advanced>false</advanced>
+        <condition table="x_nykl3_tenroxnbsa_timesheet">employee_type=Employee^employee_category=Contracted^EQ<item endquery="false" field="employee_type" goto="false" newquery="false" operator="=" or="false" value="Employee"/>
+            <item endquery="false" field="employee_category" goto="false" newquery="false" operator="=" or="false" value="Contracted"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </condition>
+        <description/>
+        <device_type>browser</device_type>
+        <match_conditions>ALL</match_conditions>
+        <name>Switch View for Contractor</name>
+        <order>100</order>
+        <overrides_user_preference>true</overrides_user_preference>
+        <script><![CDATA[(function overrideView(view, is_list) {
+
+	// Add your code here
+	answer = null;  // set the new view to answer
+
+})(view, is_list);]]></script>
+        <sys_class_name>sysrule_view</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-11-02 17:58:45</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>9e2f7e770f0a0f401416d23be1050ec4</sys_id>
+        <sys_mod_count>16</sys_mod_count>
+        <sys_name>Switch View for Contractor</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sysrule_view_9e2f7e770f0a0f401416d23be1050ec4</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-04-12 07:04:00</sys_updated_on>
+        <table>x_nykl3_tenroxnbsa_timesheet</table>
+        <view>contractor</view>
+    </sysrule_view>
+</record_update>

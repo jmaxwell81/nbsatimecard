@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <condition/>
+        <conditional>false</conditional>
+        <name>Tenrox - Reminder - Consultant Timesheet Submission</name>
+        <run_as/>
+        <run_as_tz>US/Eastern</run_as_tz>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period/>
+        <run_start>2017-11-08 19:09:58</run_start>
+        <run_time>1970-01-01 06:00:00</run_time>
+        <run_type>daily</run_type>
+        <script><![CDATA[/*
+ * Author: Lavlesh Garg
+ * Date: 11/8/17
+ * Purpose: This job will check for open timesheets for consultants
+ * If Last business day of month is Fri-Sun, send reminder to consultant for all open timesheets
+ * If Last business day of month is Mon-Thur, send reminder to consultant for all open timesheeets except last one.
+For last timesheet, if it's open and the "Month End Entry Completed" check box is not checked, send reminder to check that check box
+ */
+
+consultantTSSubmissionReminder();
+
+function consultantTSSubmissionReminder() {
+	var TABLE_USER_PROFILE = 'x_nykl3_tenroxnbsa_user_profile';
+	var TABLE_TIMESHEET    = 'x_nykl3_tenroxnbsa_timesheet';
+	
+	var snUtils   = new global.NBSA_SNUtils();
+	
+	var LBD = getLastBusinessDayThisMonth(); //LBD = Last Buisenss Day Of This Month
+	var today = new GlideDateTime();
+	var timeSheets, lastWeekTimesheet, monthEntryWeek;
+	var openWeeks = [];
+	
+	var queryUP = 'employee_type=Consultant^tenrox_status=Active';
+	var grup = new GlideRecord(TABLE_USER_PROFILE);
+	grup.addEncodedQuery(queryUP);
+	grup.query();
+	gs.debug('Tenrox - Reminder - Consultant Timesheet Submission SJ: Total Active Consultant Count: '+grup.getRowCount());
+	
+	var WS = today.compareTo(LBD) >= 0 ? getWeekStartForLastTimeSheetofMonth() : getWeekStartForLastTimeSheetofMonth('last');
+	
+	var friday = new GlideDateTime(WS);
+	friday.addDaysUTC(4);
+	gs.debug('Tenrox - Reminder - Consultant Timesheet Submission SJ: Last Week Start: '+WS+', Friday: '+friday+', today.compareTo('+LBD+'): '+today.compareTo(LBD)+', today.compareTo('+friday+'): '+today.compareTo(friday));
+	
+	while (grup.next()) {
+		openWeeks = [];
+		monthEntryWeek = '';
+		//timeSheets = snUtils.getA(TABLE_TIMESHEET, ['state=Open', 'employee='+grup.sys_id, 'week_start<'+WS], ['sys_id', 'week_start']);
+		timeSheets = new GlideRecord(TABLE_TIMESHEET);
+		timeSheets.addQuery('state=Open');
+		timeSheets.addQuery('employee='+grup.sys_id);
+		timeSheets.addQuery('week_start<'+WS);
+		timeSheets.orderBy('week_start');
+		timeSheets.query();
+		gs.debug('Tenrox - Reminder - Consultant Timesheet Submission SJ: Total Open Timesheets for User: '+grup.user.email+', are: '+timeSheets.getRowCount());
+		//for (var ts in timeSheets) {
+		while (timeSheets.next()) {
+			openWeeks.push(timeSheets.getValue('week_start'));
+		}
+		
+		lastWeekTimesheet = snUtils.getA(TABLE_TIMESHEET, ['state=Open', 'employee='+grup.sys_id, 'week_start='+WS], ['sys_id', 'month_entry_completed']);
+		gs.debug('Tenrox - Reminder - Consultant Timesheet Submission SJ: Last Week Time Sheet count: '+lastWeekTimesheet.length+', WS: '+WS);
+		if (lastWeekTimesheet.length == 1) {
+			if (today.compareTo(friday) >= 0)
+				openWeeks.push(WS.toString());
+			else if (lastWeekTimesheet[0][1] == false)
+				monthEntryWeek = WS.toString();
+			gs.debug('Tenrox - Reminder - Consultant Timesheet Submission SJ: '+grup.user.name+', openWeeks: '+openWeeks+', monthEntryWeek: '+monthEntryWeek);
+		}
+		if (openWeeks.length >0 || monthEntryWeek !='')
+			gs.eventQueue('x_nykl3_tenroxnbsa.consultant.ts.remind', grup, openWeeks.toString(), monthEntryWeek);
+	}
+	
+	/*var grTS, queryTS, missingWeeks, openWeeks;
+	var day = new GlideDateTime().getDayOfMonthUTC(); // Get current Day of Month
+	var start, end;
+	//If current Day of Month >= 25, start is start of this month, end is end of this month, else, start would be start of last month and end would be end of last month.
+	if (day >= 25) {
+		start = new GlideDateTime(gs.beginningOfThisMonth()).getDate();
+		end = new GlideDateTime(gs.endOfThisMonth()).getDate();
+	} else {
+		start = new GlideDateTime(gs.beginningOfLastMonth()).getDate();
+		end = new GlideDateTime(gs.endOfLastMonth()).getDate();
+	}
+	//get array of dates for All Mondays (1) between start and end dates
+	var mondays = getDays(1, start, end);
+	
+	gs.debug('Tenrox - Reminder - Consultant Timesheet Submission: SJ: Total Active Employees: '+grup.getRowCount()+', day: '+day+', mondays: '+mondays);
+	while (grup.next()) {
+		gs.debug('Tenrox - Reminder - Consultant Timesheet Submission: SJ: Checking for open Timesheets for '+grup.user.name);
+		missingWeeks = '';
+		openWeeks = '';
+		for (var m in mondays) {
+			grTS = new GlideRecord(TABLE_TIMESHEET);
+			queryTS = 'employee='+grup.sys_id+'^timesheet='+grup.user.name+' : '+mondays[m];
+			grTS.addEncodedQuery(queryTS);
+			grTS.query();
+			gs.debug('Tenrox - Reminder - Consultant Timesheet Submission: SJ: Total Open Timesheets for '+grup.user.name+': '+grTS.getRowCount()+', for monday: '+mondays[m]+', query: '+queryTS);
+			//If no timesheet records returned by the query, it means that timesheet for this week doesn't exists for the employee
+			// Else if a timesheet record is returned and state is open, it means that timesheet hasn't been submitted for the week
+			if (grTS.getRowCount() == 0) {
+				missingWeeks += mondays[m]+', ';
+			} else if (grTS.next() && grTS.state == 'Open') {
+				openWeeks += mondays[m]+', ';
+			}
+		}
+		
+		// If there are any weeks for which timesheet is missing or is in open state, generate event to send notification to user
+		if (missingWeeks != '' || openWeeks != '') {
+			gs.debug('Tenrox - Reminder - Consultant Timesheet Submission: SJ: Generating event for '+grup.user.name+' with missingWeeks: '+missingWeeks+', openWeeks: '+openWeeks);
+			gs.eventQueue('x_nykl3_tenroxnbsa.consultant.ts.missing', grup, missingWeeks, openWeeks);
+		}
+	}*/
+	
+}
+
+// Returns the last business day of the month in GlideDateTime formate. This doesn't consider holidays other than Sat / Sun.
+function getLastBusinessDayThisMonth() {
+	end = new GlideDateTime();
+	end.setDayOfMonthUTC(end.getDaysInMonthUTC());
+	gs.debug("Tenrox - Reminder - Consultant Timesheet Submission: end: "+end.getDisplayValue()+", DayOfWeek: "+end.getDayOfWeekUTC());
+	while (parseFloat(end.getDayOfWeekUTC()) > 5) {
+		end.addDaysUTC(-1);
+		gs.debug("Tenrox - Reminder - Consultant Timesheet Submission: end: "+end.getDisplayValue()+", DayOfWeek: "+end.getDayOfWeekUTC());
+	}
+	gs.debug("Tenrox - Reminder - Consultant Timesheet Submission: end: "+end.getDate().getDisplayValue());
+	return end;
+}
+
+// This funciton returns the week start for last time sheet of the month
+// This function takes one argument 'month'. if it's value is 'last', it returns the week start for last time sheet of the last month otherwise current month.
+function getWeekStartForLastTimeSheetofMonth(month) {
+	var gdt = new GlideDateTime();
+	if (month != undefined && month == 'last')
+		gdt = new GlideDateTime(gs.beginningOfLastMonth());
+	gdt.setDayOfMonthUTC(gdt.getDaysInMonthUTC());
+	while (gdt.getDayOfWeekUTC() != 1)
+		gdt.addDaysUTC(-1);
+	return gdt.getDate();
+}
+
+/*
+ * Parameters:
+ *   dayOfWeek: 1 = Monday, 2 = Tuesday, .......
+ *   start: start date
+ *   end: end date
+ *   maxArrayLength: maximum length of returned Array of days
+ *
+ * Return Value:
+ *   Return an array of dates of mentioned day (Monday or Tuesday or ..) between start and end dates
+ *
+ */
+function getDays(dayOfWeek, start, end, maxArrayLength) {
+	var days = [];
+	var MAX_ARRAY_LENGTH = typeof maxArrayLength == 'number' ? maxArrayLength : 10;
+	var monthStart = new GlideDateTime(start);
+	var monthEnd = new GlideDateTime(end);
+	monthEnd.addDaysUTC(1);
+	while (!monthStart.equals(monthEnd)) {
+		if (monthStart.getDayOfWeekUTC() == dayOfWeek) {
+			days.push(monthStart.getDate());
+			if (days.length >= MAX_ARRAY_LENGTH)
+				break;
+		}
+		monthStart.addDaysUTC(1);
+	}
+	return days;
+}]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-11-08 19:22:46</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>a19a42310f9a43001416d23be1050ed1</sys_id>
+        <sys_mod_count>34</sys_mod_count>
+        <sys_name>Tenrox - Reminder - Consultant Timesheet Submission</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sysauto_script_a19a42310f9a43001416d23be1050ed1</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-05-01 19:57:32</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>

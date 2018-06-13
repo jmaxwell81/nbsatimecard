@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_choice action="INSERT_OR_UPDATE" field="holidays" table="x_nykl3_tenroxnbsa_timesheet" version="3">
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>holidays</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>fri</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sequence/>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-23 20:59:56</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>4493336a0fa2c3001416d23be1050ecf</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-23 21:00:01</sys_updated_on>
+            <value>fri</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>holidays</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>mon</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sequence/>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-23 20:58:43</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>ec537baa0fa2c3001416d23be1050e03</sys_id>
+            <sys_mod_count>2</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-23 20:59:23</sys_updated_on>
+            <value>mon</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>holidays</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>thu</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sequence/>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-23 20:59:46</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>8e83336a0fa2c3001416d23be1050ece</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-23 20:59:51</sys_updated_on>
+            <value>thu</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>holidays</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>tue</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sequence/>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-23 20:59:26</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>9b63bbaa0fa2c3001416d23be1050e10</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-23 20:59:33</sys_updated_on>
+            <value>tue</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>holidays</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>wed</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sequence/>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-23 20:59:37</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>5373bb6a0fa2c3001416d23be1050e44</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-23 20:59:42</sys_updated_on>
+            <value>wed</value>
+        </sys_choice>
+        <sys_choice_set action="INSERT_OR_UPDATE">
+            <element>holidays</element>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sys_class_name>sys_choice_set</sys_class_name>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-23 20:58:43</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
+            <sys_id>e0537baa0fa2c3001416d23be1050e04</sys_id>
+            <sys_mod_count>11</sys_mod_count>
+            <sys_name>holidays</sys_name>
+            <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+            <sys_update_name>sys_choice_x_nykl3_tenroxnbsa_timesheet_holidays</sys_update_name>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-23 21:00:01</sys_updated_on>
+        </sys_choice_set>
+    </sys_choice>
+</record_update>

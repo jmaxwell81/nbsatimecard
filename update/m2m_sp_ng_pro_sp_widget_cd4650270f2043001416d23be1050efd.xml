@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="m2m_sp_ng_pro_sp_widget">
+    <m2m_sp_ng_pro_sp_widget action="INSERT_OR_UPDATE">
+        <sp_angular_provider display_value="tenroxPortalService">5fe590670f2043001416d23be1050ea3</sp_angular_provider>
+        <sp_widget display_value="Time Sheet Portal Header">89dd354f132c03007864bb722244b00e</sp_widget>
+        <sys_class_name>m2m_sp_ng_pro_sp_widget</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-08-18 21:21:16</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>cd4650270f2043001416d23be1050efd</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>tenroxPortalService.Time Sheet Portal Header</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>m2m_sp_ng_pro_sp_widget_cd4650270f2043001416d23be1050efd</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-08-18 21:21:16</sys_updated_on>
+    </m2m_sp_ng_pro_sp_widget>
+</record_update>

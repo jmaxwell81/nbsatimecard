@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element extends="sys_import_set_row" label="Import Set Project and Type M2M" max_length="40" name="x_nykl3_tenroxnbsa_import_set_project_and_type_m2m" sizeclass="6189" type="collection">
+        <element attributes="import_attribute_name=Project,edge_encryption_enabled=true" label="Project" max_length="53" name="u_project" type="string"/>
+        <element attributes="import_attribute_name=Project Work Type,edge_encryption_enabled=true" label="Project Work Type" max_length="161" name="u_project_work_type" type="string"/>
+    </element>
+</database>

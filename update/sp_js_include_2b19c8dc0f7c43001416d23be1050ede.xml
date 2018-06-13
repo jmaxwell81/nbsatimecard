@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sp_js_include">
+    <sp_js_include action="INSERT_OR_UPDATE">
+        <display_name>/myown123.js</display_name>
+        <source>local</source>
+        <sys_class_name>sp_js_include</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-08-21 04:19:47</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>2b19c8dc0f7c43001416d23be1050ede</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>/myown123.js</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_ui_script display_value="x_nykl3_tenroxnbsa.myown">8299ab9c0fb083001416d23be1050ea6</sys_ui_script>
+        <sys_update_name>sp_js_include_2b19c8dc0f7c43001416d23be1050ede</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-08-21 20:43:23</sys_updated_on>
+        <url>https://hi.service-now.com/scripts/glide-highcharts-v5.js</url>
+    </sp_js_include>
+</record_update>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_label/>
+        <action_name/>
+        <action_query>false</action_query>
+        <action_run_at>server</action_run_at>
+        <action_update>false</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <application/>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_nykl3_tenroxnbsa_timesheet</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Add Default Lunch Break for Employees</name>
+        <onclick/>
+        <order>100</order>
+        <priority>100</priority>
+        <read_access_action>false</read_access_action>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[/*
+ * Author: Lavlesh Garg - 6/8/17
+ * This Business Rule will Add a Default Lunch Break (1 Hr every weekday)
+ * For all Employees (not Consultants) at the time of timesheet Creation
+ */
+(function executeRule(current, previous /*null when async*/) {
+	
+	//Put a Condition to check if user is Employee or not
+	if (current.employee.employee_type != 'Employee')
+		return;
+	
+	var tu = new tenroxUtil();
+	
+	var t = new GlideRecord(tu.TABLE_NON_WORK_TIME);
+	t.addQuery('timesheet', current);
+	//t.addQuery('non_work_type', 'Lunch Break');
+	t.addQuery('nwt.name', 'Lunch Break');
+	t.query();
+	//Check if a Lunch Break already exists for the current time sheet, if yes, log a warning and exit.
+	if (t.next()) {
+		gs.warn('Not creating Default Lunch Break Time for timesheet: '+current.timesheet+' because one already exists');
+		return;
+	}
+	
+	//Create the Lunch Break
+	t.initialize();
+	t.timesheet = current.sys_id;
+	// 	t.non_work_type = 'Lunch Break';
+	
+	var lt = new GlideRecord(tu.TABLE_LEAVE_TYPE);
+	if (lt.get('name', 'Lunch Break')) {
+		t.nwt = lt.sys_id;
+		var lunchHours = tu.getLunchBreakToUpdate(current);
+		gs.debug('Add Default Lunch Break for Employees BR: timesheet: '+current.timesheet+', lunchHours: '+lunchHours);
+		if (lunchHours && lunchHours.length == 5) {
+			lunchHours.forEach(function(l) {
+				t.setValue(l[0], l[1]);
+			});
+		} else {
+			['mon', 'tue', 'wed', 'thu', 'fri'].forEach(function(x) {
+				t.setValue(x, 1);
+			});
+		}
+		var sysID = t.insert();
+		if (!sysID) gs.error('Add Default Lunch Break for Employees BR: Failed to create Lunch Break Time for timesheet: '+current.timesheet);
+	} else {
+		gs.error('Add Default Lunch Break for Employees BR: current.timesheet: '+current.timesheet+', A record for Lunch Break not found in '+tu.TABLE_LEAVE_TYPE+', table.');
+	}
+
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-06-08 17:37:33</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>3f2a3dec0f5376001416d23be1050e2a</sys_id>
+        <sys_mod_count>15</sys_mod_count>
+        <sys_name>Add Default Lunch Break for Employees</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_3f2a3dec0f5376001416d23be1050e2a</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-11-16 21:09:11</sys_updated_on>
+        <template/>
+        <when>after</when>
+    </sys_script>
+</record_update>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_user_role">
+    <sys_user_role action="INSERT_OR_UPDATE">
+        <assignable_by/>
+        <can_delegate>true</can_delegate>
+        <description>1) This role will enable users to create timesheet. &#13;
+2) This role will generally not be provided to any user individually.&#13;
+3) This role is included in tenrox_employee, tenrox_manager, tenrox_admin roles. Managers and Admin are provided this role because they might need to fill timesheet for users sometime.&#13;
+4) Generally, employees who needs to fill timesheet, shall be provided tenrox_employee role.&#13;
+5) This role contains tenrox_write, read and user role.</description>
+        <elevated_privilege>false</elevated_privilege>
+        <encryption_context/>
+        <grantable>true</grantable>
+        <includes_roles/>
+        <name>x_nykl3_tenroxnbsa.timesheet_create</name>
+        <suffix>timesheet_create</suffix>
+        <sys_class_name>sys_user_role</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-11-30 15:55:01</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>4b6f6ef80ffa47001416d23be1050e57</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>x_nykl3_tenroxnbsa.timesheet_create</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>true</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_user_role_4b6f6ef80ffa47001416d23be1050e57</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-04-12 11:09:30</sys_updated_on>
+    </sys_user_role>
+</record_update>

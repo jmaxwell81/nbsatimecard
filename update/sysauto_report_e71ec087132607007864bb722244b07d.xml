@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysauto_report">
+    <sysauto_report action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <address_list/>
+        <condition/>
+        <conditional>false</conditional>
+        <group_list name="Tenrox - Admin">f0b367fc0f3e47001416d23be1050e4e</group_list>
+        <include_detail>false</include_detail>
+        <include_with/>
+        <name>Scheduled Execution of Tenrox - Employee Approval Overdue [Open State]</name>
+        <omit_if_no_records>false</omit_if_no_records>
+        <output_type>Excel</output_type>
+        <report display_value="Tenrox - Employee Approval Overdue [Open State]">5fedc807132607007864bb722244b0e9</report>
+        <report_body><![CDATA[<p>Please find the list of all the Timesheets in &#39;Open&#39; State from the last week or older and needs to be Submitted by the User.</p>]]></report_body>
+        <report_title>Tenrox - Employee Approval Overdue [Open State] Report</report_title>
+        <run_as/>
+        <run_as_tz>US/Eastern</run_as_tz>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period/>
+        <run_start>2017-11-24 17:34:16</run_start>
+        <run_time>1970-01-01 03:00:00</run_time>
+        <run_type>weekly</run_type>
+        <sys_class_name>sysauto_report</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-11-24 17:36:53</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>e71ec087132607007864bb722244b07d</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>Scheduled Execution of Tenrox - Employee Approval Overdue [Open State]</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sysauto_report_e71ec087132607007864bb722244b07d</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-12-06 17:12:18</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+        <user_list>1ec1734e2baea000eef35700f8da1555</user_list>
+        <zip>false</zip>
+    </sysauto_report>
+</record_update>

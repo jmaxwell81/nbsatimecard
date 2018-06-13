@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_label/>
+        <action_name/>
+        <action_query>false</action_query>
+        <action_run_at>server</action_run_at>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <application/>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_nykl3_tenroxnbsa_timesheet</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="x_nykl3_tenroxnbsa_timesheet">stateCHANGESTOSubmitted^EQ<item endquery="false" field="state" goto="false" newquery="false" operator="CHANGESTO" or="false" value="Submitted"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Delete Empty Assignments and NWTs</name>
+        <onclick/>
+        <order>100</order>
+        <priority>100</priority>
+        <read_access_action>false</read_access_action>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+	
+	var TABLE_NON_WORK_TIME = 'x_nykl3_tenroxnbsa_non_work_time';
+	var TABLE_ASSIGNMENT    = 'x_nykl3_tenroxnbsa_assignment';
+	
+	//Delete Empty Non Work Time
+	deleteEmptyRecords(TABLE_NON_WORK_TIME);
+	
+	//Delete Empty Assignments
+	deleteEmptyRecords(TABLE_ASSIGNMENT);
+	
+})(current, previous);
+
+function deleteEmptyRecords(table) {
+	var gr = new GlideRecord(table);
+	gr.addQuery('timesheet', current.sys_id);
+
+	//Don't delete empty Lunch Time
+	if (table == 'x_nykl3_tenroxnbsa_non_work_time') {
+		gr.addQuery('nwt.name', '!=', 'Lunch Break');
+	}
+	gr.addQuery('total', '0');
+	gr.query();
+	gs.debug('Delete Empty Assignments and NWTs BR: For timesheet {0}, deleting {1} empty {2}', current.timesheet, gr.getRowCount(), table);
+	while (gr.next()) {
+		gr.deleteRecord();
+	}
+}
+]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-11-03 16:21:31</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>caa37f080fde0f401416d23be1050e18</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>Delete Empty Assignments and NWTs</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_caa37f080fde0f401416d23be1050e18</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-11-09 20:04:08</sys_updated_on>
+        <template/>
+        <when>before</when>
+    </sys_script>
+</record_update>

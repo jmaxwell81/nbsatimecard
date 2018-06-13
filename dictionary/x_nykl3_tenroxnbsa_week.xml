@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="Week" max_length="40" name="x_nykl3_tenroxnbsa_week" type="collection">
+        <element default="0" label="Fri" max_length="40" name="fri" type="float"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="0" label="Mon" max_length="40" name="mon" type="float"/>
+        <element default="0" label="Sat" max_length="40" name="sat" type="float"/>
+        <element default="0" label="Sun" max_length="40" name="sun" type="float"/>
+        <element default="javascript:current.getTableName();" dynamic_default_value="b5cb83a85f220100a9ad2572f2b4773c" label="Class" max_length="80" name="sys_class_name" type="sys_class_name" use_dynamic_default="true"/>
+        <element default="0" label="Thu" max_length="40" name="thu" type="float"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#9;return current.mon+current.tue+current.wed+current.thu+current.fri+current.sat+current.sun;&#13;&#10;})(current);" label="Total (Hrs)" max_length="40" name="total" read_only="true" type="float" virtual="true"/>
+        <element default="0" label="Tue" max_length="40" name="tue" type="float"/>
+        <element default="0" label="Wed" max_length="40" name="wed" type="float"/>
+        <element label="Week End" max_length="40" name="week_end" read_only="true" type="glide_date"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Week Start" max_length="40" name="week_start" type="glide_date"/>
+    </element>
+</database>

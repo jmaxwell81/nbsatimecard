@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_report_users_groups">
+    <sys_report_users_groups action="INSERT_OR_UPDATE">
+        <group_id display_value="Tenrox - Payroll" name="Tenrox - Payroll">e81263300f7e47001416d23be1050e31</group_id>
+        <report_id display_value="Tenrox HR Team Headcount">820d85390f1a43001416d23be1050ea2</report_id>
+        <sys_class_name>sys_report_users_groups</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-12-04 07:53:23</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>7b09e5060fb2c7001416d23be1050eb3</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>820d85390f1a43001416d23be1050ea2</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_report_users_groups_7b09e5060fb2c7001416d23be1050eb3</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-12-04 07:53:23</sys_updated_on>
+        <user_id/>
+    </sys_report_users_groups>
+</record_update>

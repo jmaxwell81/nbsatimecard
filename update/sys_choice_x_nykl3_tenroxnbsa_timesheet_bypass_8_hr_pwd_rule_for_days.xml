@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_choice action="INSERT_OR_UPDATE" field="bypass_8_hr_pwd_rule_for_days" table="x_nykl3_tenroxnbsa_timesheet" version="3">
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>bypass_8_hr_pwd_rule_for_days</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>mon</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sequence>1</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-16 13:15:33</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>f316c25813aa03007864bb722244b0a3</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-16 13:15:33</sys_updated_on>
+            <value>mon</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>bypass_8_hr_pwd_rule_for_days</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>tue</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sequence>2</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-16 13:15:47</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>5736c25813aa03007864bb722244b097</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-16 13:15:47</sys_updated_on>
+            <value>tue</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>bypass_8_hr_pwd_rule_for_days</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>wed</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sequence>3</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-16 13:16:03</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>cf46c25813aa03007864bb722244b0be</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-16 13:16:03</sys_updated_on>
+            <value>wed</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>bypass_8_hr_pwd_rule_for_days</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>thu</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sequence>4</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-16 13:16:16</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>9a56c6d413aa03007864bb722244b01b</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-16 13:16:16</sys_updated_on>
+            <value>thu</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>bypass_8_hr_pwd_rule_for_days</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>fri</label>
+            <language>en</language>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sequence>5</sequence>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-16 13:16:29</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>ed66065813aa03007864bb722244b093</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-16 13:16:29</sys_updated_on>
+            <value>fri</value>
+        </sys_choice>
+        <sys_choice_set action="INSERT_OR_UPDATE">
+            <element>bypass_8_hr_pwd_rule_for_days</element>
+            <name>x_nykl3_tenroxnbsa_timesheet</name>
+            <sys_class_name>sys_choice_set</sys_class_name>
+            <sys_created_by>GARGL</sys_created_by>
+            <sys_created_on>2017-11-16 13:15:33</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
+            <sys_id>7f26c25813aa03007864bb722244b078</sys_id>
+            <sys_mod_count>5</sys_mod_count>
+            <sys_name>bypass_8_hr_pwd_rule_for_days</sys_name>
+            <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+            <sys_update_name>sys_choice_x_nykl3_tenroxnbsa_timesheet_bypass_8_hr_pwd_rule_for_days</sys_update_name>
+            <sys_updated_by>GARGL</sys_updated_by>
+            <sys_updated_on>2017-11-16 13:16:29</sys_updated_on>
+        </sys_choice_set>
+    </sys_choice>
+</record_update>

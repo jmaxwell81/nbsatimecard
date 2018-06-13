@@ -1,0 +1,1013 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_nykl3_tenroxnbsa.tenroxUtil</api_name>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>tenroxUtil</name>
+        <script><![CDATA[var tenroxUtil = Class.create();
+tenroxUtil.prototype = {
+	initialize: function() {
+		"use strict";
+		
+		this.TABLE_TIMESHEET          = 'x_nykl3_tenroxnbsa_timesheet';
+		this.TABLE_ASSIGNMENT         = 'x_nykl3_tenroxnbsa_assignment';
+		this.TABLE_NON_WORK_TIME      = 'x_nykl3_tenroxnbsa_non_work_time';
+		this.TABLE_WEEK               = 'x_nykl3_tenroxnbsa_week';
+		this.TABLE_LEAVE_TIME         = 'x_nykl3_tenroxnbsa_leave_time';
+		this.TABLE_PAYROLL_SCHEDULE   = 'x_nykl3_tenroxnbsa_payroll_schedule';
+		this.TABLE_ADP_REPORT         = 'x_nykl3_tenroxnbsa_adp_report';
+		this.TABLE_LEAVE_TYPE         = 'x_nykl3_tenroxnbsa_leave_type';
+		this.TABLE_HOLIDAY            = 'x_nykl3_tenroxnbsa_holiday';
+		this.TABLE_TIMESHEET_TEMPLATE = 'x_nykl3_tenroxnbsa_timesheet_template';
+		this.TABLE_USER_PROFILE       = 'x_nykl3_tenroxnbsa_user_profile';
+		this.TABLE_BILL_RATE          = 'x_nykl3_tenroxnbsa_bill_rate';
+		
+		this.ROLE_USER                = 'x_nykl3_tenroxnbsa.tenrox_application_access';
+		this.CO_CODE                  = '69L';
+		this.REG_HOURS                = 86.67;
+		this.MAX_PTO_HRS              = 3.5; //PTO stands for Personal Time Out of Office
+		this.MAX_LEAVE_HRS            = 8;
+		this.INCREMENT_EXEMPT         = 4;
+		this.INCREMENT_NON_EXEMPT     = 0.50;
+		this.INCREMENT_PTO            = 0.25;
+		this.OT_ENM_HOLIDAY_THRESHOLD = 5; //ENM stands for Exempt Non Manager
+		this.OT_ENM_WEEKDAY_THRESHOLD = 12;
+		this.OT_ENM                   = 8;
+		
+		this.au        = new global.ArrayUtil();
+		this.snUtils   = new global.NBSA_SNUtils();
+		
+		this.daysInWeek    = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+		
+	},
+	
+	/*
+	 * This function will scan the Holiday Table and return the days for which it holiday
+	 * For example, if 11th and 12th December 2017 is holiday, then it will return 'mon, tue'
+	 * 
+	 * Input: @start: week start date
+	 * Output: comma separated string of days e.g. 'tue, wed, fri'
+	 */
+	
+	getHolidays: function(start) {
+		"use strict";
+		
+		var holidays = '';
+		var gt = new GlideDateTime(start);
+		gt.addDaysUTC(-1);
+		['mon', 'tue', 'wed', 'thu', 'fri'].forEach(function(w) {
+			gt.addDaysUTC(1);
+			if (this.snUtils.getA(this.TABLE_HOLIDAY, ['date='+gt.getDate()], ['name']).length == 1) holidays += w+',';
+		}, this);
+		if (holidays.endsWith(',')) {
+			holidays = holidays.substring(0, holidays.length-1);
+		}
+		return holidays;
+	},
+	
+	/*
+	 * This Function will calculate total hours for each day for the timesheet (Assignments + Non-Work Time)
+	 */
+	
+	getTotalHrsForEachDay: function(timesheet) {
+		"use strict";
+		
+		var days = [['mon', 0], ['tue', 0], ['wed', 0], ['thu', 0], ['fri', 0], ['sat', 0], ['sun', 0], ['reg', 0], ['nwt', 0]];
+		
+		var daysAssignment = this.getTotalHrsForEachDayAssignments(timesheet);
+		var daysNWT = this.getTotalHrsForEachDayNWT(timesheet);
+		
+		for (var d in days) {
+			days[d][1] = daysAssignment[d][1] + daysNWT[d][1];
+		}
+		
+		gs.debug('getTotalHrsForEachDay: for timesheet: '+timesheet.timesheet+', days: '+days);
+		return days;
+	},
+	
+	/*
+	 * This Function will calculate total hours for each day for the timesheet Assignments
+	 */
+	
+	getTotalHrsForEachDayAssignments: function(timesheet) {
+		"use strict";
+		
+		var days = [['mon', 0], ['tue', 0], ['wed', 0], ['thu', 0], ['fri', 0], ['sat', 0], ['sun', 0]];
+		
+		// Get total time for each day the assignments for the timesheet
+		this.snUtils.getA(this.TABLE_ASSIGNMENT, ['timesheet='+timesheet.sys_id], this.daysInWeek).forEach(function(ts) {
+			for (var x in ts) {
+				if (ts[x]) {
+					days[x][1] += parseFloat(ts[x]);
+				}
+			}
+		}, this);
+		
+		// Lunch break hours will also be counted in the assignment (regular) hours
+		var lunchBreak = this.snUtils.getA(this.TABLE_NON_WORK_TIME, ['timesheet='+timesheet.sys_id, 'nwt.name=Lunch Break'], this.daysInWeek);
+		gs.debug('getTotalHrsForEachDayAssignments: for timesheet: '+timesheet.timesheet+', lunchBreak: '+lunchBreak+', lunchBreak.length: '+lunchBreak.length);
+		
+		if (lunchBreak.length == 1) {
+			for (var x=0; x<=6; x++) {
+				if (lunchBreak[0][x]) {
+					days[x][1] += parseFloat(lunchBreak[0][x]);
+				}
+			}
+		}
+		
+		gs.debug('getTotalHrsForEachDayAssignments: for timesheet: '+timesheet.timesheet+', days: '+days);
+		return days;
+	},
+	
+	/*
+	 * This Function will calculate total hours for each day for the timesheet Non-Work Time
+	 */
+
+	getTotalHrsForEachDayNWT: function(timesheet) {
+		"use strict";
+		
+		var days = [['mon', 0], ['tue', 0], ['wed', 0], ['thu', 0], ['fri', 0], ['sat', 0], ['sun', 0]];
+		
+		// Get all the non work times except lunch break, which is considered in the Regular Time
+		this.snUtils.getA(this.TABLE_NON_WORK_TIME, ['timesheet='+timesheet.sys_id, 'nwt.name!=Lunch Break'], this.daysInWeek).forEach(function(ts) {
+			for (var x in ts) {
+				if (ts[x]) {
+					days[x][1] += parseFloat(ts[x]);
+				}
+			}
+		}, this);
+		
+		gs.debug('getTotalHrsForEachDayNWT: for timesheet: '+timesheet.timesheet+', days: '+days);
+		return days;
+	},
+	
+	updateOTSH: function(tsSysID, category, total, ot, sh, reg, holidays) {
+		"use strict";
+		var overTime, straightHour;
+		if (category == 'Non-Exempt') {
+			overTime = this.calOTNonExempt(reg);
+			straightHour = this.calSH(total, overTime, category);
+		}
+		else if (category == 'Exempt Non-Manager')
+			overTime = this.calOTExemptNM(tsSysID, holidays);
+		else
+			return;
+		var ts = {};
+		//if (overTime && overTime != ot) 
+		ts.ot = overTime;
+		//if (straightHour && straightHour != sh)
+		ts.sh = straightHour;
+		//if (ts.ot || ts.sh)
+		this.snUtils.grS(this.TABLE_TIMESHEET, tsSysID, ts);
+	},
+
+	/*updateSH: function(tsSysID, total, ot, category) {
+		"use strict";
+		if (category != 'Non-Exempt')
+			return 0;
+		var sh = parseFloat(total) - 40 - parseFloat(ot);
+		var ts = {sh: sh>0? sh : 0};
+		this.snUtils.grS(this.TABLE_TIMESHEET, tsSysID, ts);
+	},
+	
+	// Calculates Over Time for a timesheet
+	calOT: function(timesheet) {
+		"use strict";
+		
+		return timesheet.employee_category == 'Non-Exempt'? this.calOTNonExempt(timesheet.reg) : timesheet.employee_category == 'Exempt Non-Manager' ? this.calOTExemptNM(timesheet.sys_id) : 0;
+	},*/
+	
+	//Calculates Straigh Hours for a Non-Exempt Employee
+	calSH: function(total, ot, category) {
+		if (category != 'Non-Exempt' || total == undefined || ot == undefined)
+			return 0;
+		return parseFloat(total) - 40 - parseFloat(ot);
+	},
+	
+	
+	//Calculates Over Time for a Non-Exempt Employee
+	calOTNonExempt: function(reg) {
+		"use strict";
+		
+		return reg>40? reg-40:0;
+	},
+	
+	// Calculates Over Time for a Exempt Non-Manager Employee
+	calOTExemptNM: function(tsSysID, holidays) {
+		"use strict";
+
+		//var timesheet = this.snUtil.getO(this.TABLE_TIMESHEET, ['sys_id='+tsSysID], ['holidays']);
+		//if (timesheet.length != 1)
+		//	return;
+		//var holidays = timesheet[0].holidays.toString() + ',sat,sun';
+		holidays = holidays.toString() + ',sat,sun';
+		gs.debug('calOTExemptNM: for timesheet: '+tsSysID+', holidays: '+holidays);		
+		
+		var ot=0, o=0;
+		var ga = new GlideAggregate(this.TABLE_ASSIGNMENT);
+		ga.addQuery('timesheet', tsSysID);
+		this.daysInWeek.forEach(function(d) {
+			ga.addAggregate('SUM', d);
+		});
+		ga.query();
+		if (ga.next()) {
+			this.daysInWeek.forEach(function(d) {
+				o = ga.getAggregate('SUM', d)? parseFloat(ga.getAggregate('SUM', d)) : 0;
+				//if ((o >= this.OT_ENM_WEEKDAY_THRESHOLD) || ((d == 'sat' || d == 'sun' || timesheet.getValue(d+'_holiday') == true) && o >= this.OT_ENM_HOLIDAY_THRESHOLD)){
+				if ((o >= this.OT_ENM_WEEKDAY_THRESHOLD) || ((holidays.contains(d)) && o >= this.OT_ENM_HOLIDAY_THRESHOLD)) {
+					ot += this.OT_ENM;
+				}
+			}, this);
+		}
+		gs.debug('calOTExemptNM: for timesheet: '+tsSysID+', overtime: '+ot);
+		return ot;
+	},
+	
+	/*
+	 * This function will check if this is a duplicate non work time
+	 * If it's duplicate, it won't return anything
+	 */
+	isDuplicateNonWorkTime: function(nonWorkTime) {
+		"use strict";
+		
+		if (this.snUtils.getA(this.TABLE_NON_WORK_TIME,  ['timesheet='+nonWorkTime.timesheet.sys_id, 'nwt='+nonWorkTime.nwt, 'sys_id!='+nonWorkTime.sys_id], ['sys_id']).length >0) {
+			return 'Duplicate Non-Work Time: '+nonWorkTime.nwt.name;
+		}
+	},
+	
+	/*
+ 	 * This function will validate if an array of hours is valid
+ 	 * it's valid if all the values in array are less than 'max' and in increment of increment
+ 	 */
+	validateHours: function(hoursForEachWeekDay, max, increment, nwtName) {
+		"use strict";
+		
+		var h;
+		for(var hr in hoursForEachWeekDay) {
+			h = hoursForEachWeekDay[hr];
+			if (h) {
+				if (parseFloat(h) > max)
+					return 'Invalid filled hours for '+nwtName+', max allowed is '+max+', filled: '+h;
+				else if (parseFloat(h)%increment !=0)
+					return 'Invalid fileld hours for '+nwtName+', should be in increments of '+increment+', filled: '+h;
+			}
+		}
+	},
+	
+	
+	/* 
+	 * This function will validate if the hours filled in Non-Work times are valid or not
+ 	 * 1. Check if employee have enough vacations available to fill-in
+ 	 * 2. Exempt Employees can only fill in 0, 4 or 8 hours
+ 	 *    Non Exempt Employees can fill in increments of 0.25 hours
+ 	 * 
+	 * Input:
+	 *     @hoursForEachWeekDay: This is an array of hours for each day e.g.: [4, 6, 2, 6, 8, 0, 0]
+	 *     @nwt: Non Work Time Record
+	 *     @employeeCategory: Employee Category
+	 *
+	 * Return:
+	 *     Returns nothing if work hours validated
+	 *     Returns error if works hours doesn't validate
+	 */
+	validateNonWorkHours: function (hoursForEachWeekDay, nwt, employeeCategory) {
+		"use strict";
+		
+		var totalHours = 0;
+		var nwtName = nwt.name;
+		
+		// Get Total Hours for the timesheet
+		hoursForEachWeekDay.forEach(function(x) {
+			totalHours += parseFloat(x);
+		});
+		
+		gs.debug('Hours: '+hoursForEachWeekDay+', non work type: '+nwtName);
+		
+		if (totalHours == 0 || nwtName == 'Lunch Break')
+			return;
+		
+		if (nwtName == 'Personal Time Out of Office')
+			return this.validateHours(hoursForEachWeekDay, this.MAX_PTO_HRS, this.INCREMENT_PTO, nwtName);
+		
+		if (employeeCategory.indexOf('Exempt') == 0)
+			return this.validateHours(hoursForEachWeekDay, this.MAX_LEAVE_HRS, this.INCREMENT_EXEMPT, nwtName);
+		
+		if (employeeCategory == 'Non-Exempt')
+			return this.validateHours(hoursForEachWeekDay, this.MAX_LEAVE_HRS, this.INCREMENT_NON_EXEMPT, nwtName);
+	},
+	
+	/*
+	 * This function will validate if the user have enough remaining vacation time balance to apply
+	 * Input:
+	 *      @weekStart: Week Start Date
+	 *      @nwtName: Name of the Non-Work Time
+	 *      @remainingLTArray: Remaining Leave Time Array [{sysID: 'xyz', count: 2}, {sysID: 'abc', count: 3}]
+	 *                         Sys IDs of Remaining Type of Leave Balance for Mon to Fri.
+	 *                         For most of the timesheets, remainingLTArray will have only one element
+	 *                         For the border case timesheet like end of year, it's possible to have 2 days of timesheet in current year
+	 *                         and 3 days in next year. In such cases, first element will have sysID of first Leave Balance Record with count of days
+	 *                         It covers (e.g. 2 if Mon, Tue) and next element will have sysID for next Leave Balance Record
+	 *      @appliedHrs: Array of total hours applied for the each of the above leave balance
+	 *      @hoursForEachWeekDay: This is an array of hours for each day e.g.: [4, 6, 2, 0, 8]
+	 *      
+	 * Return:
+	 *     Returns nothing if vacation available
+	 *     Returns error if works vacation not available
+	 */
+	isVacationAvailable: function(weekStart, nwtName, remainingLTArray, appliedHrs, hoursForEachWeekDay) {
+		"use strict";
+		
+		var snField = this.labelToSnName(nwtName);
+		var weekDays = ['mon', 'tue', 'wed', 'thu', 'fri'];
+		var remainingHrs;
+		var gdt, endDate, startDate, count=0;
+		var grlt = new GlideRecord(this.TABLE_LEAVE_TIME);
+		
+		gs.debug('isVacationAvailable: weekStart: {0}, nwtName: {1}, appliedHrs: {2}, snField: {3}', [weekStart, nwtName, appliedHrs, snField]);
+		for (var l in remainingLTArray) {
+			gs.debug(l+'. remainingLTArray[l].sysID: '+remainingLTArray[l].sysID+', remainingLTArray[l].count: '+remainingLTArray[l].count);
+		}
+		
+		/* For each leave balance record, check if vacation is available */
+		for (var r in remainingLTArray) {
+			var expiresOn;
+			remainingHrs = 0;
+			
+			//Get the Remaining Leave Balance Record
+			grlt.get(remainingLTArray[r].sysID);
+			
+			//Get the Remaining Hours for the leave type (vacation, sl, ....)
+			remainingHrs = grlt.getValue(snField);
+			gs.debug('grlt.type: '+grlt.type+', grlt.getValue(snField): '+grlt.getValue(snField)+', Remaining Hrs: '+remainingHrs);
+			
+			//If remaining hours are less than applied hours, return error
+			if (parseFloat(remainingHrs) < parseFloat(appliedHrs[r]))
+				return "You don't have enought hours left to apply for leave: "+nwtName+". Remaining: "+remainingHrs+", Applied: "+appliedHrs[r];
+			
+			if (nwtName == 'Carry Over Vacation')
+				expiresOn = grlt.co_vac_expires_on;
+			else if (nwtName == 'Carry Over DH')
+				expiresOn = grlt.co_dh_expires_on;
+			
+			gs.debug('For '+nwtName+', expiresOn: '+expiresOn);
+			
+			// For the Carry Over (Vacation or DH), check if it's expired
+			if (expiresOn) {
+				/*
+				 * Run from Last day till first day
+				 * If remainingLTArray[0].count is 2 then run it from Tue(1) to Mon(0)
+				 * If remainingLTArray[1].count is 3 then run it from Fri(2+3-1=4) to Wed(2)
+				 */
+				for(var c=remainingLTArray[r].count+count-1; c>=count; c--) {
+					if (hoursForEachWeekDay[c] && hoursForEachWeekDay[c]>0) {
+						endDate = new GlideDateTime(expiresOn.toString()).getDate();
+						
+						gdt = new GlideDateTime(weekStart.toString());
+						gdt.addDaysLocalTime(c);
+						startDate = gdt.getDate();
+						
+						gs.debug('c: {0}, startDate: {1}, endDate: {2}, subtract: {3}', [c, startDate, endDate,GlideDate.subtract(startDate, endDate).getDisplayValue()]);
+						// this subtract function returns null if end (endDate) is less than begin (startDate)
+						// So, this if loop will run till weekStart is not greater than or equal to effectiveFromDate
+						if (!GlideDate.subtract(startDate, endDate).getDisplayValue())
+							return nwtName+" has been expired on "+expiresOn+". You can't use it anymore.";
+						break;
+					}
+				}
+			}
+			count += remainingLTArray[r].count;
+		}
+	},
+	
+	/*
+	 * This funciton will delete current ADP Report and generate a new one for the exception period between start and end
+	 * Input:
+	 *      @start and @end: Date period for which ADP period need to be generated.
+	 *      @batchID: batchID string in the payroll schedule record. It's used for ADP purpose.
+	 */
+	generateADPReport: function(start, end, batchID) {
+		"use strict";
+		
+		gs.debug('generateADPReport: Generating Report for Payroll with exception start: {0}, end: {1}, batchID: {2}', start, end, batchID);
+		var ot, sh, nonworktime;
+		
+		// Delete all Existing Records from the ADP Report Table
+		var ar = new GlideRecord(this.TABLE_ADP_REPORT);
+		ar.deleteMultiple();
+		
+		/* Get List of all Users
+		 * Reason behind getting all the users is that there may be few users who has been terminated by the time Payroll goes to create ADP report
+		 * Which is normally 15 days behind. So, there may be users who were active at that time and submitted timesheets and aren't active any more.
+		 * Also, we get the list of all the users because we can't be sure if a user is Consultant now, what was user's status few weeks ago
+		 * This can be deduced only by the Timesheet.employee_type field
+		 * which is set at the time Employee creates the timesheet and doesn't change even if Employee's type changes in future.
+		 */
+		
+		var grup = new GlideRecord(this.TABLE_USER_PROFILE);
+		grup.query();
+		var grts;
+		gs.debug('generateADPReport: Total User Profiles: {0}', grup.getRowCount());
+		while (grup.next()) {
+			//Get all the Approved timesheets for the users in the exception period (start - end)
+			var timesheet = this.snUtils.getO(this.TABLE_TIMESHEET, ['week_start>='+start, 'week_start<'+end, 'employee='+grup.sys_id, 'employee_type=Employee', 'state=Payroll Approved'], ['ot', 'sh', 'mon', 'tue', 'wed', 'thu', 'fri', 'holidays']);
+			gs.debug('generateADPReport: For period between {0} and {1}, total {2} Payroll Approved Timesheets (with timesheet.employee_type = Employee) found for Employee: {3}', start, end, timesheet.length, grup.user.name);
+			if (timesheet.length>0) {
+				ar.initialize();
+				ot = 0;
+				sh = 0;
+				
+				// If there is only one timesheet for an employee, we can assume that it's because employee resigned
+				// Which means that 1 week (40 hours) would be considered as a non work time for that employee.
+				nonworktime = timesheet.length == 1 ? 40 : 0;
+				
+				// Retrieve Overtime and Straight Hours for the Employee
+				for (var ts in timesheet) {
+					gs.debug('generateADPReport: timesheet['+ts+']: '+timesheet[ts]);
+					ot += timesheet[ts].ot ? parseFloat(timesheet[ts].ot) : 0;
+					sh += timesheet[ts].sh ? parseFloat(timesheet[ts].sh) : 0;
+					['mon', 'tue', 'wed', 'thu', 'fri'].forEach(function(wd) {
+						if (!(timesheet[ts].holidays && timesheet[ts].holidays.contains(wd)))
+							nonworktime += timesheet[ts][wd] == 0? 8 : 0;
+					});
+				}
+				
+				//Get total of all non work times for all timesheets for the user in the exception period
+				var amount, i, j = [1, 1, 1];
+				var type, code;
+				var nwtObjArr = this.snUtils.getO(this.TABLE_NON_WORK_TIME, ['timesheet.week_start>='+start, 'timesheet.week_start<'+end, 'timesheet.employee='+grup.sys_id, 'timesheet.state=Payroll Approved'], ['nwt.name', 'nwt.code', 'nwt.type', 'total']);
+				for(var x=0; x<nwtObjArr.length; x++) {
+					type = nwtObjArr[x]['nwt.type'];
+					code = nwtObjArr[x]['nwt.code'];
+					amount = nwtObjArr[x].total? nwtObjArr[x].total: 0;
+					
+					if (nwtObjArr[x]['nwt.name'] != 'Lunch Break')
+						nonworktime += parseFloat(amount);
+					i = parseFloat(type)-3;
+					
+					var found = false;
+					for (var k=1; k<j[i]; k++) {
+						if (ar.getValue('hours_'+type+'_code_'+k) == code) {
+							found = true;
+							amount = parseFloat(amount) + parseFloat(ar.getValue('hours_'+type+'_amount_'+k));
+							ar.setValue('hours_'+type+'_amount_'+k, amount);
+							break;
+						}
+					}
+					if (!found) {
+						ar.setValue('hours_'+type+'_code_'+j[i], code);
+						ar.setValue('hours_'+type+'_amount_'+j[i], amount);
+						j[i]++;
+					}
+				}
+				ar.co_code     = this.CO_CODE;
+				ar.file_number = grup.file;
+				ar.batch_id    = batchID;
+				ar.o_t_hours   = ot;
+				var regHours   = parseFloat(this.REG_HOURS) + parseFloat(sh) - parseFloat(nonworktime);
+				regHours       = parseFloat(regHours).toFixed(2);
+				ar.reg_hours   = regHours > parseFloat(6.67) ? regHours : 0;
+				gs.debug('generateADPReport: for user: '+grup.user.name+', OT: '+ot+', SH: '+sh+', NonWorkTime: '+nonworktime+', reg_hours: '+ar.reg_hours+', regHours: '+regHours);
+				var sysID = ar.insert();
+				if (!sysID)
+					gs.error('generateADPReport: Failed to insert Record in ADP Report for user: {0}', grup.user.name);
+				else
+					gs.debug('generateADPReport: Inserted Record in ADP Report for user: {0}', grup.user.name);
+				
+			}
+		}
+	},
+	
+	/*
+ 	* Parameters
+ 	* timesheet: for which we need to verify the minimum 8 hours per week-day rule
+ 	*
+ 	* Returns
+ 	* false, If any weekday found, except the ones needed to be bypassed with less than 8 hours
+ 	* true, otherwise
+ 	*/
+	validateMin8HrWeekDayRule: function (timesheet) {
+		//var weekDaysToBypass = timesheet.bypass_8_hr_per_weekday_rule? timesheet.bypass_8_hr_pwd_rule_for_days.split(',') : '';
+		var weekDaysToBypass = timesheet.bypass_8_hr_pwd_rule_for_days.toString().split(',');
+		var weekDayToFollow8hrRule = [];
+		var weekDays8hrRuleObj = {};
+		if (weekDaysToBypass) {
+			['mon', 'tue', 'wed', 'thu', 'fri'].forEach(function(x) {
+				if(!this.au.contains(weekDaysToBypass, x)) {
+					weekDayToFollow8hrRule.push(x);
+				}
+			}, this);
+			weekDays8hrRuleObj.normal = weekDayToFollow8hrRule;
+			weekDays8hrRuleObj.bypass = weekDaysToBypass;
+		}
+		if (!weekDays8hrRuleObj)
+			weekDays8hrRuleObj = this.getWeekDaysWith8hrRule(timesheet.week_start, timesheet.employee.start_date, timesheet.employee.end_date);
+		gs.debug('current.timesheet: '+timesheet.timesheet+', week start: '+timesheet.week_start+', employement start: '+timesheet.employee.start_date+', employement end: '+timesheet.employee.end_date+', weekDaysToFollow8hrRule: '+weekDays8hrRuleObj.normal+', weekDaysToBypass: '+weekDays8hrRuleObj.bypass);
+		for (var w in weekDays8hrRuleObj.normal) {
+			if (parseFloat(timesheet.getValue(weekDays8hrRuleObj.normal[w])) < 8) {
+				return 'Minimum 8 days per weekday. For '+weekDays8hrRuleObj.normal[w]+', you filled '+timesheet.getValue(weekDays8hrRuleObj.normal[w]);
+			}
+		}
+	},
+	
+	/*
+ 	* Parameters:
+ 	* wStart: Start Date of the week (Monday) for the timesheet
+ 	* eStart: Start Date of employment
+ 	* eEnd: End date of employment
+ 	*
+ 	* Returns:
+ 	* Object of 2 arrays:
+ 	* 1st key of this obj is 'normal' and its value is the Array of week days [mon, tue, ...] for which 8 hr rule needs to be followed
+ 	* 2nd key of this obj is 'bypass' and its value is the Array of week days [mon, tue, ...] for which 8 hr rule needs to be bypassed
+ 	* If Employment Start Date falls in between the week, for example on Wed, returned object would be
+ 	* {'normal': ['wed', 'thu', 'fri'], 'bypass': ['mon', 'tue']}
+ 	* as employee shall be allowed to fill 0 hours on mon and tue
+ 	* Similarly, if Employment End Date falls in between the week, for example on Thu, returned object would be
+ 	* {'normal': ['mon', 'tue', 'wed', 'thu'], 'bypass': ['fri']}
+ 	* as employee need not to fill hours on fri
+ 	*
+ 	*/
+	getWeekDaysWith8hrRule: function(wStart, eStart, eEnd) {
+		"use strict";
+		
+		var weekStart           = wStart? new GlideDateTime(wStart) : '';
+		var employmentStart     = eStart? new GlideDateTime(eStart) : '';
+		var employmentEnd       = eEnd  ? new GlideDateTime(eEnd)   : '';
+		var weekDays8hrRuleObj  = {'normal': ['mon', 'tue', 'wed', 'thu', 'fri'],
+		'bypass': []};
+		var temp1 = [], temp2 = [];
+		var diffWeekStartEmploymentStart = employmentStart? GlideDateTime.subtract(weekStart, employmentStart).getDayPart() : employmentStart;
+		var diffWeekStartEmploymentEnd   = employmentEnd  ? GlideDateTime.subtract(weekStart, employmentEnd).getDayPart()   : employmentEnd;
+		if (diffWeekStartEmploymentStart && diffWeekStartEmploymentStart > 0 && diffWeekStartEmploymentStart <= 5) {
+			for (var i=0; i<diffWeekStartEmploymentStart; i++) {
+				temp1.push(weekDays8hrRuleObj.normal.shift());
+			}
+		}
+		if (diffWeekStartEmploymentEnd && diffWeekStartEmploymentEnd >= 0 && diffWeekStartEmploymentEnd <= 4) {
+			for (var j=4; j>diffWeekStartEmploymentEnd; j--) {
+				temp2.unshift(weekDays8hrRuleObj.normal.pop());
+			}
+		}
+		weekDays8hrRuleObj.bypass = temp1.concat(temp2);
+		return weekDays8hrRuleObj;
+	},
+	
+	labelToSnName: function labelToSnName(l) {
+		"use strict";
+		
+		return l.toLowerCase().split(/\(|\s+|\)|\/|\-/).filter(function (x) {return x;}).join('_');
+	},
+	
+	getStartOfCurrentWeek: function(userId) {
+		"use strict";
+		
+		var today = new GlideDate();
+		if (gs.nil(userId))
+			userId = gs.getUserID();
+		return this.getStartOfWeekByDate(today, userId);
+	},
+	
+	getStartOfWeekByDate: function(aDate, userId) {
+		"use strict";
+		
+		//var timeSheetPolicy = TimeSheetPolicy.getFromUserId(userId);
+		var firstDayOfWeek = 1; // 1 = Monday //timeSheetPolicy.weekStartsOn();
+		
+		var gd = new GlideDate();
+		gd.setValue(aDate);
+		var currentDay = gd.getDayOfWeekUTC();
+		
+		var daysInWeek = 7;
+		var daysToMoveBehind = (firstDayOfWeek - currentDay - daysInWeek) % daysInWeek;
+		gd.addDaysUTC(daysToMoveBehind);
+		
+		return gd;
+	},
+	
+	getWeekStartsOnDateTimeForUser: function(weekStartsOnDate, userId) {
+		"use strict";
+		
+		var gr = new GlideRecord('sys_user');
+		gr.get(userId);
+		var timeZoneId = gr.getValue('time_zone');
+		var timeZone;
+		if (global.JSUtil.nil(timeZoneId))
+			timeZone = gs.getSession().getTimeZone();
+		else
+			timeZone = Packages.java.util.TimeZone.getTimeZone(timeZoneId);
+		
+		var weekStartsOnDateTimeForUser = new GlideDateTime();
+		weekStartsOnDateTimeForUser.setTZ(timeZone);
+		weekStartsOnDateTimeForUser.setDisplayValueInternal(weekStartsOnDate + ' 00:00:00');
+		return weekStartsOnDateTimeForUser;
+	},
+	
+	/*
+ 	* Parameters
+ 	* timesheet: for which we need to verify the minimum 0 hour per week-day for Consulatants
+ 	*
+ 	* Returns
+ 	* false, If any weekday found with 0 hour
+ 	* true, otherwise
+ 	*/
+	find0HrWeekDayRule: function (timesheet) {
+		"use strict";
+		
+		var weekDays = this.getWeekDays(timesheet.week_start, timesheet.employee.start_date, timesheet.employee.end_date);
+		gs.debug('current.timesheet: {0}, wStart: {1}, eStart: {2}, eEnd: {3}', timesheet.timesheet, timesheet.week_start, timesheet.employee.start_date, timesheet.employee.end_date);
+		for (var w in weekDays) {
+			if (parseFloat(timesheet.getValue(weekDays[w])) == 0) {
+				return true;
+			}
+		}
+	},
+	
+	getLunchBreakToUpdate: function (timesheet) {
+		
+		gs.debug('getLunchBreakToUpdate: timesheet: '+timesheet.timesheet);
+		var lunchHours = [];
+		//var weekDaysToBypass = timesheet.bypass_8_hr_per_weekday_rule? timesheet.bypass_8_hr_pwd_rule_for_days.split(',') : '';
+		var weekDaysToBypass = timesheet.bypass_8_hr_pwd_rule_for_days.toString().split(',');
+		var totalNWT = this.getTotalHrsForEachDayNWT(timesheet);
+		gs.debug('getLunchBreakToUpdate timesheet: '+timesheet.timesheet+', totalNWT: '+totalNWT+', weekDaysToBypass: '+weekDaysToBypass);
+		if (totalNWT && totalNWT.length>=5) {
+			for (var t=0; t<5; t++) {
+				if (totalNWT[t][1] >= 4 || (weekDaysToBypass && this.au.contains(weekDaysToBypass, totalNWT[t][0]))) {
+					lunchHours.push([totalNWT[t][0], 0]);
+				} else {
+					lunchHours.push([totalNWT[t][0], 1]);
+				}
+			}
+			gs.debug('getLunchBreakToUpdate: timesheet: '+timesheet.timesheet+', lunchHours: '+lunchHours);
+			return lunchHours;
+		}
+	},
+	
+	
+	/*
+ 	* This function will take a user profile as an argument
+ 	* and will update all the bill rates for that user profile
+ 	* with total hours worked on each bill rate
+ 	*/
+	updateBillRateForUser: function(userProfile) {
+		var billRate = new GlideRecord(this.TABLE_BILL_RATE);
+		billRate.addQuery('user', userProfile);
+		billRate.orderBy('effective_from_date');
+		billRate.query();
+		while (billRate.next()) {
+			hours = this.getHoursForBillRate(billRate);
+			gs.debug('Updating Bill Rate for user: {0} with Effective From Date: {1}, Effective Till Date: {2}, Hours: {3}', billRate.user.user.name, billRate.effective_from_date, billRate.effective_till_date, hours);
+			billRate.total_hours_on_this_rate = hours;
+			billRate.update();
+		}
+	},
+	
+	/*
+ 	* This function will calculate the total hours worked by an employee on the given Bill Rate.
+ 	* Input: Bill Rate Record
+ 	* Output: Total number of hours worked by the employee on the given Bill Rate
+ 	*/
+	getHoursForBillRate: function(billRate) {
+		var effectiveFromDate, effectiveTillDate, hours=0;
+		var weekDays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+		var start, end;
+		var weekStart, weekEnd;
+		
+		effectiveFromDate = new GlideDate();
+		effectiveFromDate.setValue(billRate.effective_from_date.toString());
+		
+		//If effective till date is present (current active bill rate may not have effective till date)
+		if (billRate.effective_till_date) {
+			effectiveTillDate = new GlideDate();
+			effectiveTillDate.setValue(billRate.effective_till_date.toString());
+		}
+		
+		//Get all the timesheets for the employee which falls between the effective from date and till date
+		var grts = new GlideRecord(this.TABLE_TIMESHEET);
+		grts.addQuery('employee='+billRate.user);
+		grts.addQuery('week_end>='+effectiveFromDate.toString());
+		
+		//If effective till date is present, add it to the query
+		if (effectiveTillDate) {
+			grts.addQuery('week_start<='+effectiveTillDate.toString());
+		}
+		grts.query();
+		
+		//For each timesheet, calculate eligible hours and add them
+		while (grts.next()) {
+			
+			/*
+ 			* We are going to check if effective start / till date falls between the week
+ 			* if effective start date falls on Tuesday, start will be 1 [0 signifies Monday]
+ 			* if effective till date falls on Friday, end will be 4 [6 signifies Sunday]
+ 			*/
+			start = 0;
+			end = 6;
+			
+			weekStart = new GlideDateTime(grts.week_start.toString());
+			weekStart.addDaysUTC(-1);
+			while (start<=6) {
+				weekStart.addDaysUTC(1);
+				// this subtract function returns null if end (weekStart) is less than begin (effectiveFromDate)
+				// So, this if loop will run till weekStart is not greater than or equal to effectiveFromDate
+				// If it's already greater than or equal to effectiveFromDate, it will break and start will remain as 0 meaning Monday
+				if (GlideDate.subtract(effectiveFromDate, weekStart.getDate()).getDisplayValue())
+					break;
+				start++;
+			}
+			
+			if (effectiveTillDate) {
+				weekEnd = new GlideDateTime(grts.week_end.toString());
+				weekEnd.addDaysUTC(1);
+				while (end>=0) {
+					weekEnd.addDaysUTC(-1);
+					if (GlideDate.subtract(weekEnd.getDate(), effectiveTillDate).getDisplayValue())
+						break;
+					end--;
+				}
+			}
+			
+			for (var i=start; i<=end; i++) {
+				hours += parseFloat(grts.getValue(weekDays[i]));
+			}
+		}
+		return hours;
+	},
+	
+	/*
+ 	* This function will check if user (user sys_id) has the exactly role (name of the role) or not
+ 	*/
+	hasRoleExactly : function(user, role) {
+		var gr = new GlideRecord('sys_user_has_role');
+		gr.addQuery('user', user);
+		gr.addQuery('role.name', role);
+		gr.query();
+		if (gr.getRowCount() > 0)
+			return true;
+		return false;
+	},
+	
+	getLastDateOfMonth: function(month, year) {
+		var gdt = new GlideDateTime();
+		gdt.setMonthUTC(month);
+		gdt.setYearUTC(year);
+		var days = gdt.getDaysInMonthUTC();
+		gdt.setDayOfMonthUTC(days);
+		return gdt.getDate();
+	},
+	
+	createLeaveTime: function(type, employee, validFrom, leaveBalanceArray, coVacExpiresOn) {
+		gs.debug('in the createLeaveTime function for type: '+type+', employee: '+employee+', validFrom: '+validFrom+', leaveBalanceArray: '+leaveBalanceArray+', coVacExpiresOn: '+coVacExpiresOn);
+		if (!validFrom)
+			return 'Failed to create Leave Time record for employee: '+employee+', type: '+type+' because of empty valid from date';
+		
+		var gdt = new GlideDateTime();
+		gdt.setDisplayValue(validFrom.toString());
+		gdt.addYearsLocalTime(1);
+		gdt.addDaysLocalTime(-1);
+		var validTill = gdt.getDate();
+		
+		var isUnique = this.isLeaveTimeUnique(type, employee, validFrom, validTill);
+		if (!isUnique)
+			return 'Failed to create Leave Time record for employee: '+employee+', type: '+type+' because of validity range from '+validFrom+', till '+validTill+', clashes with another leave time record';
+		
+		if (isUnique) {
+			var grlt = new GlideRecord('x_nykl3_tenroxnbsa_leave_time');
+			grlt.initialize();
+			
+			grlt.type = type;
+			grlt.employee = employee;
+			grlt.valid_from = validFrom;
+			grlt.valid_till = validTill;
+			
+			if (coVacExpiresOn)
+				grlt.co_vac_expires_on = coVacExpiresOn;
+			
+			if (leaveBalanceArray && leaveBalanceArray.length>0) {
+				for (var lb in leaveBalanceArray) {
+					grlt.setValue(leaveBalanceArray[lb][0], leaveBalanceArray[lb][1]);
+				}
+			}
+			var sysID = grlt.insert();
+			if (!sysID) return 'Failed to insert Leave Time record for employee: '+employee+', type: '+type+', valid from: '+validFrom;
+			}
+	},
+	
+	isLeaveTimeUnique: function(type, employee, validFrom, validTill, excludeSysID) {
+		
+		gs.debug('in isLeaveTimeUnique function for type: '+type+', employee: '+employee+', validFrom: '+validFrom+', validTill: '+validTill);
+		
+		var grlt = new GlideRecord('x_nykl3_tenroxnbsa_leave_time');
+		var queryString = "type="+type;
+		queryString += "^employee="+employee;
+		queryString += "^sys_id!="+excludeSysID;
+		queryString += "^valid_from<="+validFrom;
+		queryString += "^valid_till>="+validFrom;
+		
+		queryString += "^NQtype="+type;
+		queryString += "^employee="+employee;
+		queryString += "^sys_id!="+excludeSysID;
+		queryString += "^valid_from<="+validTill;
+		queryString += "^valid_till>="+validTill;
+		
+		queryString += "^NQtype="+type;
+		queryString += "^employee="+employee;
+		queryString += "^sys_id!="+excludeSysID;
+		queryString += "^valid_from>="+validFrom;
+		queryString += "^valid_till<="+validTill;
+		
+		gs.debug('queryString: '+queryString);
+		grlt.addEncodedQuery(queryString);
+		grlt.query();
+		
+		if (grlt.getRowCount() == 0)
+			return true;
+	},
+	
+	getLeaveTimeArray: function(employee, type, weekStart) {
+		var gdt = new GlideDateTime(weekStart);
+		var ltArray = [{}];
+		var sysID, j=0;
+		for (var i=0; i<5; i++) {
+			sysID = this.getLeaveTime(employee, type, gdt.getDate());
+			if (!ltArray[j].sysID) {
+				ltArray[j].sysID = sysID;
+				ltArray[j].count = 0;
+			}
+			if (ltArray[j].sysID == sysID) {
+				ltArray[j].count++;
+			} else {
+				ltArray[++j] = {};
+				ltArray[j].sysID = sysID;
+				ltArray[j].count = 1;
+			}
+			gdt.addDaysLocalTime(1);
+		}
+		return ltArray;
+	},
+	
+	getLeaveTime: function(employee, type, date) {
+		var lt = new GlideRecord(this.TABLE_LEAVE_TIME);
+		var query = 'employee='+employee;
+		query += '^type='+type;
+		query += '^valid_from<='+date;
+		query += '^valid_till>='+date;
+		lt.addEncodedQuery(query);
+		lt.query();
+		if (lt.next())
+			return lt.sys_id;
+	},
+	
+	/*
+	 * Purpose of this function is to return the existing leave balance for the given employee, year and type
+	 * If none exists, function won't return anything
+	 * 
+	 * Input Parameters:
+	 *   @employee: User Profile record for which Leave Balace is request
+	 *   @year: 4 digit year (e.g. 2017) for which request is being made
+	 *   @type: type of balace requested - 'Initial Balance', 'Remaining', 'Used'
+	 *
+	 * Return:
+	 *   It will return a 2 dimension array like below which will contain existing leave hours for each type of leave
+	 *   [['discretionary_holiday', 24], ['sick_leave', 56], ['vacation', 80], ['carry_over_vacation', 0], ['carry_over_dh', 0]]
+	 *
+	 */
+	getExistingLeaveBalanceArray: function(employee, year, type) {
+		gs.debug('getExistingLeaveBalanceArray: employee: '+employee.user.name+', year: '+year+', type: '+type);
+		
+		var leaveBalanceArray;
+		var lt = new GlideRecord(this.TABLE_LEAVE_TIME);
+		lt.addEncodedQuery('employee='+employee.sys_id+'^type='+type+'^validity_year='+year);
+		lt.query();
+		
+		gs.debug('getExistingLeaveBalanceArray: lt.getRowCount(): '+lt.getRowCount());
+
+		if (lt.getRowCount() == 1 && lt.next()) {
+			leaveBalanceArray = [['discretionary_holiday', 0], ['sick_leave', 0], ['vacation', 0], ['carry_over_vacation', 0], ['carry_over_dh', 0]];
+			leaveBalanceArray[0][1] = lt.discretionary_holiday;
+			leaveBalanceArray[1][1] = lt.sick_leave;
+			leaveBalanceArray[2][1] = lt.vacation;
+			leaveBalanceArray[3][1] = lt.carry_over_vacation;
+			leaveBalanceArray[4][1] = lt.carry_over_dh;
+		}
+		
+		gs.debug('getExistingLeaveBalanceArray: returning leaveBalanceArray: '+leaveBalanceArray);
+		return leaveBalanceArray;
+	},
+
+	
+	/*
+	 * Purpose of this function is to
+	 *    either return existing 'Initial Balace' array for the year
+	 *    or if it doesn't exists, return a new calculated 'Initial Balance' array for the year.
+	 *
+	 * Input Parameters:
+	 *   @employee: User Profile Record
+	 *   @year: 4 digit year (e.g. 2017) for which 'Initial Balance' Array is required.
+	 *
+	 * Return:
+	 *   It will return a 2 dimension array like below which will contain leave hours for each type of leave
+	 *   [['discretionary_holiday', 24], ['sick_leave', 56], ['vacation', 80], ['carry_over_vacation', 0], ['carry_over_dh', 0]]
+	 */
+	
+	getLeaveBalanceArray: function(employee, year) {
+		
+		if (employee.employee_category == 'Contracted') {
+			var paidTimeOff = employee.paid_time_off? employee.paid_time_off : 0;
+			return [['paid_time_off', paidTimeOff]];
+		}
+		
+		var zeroLeaveBalanceArray    = [['discretionary_holiday', 0], ['sick_leave', 0], ['vacation', 0], ['carry_over_vacation', 0], ['carry_over_dh', 0]];		
+		var defaultLeaveBalanceArray = [['discretionary_holiday', 24], ['sick_leave', 56], ['vacation', 80], ['carry_over_vacation', 0], ['carry_over_dh', 0]];
+		
+		// Get the Remaining leave balance for last year if it persists. It will be used to calculate the Carry Over		
+		var lastYear = parseFloat(year)-1;
+		var lastYearLeaveBalanceArray = this.getExistingLeaveBalanceArray(employee, lastYear, 'Remaining');
+		gs.debug('getLeaveBalanceArray: lastYear: '+lastYear+', lastYearLeaveBalanceArray: '+lastYearLeaveBalanceArray);
+		
+		var gdt   = new GlideDateTime(employee.start_date.toString());
+		var month = gdt.getMonthLocalTime();
+		var day   = gdt.getDayOfMonthLocalTime();
+		var startYear = gdt.getYearLocalTime();
+		var balance = 12;
+		var finalLeaveBalanceArray;
+		
+		var diffInYears = parseFloat(year) - parseFloat(startYear);
+		
+		gs.debug('getLeaveBalanceArray: start month: {0}, start day: {1}, start year: {2}, diffInYears: {3}: '+[month, day, startYear, diffInYears]);
+		if (diffInYears == 0) {
+			
+			// It means that we are creating for the same year as start year of the employee. So, need to calculate how much balance is left
+			// Award for remaining Months
+			balance = 12 - parseFloat(month);
+			
+			// If Joining Date less than 15, award for whole month, else award for half month
+			balance = parseFloat(day) < 15 ? balance+1 : balance+0.5;
+			
+			finalLeaveBalanceArray = defaultLeaveBalanceArray.map(function(x) {
+				return [x[0], parseFloat(x[1]*balance/12).toFixed(1)];
+			});
+			
+			gs.debug('getLeaveBalanceArray: finalLeaveBalanceArray: '+finalLeaveBalanceArray);
+			return finalLeaveBalanceArray;
+		} else if (diffInYears>0) {
+			
+			finalLeaveBalanceArray = defaultLeaveBalanceArray;
+			
+			/* 
+			 * Bonus Vacation:
+			 * 8 hours of extra vacations are awarded for each year of service. So, if user worked 2 years, user will get 16 hours extra
+			 * We are keeping diffInYears > 1 because we are assuming that if diffInYear == 1, employee hasn't actually completed full one year of service
+			 */
+			finalLeaveBalanceArray[2][1] += (parseFloat(diffInYears)-1)*8;
+			gs.debug('getLeaveBalanceArray: After Bonus Calculation finalLeaveBalanceArray: '+finalLeaveBalanceArray);
+			
+			/* 
+			 * Carry Over Vacation:
+			 * Remaining DH from Last year goes to Carry Over DH
+			 * Remaining Vacations from Last year goes to Carry Over Vacation
+			 * Remaining SL gets added to this Years SL
+			 */
+			if (lastYearLeaveBalanceArray) {
+				//Move Last year's remaining Balance in Carry Over Bucket
+				finalLeaveBalanceArray[1][1] += lastYearLeaveBalanceArray[1][1]; // Sick Leave This Year = Default (56) + Remaining SL Last Year
+				finalLeaveBalanceArray[3][1]  = lastYearLeaveBalanceArray[2][1]; // Carry Over Vacation This Year = Remaining Vacation Last Year
+				finalLeaveBalanceArray[4][1]  = lastYearLeaveBalanceArray[0][1]; // Carry Over DH This Year = Remaining DH Last Year
+				gs.debug('getLeaveBalanceArray: After Carry Over Calculation finalLeaveBalanceArray: '+finalLeaveBalanceArray);
+			}
+			/*
+			 * Maximum Allowed:
+			 * Vacation: 160
+			 * SL: 168
+			 */
+			if (finalLeaveBalanceArray[1][1] > 168)
+				finalLeaveBalanceArray[1][1] = 168;
+			if (finalLeaveBalanceArray[2][1] > 160)
+				finalLeaveBalanceArray[2][1] = 160;
+			
+			gs.debug('getLeaveBalanceArray: returning finalLeaveBalanceArray: '+finalLeaveBalanceArray);
+			return finalLeaveBalanceArray;
+		}
+	},
+	
+	type: 'tenroxUtil'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-06-08 20:59:39</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>7d12aa6c0f9376001416d23be1050e98</sys_id>
+        <sys_mod_count>324</sys_mod_count>
+        <sys_name>tenroxUtil</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_include_7d12aa6c0f9376001416d23be1050e98</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-05-01 12:13:03</sys_updated_on>
+    </sys_script_include>
+</record_update>

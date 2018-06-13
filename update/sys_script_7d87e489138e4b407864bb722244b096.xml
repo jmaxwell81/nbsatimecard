@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_label/>
+        <action_name/>
+        <action_query>false</action_query>
+        <action_run_at>server</action_run_at>
+        <action_update>false</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <application/>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_nykl3_tenroxnbsa_timesheet</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Add Company holiday in NWT automatically</name>
+        <onclick/>
+        <order>100</order>
+        <priority>100</priority>
+        <read_access_action>false</read_access_action>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[/*
+ * Author: Manami Sato - 10/24/17
+ * This Business Rule will Add Company holiday in NWT automatically
+ */
+(function executeRule(current, previous /*null when async*/) {
+	if (current.employee.employee_type != 'Employee') {
+		return;
+	} else {
+		
+		var tu = new tenroxUtil();
+		var holidays = tu.getHolidays(current.week_start);
+		var holidaysArr = [];
+		
+		if (holidays != undefined && holidays != '') {
+			holidaysArr = holidays.split(',');
+			gs.debug('holidays array length: '+holidaysArr.length);
+			
+			var nonWorkTimeGR = new GlideRecord(tu.TABLE_NON_WORK_TIME);
+			nonWorkTimeGR.initialize();
+			nonWorkTimeGR.timesheet = current.sys_id;
+			
+			var lt = new GlideRecord(tu.TABLE_LEAVE_TYPE);
+			lt.get('name', 'Company Paid Holiday');
+			nonWorkTimeGR.nwt = lt.sys_id;
+			
+			for (var h in holidaysArr) {
+				nonWorkTimeGR.setValue(holidaysArr[h], 8);
+			}
+			var sysID = nonWorkTimeGR.insert();
+			if (!sysID) gs.error('Failed to insert Company Paid Holiday for timesheet: '+current.timesheet);
+		}
+		/*
+		//Date from monday to friday based on week_start
+		var week = new Array(5);
+		var weekDay = new Array('mon','tue','wed','thu','fri','sat','sun');
+		week[0] = new GlideDateTime(current.week_start);
+		week[0] = week[0].getValue().split(' ')[0];
+		for(var i=1; i<week.length; i++){
+			week[i] = new GlideDateTime(week[0]);
+			week[i].addDaysLocalTime(i);
+			week[i] = week[i].getValue().split(' ')[0];
+		}
+		//var sat = new Date();
+		//var sun = new Date();
+		var sysID; 
+	
+		//create table
+		var nwt = new GlideRecord('x_nykl3_tenroxnbsa_non_work_time');
+		nwt.addQuery('timesheet', current);
+		nwt.query();
+		var ass = new GlideRecord('x_nykl3_tenroxnbsa_assignment');
+		ass.addQuery('timesheet', current);
+		ass.query();
+	
+		//get holiday from 'x_nykl3_tenroxnbsa_holiday'
+		var companyHoliday = new GlideRecord('x_nykl3_tenroxnbsa_holiday');
+		companyHoliday.addEncodedQuery('date='+ week[0] +'^ORdate='+ week[1] +'^ORdate='+ week[2] +'^ORdate='+ week[3] +'^ORdate='+ week[4]);
+		companyHoliday.query();
+		var startWeek = new GlideDateTime(current.week_start);
+	
+		//initialize 'nwt' and 'ass'
+		if(companyHoliday.getRowCount()>0){
+			nwt.initialize();
+			nwt.timesheet = current.sys_id;
+			// nwt.non_work_type = 'Company Paid Holiday';
+			
+			var lt = new GlideRecord('x_nykl3_tenroxnbsa_leave_type');
+			lt.get('name', 'Company Paid Holiday');
+			nwt.nwt = lt;
+			
+			sysID = nwt.insert();
+			if(!sysID) gs.warn('Failed to create');
+		}
+	
+		while(companyHoliday.next()){
+			var holiday = new GlideDateTime(companyHoliday.date);	
+			if(GlideDate.subtract(startWeek,holiday).getDisplayValue() == "0 Seconds"){//monday holiday
+				nwt.mon = 8;
+				nwt.mon_holiday = 'True';
+				nwt.update();
+				//ass.mon_holiday = 'True';
+				//ass.update();
+			}
+			else if(GlideDate.subtract(startWeek,holiday).getDisplayValue() == '1 Day'){//Tuesdat holiday
+				nwt.tue = 8;
+				nwt.tue_holiday = 'True';
+				nwt.update();
+				//ass.tue_holiday = 'True';
+				//ass.update();
+			}
+			else if(GlideDate.subtract(startWeek,holiday).getDisplayValue() == '2 Days'){//Wednsday holiday
+				nwt.wed = 8;
+				nwt.wed_holiday = 'True';
+				nwt.update();
+				//ass.wed_holiday = 'True';
+				//ass.update();
+			}
+			else if(GlideDate.subtract(startWeek,holiday).getDisplayValue() == '3 Days'){//Thurseday holiday
+				nwt.thu = 8;
+				nwt.thu_holiday = 'True';
+				nwt.update();
+				//ass.thu_holiday = 'True';
+				//ass.update();
+			}
+			else if(GlideDate.subtract(startWeek,holiday).getDisplayValue() == '4 Days'){//Friday holiday
+				nwt.fri = 8;
+				nwt.fri_holiday = 'True';
+				nwt.update();
+				//ass.fri_holiday = 'True';
+				//ass.update();
+			}	
+		}*/
+	}
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>satom</sys_created_by>
+        <sys_created_on>2017-10-24 17:46:36</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>7d87e489138e4b407864bb722244b096</sys_id>
+        <sys_mod_count>32</sys_mod_count>
+        <sys_name>Add Company holiday in NWT automatically</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_7d87e489138e4b407864bb722244b096</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-11-23 21:33:26</sys_updated_on>
+        <template/>
+        <when>after</when>
+    </sys_script>
+</record_update>

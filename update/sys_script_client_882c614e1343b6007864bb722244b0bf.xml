@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_script_client">
+    <sys_script_client action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <applies_extended>false</applies_extended>
+        <condition/>
+        <description/>
+        <field>week_start</field>
+        <global>true</global>
+        <messages/>
+        <name>Set Week Start to Monday</name>
+        <order/>
+        <script><![CDATA[function onChange(control, oldValue, newValue, isLoading, isTemplate) {
+	if (isLoading || newValue == '') {
+		return;
+	}
+	
+	var weekStart = new Date(getDateFromFormat(newValue, g_user_date_format));
+	var daysToSubtractForMonday = parseInt(weekStart.getDay(), 10)-1; //0 = Sunday, 1 = Monday, 2 = Tuesday ...
+	
+	var tempDate;
+	if (daysToSubtractForMonday != 0) {
+		weekStart.setDate(weekStart.getDate() - daysToSubtractForMonday); //Make weekStart Monday
+		tempDate = formatDate(weekStart, g_user_date_format); //tempDate is to hold Date portion of week1Date in user date format
+		g_form.setValue('week_start', tempDate); //set weekStart to Monday
+		return;
+	}
+	
+	/*var ws = formatDate(weekStart, 'yyyy-MM-dd'); //To hold the week start in System Date Format
+	
+	var weekEnd = weekStart;
+	weekEnd.setDate(weekEnd.getDate() + 7);
+	tempDate = formatDate(weekEnd, g_user_date_format);
+	g_form.setValue('week_end', tempDate); //set weekEnd to Monday
+		
+	var table = 'x_nykl3_tenroxnbsa_timesheet';
+	var encodedConds = 'employee='+g_user.userID+'^week_start='+ws+'^sys_id!='+g_form.getUniqueValue();
+	
+	var ajax = new GlideAjax('global.NBSA_SNUtilsAjax');
+	ajax.addParam('sysparm_name', 'getRowCount');
+	ajax.addParam('sysparm_table', table);
+	ajax.addParam('sysparm_encodedConds', encodedConds);
+	ajax.getXML(isDuplicateTS);*/
+}
+
+/*function isDuplicateTS(response) {
+	var answer = response.responseXML.documentElement.getAttribute("answer");
+	//alert('answer: '+answer);
+	if (answer != 0) {
+		alert('A timesheet already exists for this time period');
+		g_form.setValue('week_start', '');
+		g_form.setValue('week_end', '');
+	}
+}*/]]></script>
+        <sys_class_name>sys_script_client</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-05-31 22:11:43</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>882c614e1343b6007864bb722244b0bf</sys_id>
+        <sys_mod_count>7</sys_mod_count>
+        <sys_name>Set Week Start to Monday</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_script_client_882c614e1343b6007864bb722244b0bf</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-10-24 18:11:33</sys_updated_on>
+        <table>x_nykl3_tenroxnbsa_timesheet</table>
+        <type>onChange</type>
+        <ui_type>0</ui_type>
+        <view/>
+    </sys_script_client>
+</record_update>

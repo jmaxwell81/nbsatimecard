@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_data_policy2">
+    <sys_data_policy2 action="INSERT_OR_UPDATE">
+        <active>false</active>
+        <apply_import_set>true</apply_import_set>
+        <apply_soap>true</apply_soap>
+        <conditions table="x_nykl3_tenroxnbsa_leave_time">employee.employee_type=Employee^employee.employee_category=Contracted^EQ<item endquery="false" field="employee.employee_type" goto="false" newquery="false" operator="=" or="false" value="Employee"/>
+            <item endquery="false" field="employee.employee_category" goto="false" newquery="false" operator="=" or="false" value="Contracted"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </conditions>
+        <description>1) Paid Time Off is available only for Contracted Employees&#13;
+2) Rest Leaves (SL, DH, Vacation etc.) available for all Employees but Contracted</description>
+        <enforce_ui>true</enforce_ui>
+        <inherit>false</inherit>
+        <model_id/>
+        <model_table>x_nykl3_tenroxnbsa_leave_time</model_table>
+        <reverse_if_false>true</reverse_if_false>
+        <short_description>PTO only for Contracted Employees, Rest Leaves for all Other Employees</short_description>
+        <sys_class_name>sys_data_policy2</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-30 11:53:49</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>19009af20f02cb401416d23be1050e29</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>PTO only for Contracted Employees, Rest Leaves for all Other Employees</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sys_data_policy2_19009af20f02cb401416d23be1050e29</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-11-03 14:53:13</sys_updated_on>
+    </sys_data_policy2>
+</record_update>

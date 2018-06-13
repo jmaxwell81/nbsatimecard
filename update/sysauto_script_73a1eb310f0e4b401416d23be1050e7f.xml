@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>false</active>
+        <condition/>
+        <conditional>false</conditional>
+        <name>Tenrox - Test</name>
+        <run_as/>
+        <run_as_tz>US/Pacific</run_as_tz>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period/>
+        <run_start>2017-10-27 15:14:49</run_start>
+        <run_time>1969-12-31 17:30:00</run_time>
+        <run_type>on_demand</run_type>
+        <script><![CDATA[var d = new GlideDate();
+var coDHExpiresOn = new GlideDateTime();
+var test = new GlideDateTime(d.getValue());
+var simple = new GlideDateTime();
+var days = simple.getDaysInMonthUTC();
+gs.debug('days: '+days);
+/*gs.debug('d.getDisplayValue: coDHExpiresOn.getValue(): {0}, coDHExpiresOn.getDisplayValue(): {1}, coDHExpiresOn.getLocalTime(): {2}, coDHExpiresOn.getLocalDate(): {3}', coDHExpiresOn.getValue(), coDHExpiresOn.getDisplayValue(), coDHExpiresOn.getLocalTime().toString(), coDHExpiresOn.getLocalDate().toString());
+
+gs.debug('d.getValue: test.getValue(): {0}, test.getDisplayValue(): {1}, test.getLocalTime(): {2}, test.getLocalDate(): {3}', test.getValue(), test.getDisplayValue(), test.getLocalTime().toString(), test.getLocalDate().toString());
+
+gs.debug('simple.getValue(): {0}, simple.getDisplayValue(): {1}, simple.getLocalTime(): {2}, simple.getLocalDate(): {3}', simple.getValue(), simple.getDisplayValue(), simple.getLocalTime().toString(), simple.getLocalDate().toString());*/]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>GARGL</sys_created_by>
+        <sys_created_on>2017-10-27 15:15:59</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>73a1eb310f0e4b401416d23be1050e7f</sys_id>
+        <sys_mod_count>71</sys_mod_count>
+        <sys_name>Tenrox - Test</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sysauto_script_73a1eb310f0e4b401416d23be1050e7f</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2017-12-06 22:30:24</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>

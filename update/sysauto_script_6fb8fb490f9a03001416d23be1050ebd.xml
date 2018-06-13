@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <condition/>
+        <conditional>false</conditional>
+        <name>Tenrox - Reminder - Employee Timesheet Submission</name>
+        <run_as/>
+        <run_as_tz>US/Eastern</run_as_tz>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period/>
+        <run_start>2017-11-06 19:15:49</run_start>
+        <run_time>1970-01-01 06:00:00</run_time>
+        <run_type>daily</run_type>
+        <script><![CDATA[/*
+ * Author: Lavlesh Garg
+ * Date: 11/8/17
+ * Purpose: This job will check for any open timesheets for employees for (doesn't include current week's timesheet before Friday)
+ * If, the job finds any open timesheets, it will send notification to the user.
+ */
+employeeTSSubmissionReminder();
+
+function employeeTSSubmissionReminder() {
+	var TABLE_USER_PROFILE = 'x_nykl3_tenroxnbsa_user_profile';
+	var TABLE_TIMESHEET    = 'x_nykl3_tenroxnbsa_timesheet';
+	
+	var snUtils   = new global.NBSA_SNUtils();
+	//var userProfiles = snUtils.getA(TABLE_USER_PROFILE, ['employee_type=Employee^tenrox_status=Active'], ['sys_id', 'user.email']);
+	
+	var queryUP = 'employee_type=Employee^tenrox_status=Active';
+	var grup = new GlideRecord(TABLE_USER_PROFILE);
+	grup.addEncodedQuery(queryUP);
+	grup.query();
+
+	gs.debug('Tenrox - Reminder - Employee Timesheet Submission SJ: Total Active Employee User Profiles: '+grup.getRowCount());
+
+	var timeSheets, openWeeks, ws;
+	
+	// We want to send reminder for all open timesheets except for the current timesheet. For current timesheet, we want to send the reminder starting Friday only.
+	// So, by deducting 4 days from current date, if it's less the Friday, we will get less than Monday.
+	// We will compare the resulting date with all the open timesheet week start, if week start for the timesheet is less than or equal to fourdaysago, we will send reminder for that open timesheet.
+	var fourDaysAgo = new GlideDateTime(new GlideDate().getValue());
+	fourDaysAgo.addDaysUTC(-4);
+	
+	gs.debug('Tenrox - Reminder - Employee Timesheet Submission SJ: fourDaysAgo: '+fourDaysAgo.getDisplayValue());
+	
+	while (grup.next()) {
+		//timeSheets = snUtils.getA(TABLE_TIMESHEET, ['state=Open^employee='+grup.sys_id], ['sys_id', 'week_start']);
+		timeSheets = new GlideRecord(TABLE_TIMESHEET);
+		timeSheets.addEncodedQuery('state=Open^employee='+grup.sys_id);
+		timeSheets.orderBy('week_start');
+		timeSheets.query();
+		gs.debug('Tenrox - Reminder - Employee Timesheet Submission SJ: Total Open Timesheets for User: '+grup.user.email+', are: '+timeSheets.getRowCount());
+		
+		openWeeks = [];
+		//for (var ts in timeSheets) {
+		while (timeSheets.next()) {
+			ws = new GlideDateTime(timeSheets.week_start);
+			gs.debug('Tenrox - Reminder - Employee Timesheet Submission SJ: fourDaysAgo.compareTo('+ws.getDisplayValue()+'): '+fourDaysAgo.compareTo(ws));
+			if (fourDaysAgo.compareTo(ws) >= 0)
+				openWeeks.push(timeSheets.week_start.toString());
+		}
+		gs.debug('Tenrox - Reminder - Employee Timesheet Submission SJ: Open Timesheets for User: '+grup.user.email+', are: '+openWeeks.toString());
+		if (openWeeks.length > 0)
+			gs.eventQueue('x_nykl3_tenroxnbsa.employee.ts.remind', grup, openWeeks);
+
+	}
+	
+	/*var queryUP = 'employee_type=Employee^tenrox_status=Active';
+	var grup = new GlideRecord(TABLE_USER_PROFILE);
+	grup.addEncodedQuery(queryUP);
+	grup.query();
+	
+	var grTS, queryTS, missingWeeks, openWeeks;
+	//Check for last 4 week timesheets (doesn't include current week's timesheet)
+	var gdt = new GlideDateTime();
+	gdt.addDaysUTC(-7);
+	var end = gdt.getDate();
+	gdt.addDaysUTC(-27);
+	var start = gdt.getDate();	//get array of dates for All Mondays (1) between start and end dates
+	var mondays = getDays(1, start, end);
+	
+	gs.debug('Tenrox - Reminder - Employee Timesheet Submission: SJ: Total Active Employees: '+grup.getRowCount()+', mondays: '+mondays);
+	while (grup.next()) {
+		gs.debug('Tenrox - Reminder - Employee Timesheet Submission: SJ: Checking for open Timesheets for '+grup.user.name);
+		missingWeeks = '';
+		openWeeks = '';
+		for (var m in mondays) {
+			grTS = new GlideRecord(TABLE_TIMESHEET);
+			queryTS = 'employee='+grup.sys_id+'^timesheet='+grup.user.name+' : '+mondays[m];
+			grTS.addEncodedQuery(queryTS);
+			grTS.query();
+			gs.debug('Tenrox - Reminder - Employee Timesheet Submission: SJ: Total Open Timesheets for '+grup.user.name+': '+grTS.getRowCount()+', for monday: '+mondays[m]+', query: '+queryTS);
+			//If no timesheet records returned by the query, it means that timesheet for this week doesn't exists for the employee
+			// Else if a timesheet record is returned and state is open, it means that timesheet hasn't been submitted for the week
+			if (grTS.getRowCount() == 0) {
+				missingWeeks += mondays[m]+', ';
+			} else if (grTS.next() && grTS.state == 'Open') {
+				openWeeks += mondays[m]+', ';
+			}
+		}
+		
+		// If there are any weeks for which timesheet is missing or is in open state, generate event to send notification to user
+		if (missingWeeks != '' || openWeeks != '') {
+			gs.debug('Tenrox - Reminder - Employee Timesheet Submission: SJ: Generating event for '+grup.user.name+' with missingWeeks: '+missingWeeks+', openWeeks: '+openWeeks);
+			gs.eventQueue('x_nykl3_tenroxnbsa.employee.ts.missing', grup, missingWeeks, openWeeks);
+		}
+	}*/
+	
+}
+
+/*
+ * Parameters:
+ *   dayOfWeek: 1 = Monday, 2 = Tuesday, .......
+ *   start: start date
+ *   end: end date
+ *   maxArrayLength: maximum length of returned Array of days
+ *
+ * Return Value:
+ *   Return an array of dates of mentioned day (Monday or Tuesday or ..) between start and end dates
+ *
+ */
+function getDays(dayOfWeek, start, end, maxArrayLength) {
+	var days = [];
+	var MAX_ARRAY_LENGTH = typeof maxArrayLength == 'number' ? maxArrayLength : 10;
+	var monthStart = new GlideDateTime(start);
+	var monthEnd = new GlideDateTime(end);
+	monthEnd.addDaysUTC(1);
+	while (!monthStart.equals(monthEnd)) {
+		if (monthStart.getDayOfWeekUTC() == dayOfWeek) {
+			days.push(monthStart.getDate());
+			if (days.length >= MAX_ARRAY_LENGTH)
+				break;
+		}
+		monthStart.addDaysUTC(1);
+	}
+	return days;
+}]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>LIUR</sys_created_by>
+        <sys_created_on>2017-11-06 19:16:10</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>6fb8fb490f9a03001416d23be1050ebd</sys_id>
+        <sys_mod_count>32</sys_mod_count>
+        <sys_name>Tenrox - Reminder - Employee Timesheet Submission</sys_name>
+        <sys_package display_value="TenroxNBSA" source="x_nykl3_tenroxnbsa">1a0e09cc0f4332001416d23be1050e3f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TenroxNBSA">1a0e09cc0f4332001416d23be1050e3f</sys_scope>
+        <sys_update_name>sysauto_script_6fb8fb490f9a03001416d23be1050ebd</sys_update_name>
+        <sys_updated_by>GARGL</sys_updated_by>
+        <sys_updated_on>2018-05-01 19:39:39</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>
